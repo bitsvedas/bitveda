@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Publishing - Master Student Notes</title>
+    
+    <!-- Tailwind CSS for utility foundation -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Kalam (Handwriting style) & School Bell/Reenie Beanie for doodles -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Permanent+Marker&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome for cute school/drawing icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --blue-ink: #1a365d;
+            --red-ink: #c53030;
+            --green-ink: #2f855a;
+            --purple-ink: #6b46c1;
+            --paper-bg: #fdfaf2;
+            --ruled-line: #cbd5e1;
+            --margin-line: #fda4af;
+        }
+
+        body {
+            font-family: 'Kalam', cursive;
+            background-color: #e2e8f0; /* Desk wood/grey background */
+            background-image: radial-gradient(#cbd5e1 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--blue-ink);
+            font-size: 1.15rem;
+        }
+
+        /* Ruled Paper Style Container */
+        .notebook-page {
+            background-color: var(--paper-bg);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            background-image: linear-gradient(var(--ruled-line) 1px, transparent 1px);
+            background-size: 100% 2.4rem;
+            line-height: 2.4rem;
+            padding-top: 4.8rem;
+            min-height: 1000px;
+        }
+
+        /* Standard Red Margin Line */
+        .notebook-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 3.5rem;
+            width: 2px;
+            height: 100%;
+            background-color: var(--margin-line);
+            border-right: 1px solid var(--margin-line);
+        }
+
+        /* Ring Binder Holes for authentic look */
+        .binder-holes {
+            position: absolute;
+            left: 1rem;
+            top: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 6rem;
+            z-index: 10;
+        }
+
+        .binder-hole {
+            width: 1.25rem;
+            height: 1.25rem;
+            background-color: #cbd5e1;
+            border-radius: 50%;
+            box-shadow: inset 2px 2px 5px rgba(0,0,0,0.4);
+            border: 1px solid #94a3b8;
+        }
+
+        /* Ink colors matching actual student writing styles */
+        .ink-blue { color: var(--blue-ink); }
+        .ink-red { color: var(--red-ink); font-weight: 700; }
+        .ink-green { color: var(--green-ink); }
+        .ink-purple { color: var(--purple-ink); }
+
+        /* Real handwritten highlights */
+        .highlight-yellow {
+            background: linear-gradient(104deg, rgba(254,240,138,0.85) 0%, rgba(254,240,138,0.6) 100%);
+            border-radius: 4px;
+            padding: 0.1rem 0.3rem;
+        }
+
+        .highlight-pink {
+            background: linear-gradient(104deg, rgba(251,207,232,0.85) 0%, rgba(251,207,232,0.6) 100%);
+            border-radius: 4px;
+            padding: 0.1rem 0.3rem;
+        }
+
+        .highlight-green {
+            background: linear-gradient(104deg, rgba(187,247,208,0.85) 0%, rgba(187,247,208,0.6) 100%);
+            border-radius: 4px;
+            padding: 0.1rem 0.3rem;
+        }
+
+        /* Sticky Notes Layout (Styled not to block content) */
+        .sticky-note {
+            font-family: 'Caveat', cursive;
+            font-size: 1.35rem;
+            line-height: 1.6rem;
+            box-shadow: 5px 5px 10px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease;
+        }
+
+        .sticky-note:hover {
+            transform: scale(1.05) rotate(0deg) !important;
+            z-index: 20;
+        }
+
+        /* Tape effect at the top of sticky notes */
+        .tape {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 24px;
+            background-color: rgba(254, 240, 138, 0.4);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            backdrop-filter: blur(1px);
+            border-left: 1px dashed rgba(0,0,0,0.1);
+            border-right: 1px dashed rgba(0,0,0,0.1);
+        }
+
+        /* Content Margins mapping perfectly with Ruled Lines */
+        .notes-content {
+            padding-left: 5rem;
+            padding-right: 2.5rem;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Kalam', cursive;
+            line-height: 2.8rem;
+        }
+
+        /* Cute double underline for headings */
+        .double-underline {
+            border-bottom: 3px double var(--red-ink);
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Custom scrollbar to look aesthetic */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 5px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+    </style>
+</head>
+<body class="py-10 px-2 sm:px-6 md:px-12">
+
+    <!-- Top cute desk setup elements -->
+   <!--  <div class="max-w-5xl mx-auto flex justify-between items-center mb-6 px-4">
+         <div class="flex items-center gap-3">
+            <span class="text-4xl">📚</span>
+            <div>
+                <h4 class="font-bold text-slate-800 tracking-wide text-lg">Class: XII Computer Science</h4>
+                <p class="text-xs text-slate-600 font-sans">Syllabus Reference Code: Screenshot_2026-06-15-10-42-21-12_e2d5b3f32b79de1d45acd1fad96fbb0f.jpg</p>
+            </div> 
+        </div>
+        <div class="flex gap-2">
+            <div class="w-8 h-8 rounded-full bg-blue-700 border-2 border-white shadow" title="Blue Ink Mode"></div>
+            <div class="w-8 h-8 rounded-full bg-red-600 border-2 border-white shadow" title="Teacher Corrections"></div>
+            <div class="w-8 h-8 rounded-full bg-yellow-300 border-2 border-white shadow" title="Highlighter Active"></div>
+        </div>
+    </div>-->
+
+    <!-- MAIN NOTEBOOK PAPER CONTAINER -->
+    <div class="max-w-5xl mx-auto notebook-page rounded-lg relative overflow-hidden">
+        
+        <!-- Binder Ring Holes -->
+        <div class="binder-holes hidden sm:flex">
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+            <div class="binder-hole"></div>
+        </div>
+
+        <div class="notes-content">
+            
+            <!-- HEADER SECTION -->
+            <div class="text-center mb-10">
+                
+                <h1 class="text-3xl sm:text-4xl font-bold ink-red double-underline">Introduction to Web Publishing</h1>
+                <p class="text-sm text-gray-500 font-sans mt-2">Prepared by: <strong>Aakash Sen</strong> (Self Study Group Hindi-English Blend Edition)</p>
+            </div>
+
+            <!-- INTRODUCTION BLOCK -->
+            <div class="mb-12">
+                <p class="text-xl leading-9">
+                    सरल शब्दों में, <span class="highlight-yellow font-bold text-black">Web Publishing</span> का अर्थ है अपनी फाइलों (HTML, CSS, JavaScript, Images) को लोकल कंप्यूटर से निकाल कर एक सार्वजनिक वेब सर्वर पर अपलोड करना, ताकि पूरी दुनिया में कोई भी व्यक्ति उसे इंटरनेट के ज़रिए खोल सके।
+                </p>
+                <div class="bg-blue-50 border-l-4 border-blue-400 p-3 my-4 rounded-r shadow-sm text-sm sm:text-base leading-7">
+                    <span class="font-bold ink-blue">💡 Analogy Time:</span> मान लो तुमने अपने घर पर एक डायरी (Website) लिखी। जब तक डायरी घर पर आलमारी में बंद है, वह तुम्हारा <strong>Local Storage</strong> है। पर अगर तुम उसे प्रिंटिंग प्रेस भेज कर हर दुकान में रखवा दो (Web Server), तो वह <strong>Publish</strong> हो गई!
+                </div>
+            </div>
+
+            <hr class="border-t-2 border-pink-200 my-8">
+
+            <!-- TOPIC 1: CREATING & SAVING -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                <div class="lg:col-span-2">
+                    <h2 class="text-2xl font-bold ink-red mb-3">
+                        <i class="fa-solid fa-code mr-2"></i>1. Creating & Saving the Website
+                    </h2>
+                    
+                    <p class="mb-4">
+                        एक वेबसाइट बनाना हमारा पहला कदम होता है। हम कोडिंग के लिए <span class="highlight-pink text-black font-bold">Frontend Technologies</span> का प्रयोग करते हैं:
+                    </p>
+                    <ul class="list-disc pl-6 mb-6 leading-8">
+                        <li><strong class="ink-purple">HTML (Markup Layout):</strong> वेबसाइट का बुनियादी ढांचा (Structure) तैयार करता है।</li>
+                        <li><strong class="ink-green">CSS (Styling):</strong> उसे सुंदर रंग, मार्जिन, बॉर्डर और फॉन्ट प्रदान करता है।</li>
+                        <li><strong class="ink-blue">JavaScript (Interactivity):</strong> पेज में जान डालता है (Dynamic behavior जैसे क्लिक होने पर पॉप-अप आना)।</li>
+                    </ul>
+
+                    <h3 class="text-xl font-bold ink-purple mb-2">Saving Rules (फाइलें सुरक्षित करने के कड़े नियम):</h3>
+                    <p class="mb-4 leading-8">
+                        अपने कंप्यूटर पर सभी फाइलों को एक <span class="highlight-yellow text-black font-bold">Root Folder</span> में व्यवस्थित रखना होता है। होमपेज वाली मुख्य फाइल का नाम हमेशा <span class="ink-red font-bold">`index.html`</span> ही होना चाहिए।
+                    </p>
+                </div>
+
+                <!-- Sticky Note Inline right side on Desktop, stacks on mobile -->
+                <div class="lg:col-span-1 flex justify-center items-start pt-6">
+                    <div class="sticky-note bg-yellow-100 p-5 rounded relative transform rotate-2 w-72 border border-yellow-200">
+                        <div class="tape"></div>
+                        <h4 class="font-bold text-red-700 border-b border-yellow-300 pb-1 mb-2"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Warning Zone!</h4>
+                        <p class="text-sm text-gray-800">
+                            कभी भी होमपेज का नाम <span class="underline decoration-red-500 font-bold">MyHome.html</span> या <span class="underline decoration-red-500 font-bold">main.html</span> मत रखना! <br><strong>Web Servers</strong> स्वतः केवल <span class="bg-yellow-200 p-0.5 rounded font-bold">index.html</span> को ही ढूंढते हैं। अगर यह नहीं मिली तो <span class="text-red-600 font-bold">403 Forbidden</span> या Directory list एरर दिखेगा!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ruled Paper Folder Structure box -->
+            <div class="bg-orange-50 border-2 border-dashed border-orange-300 p-5 rounded-lg mb-12 shadow-sm font-mono text-sm leading-6">
+                <span class="ink-red font-sans font-bold block mb-2"><i class="fa-regular fa-folder-open mr-1"></i> Standard Folder Directory Tree:</span>
+                📁 My_Web_Project/ (Root Directory)<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── 📄 index.html  &lt;-- <span class="text-red-600 font-sans">(यह मुख्य दरवाजा है)</span><br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── 📄 about.html<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── 📁 css/<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└── 📄 style.css<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;├── 📁 js/<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;&nbsp;└── 📄 main.js<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;└── 📁 images/<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 🖼️ logo.png
+            </div>
+
+            <hr class="border-t-2 border-pink-200 my-8">
+
+            <!-- TOPIC 2: WEB HOSTING & HOSTING CONSIDERATIONS -->
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold ink-red mb-3">
+                    <i class="fa-solid fa-server mr-2"></i>2. Web Hosting & Hosting Considerations
+                </h2>
+                <p class="mb-4 leading-8 text-lg">
+                    वेबसाइट की फाइलों को सुरक्षित रखने के लिए जिस भारी-भरकम कंप्यूटर (Server Machine) को किराए पर लिया जाता है, उस सेवा को <span class="highlight-green text-black font-bold">Web Hosting</span> कहते हैं। होस्टिंग लेते समय निम्नलिखित 4 बातों (Considerations) पर कड़ाई से ध्यान देना चाहिए:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                    <div class="bg-blue-50/70 p-4 rounded-lg border border-blue-100">
+                        <h4 class="font-bold ink-purple text-lg"><i class="fa-solid fa-database mr-2"></i>A. Storage Space (डिस्क स्टोरेज)</h4>
+                        <p class="text-sm mt-1 leading-6">
+                            आपकी वेबसाइट की इमेजेस, फाइलों और डेटाबेस का साइज कितना है? क्या होस्टिंग कंपनी आपको SSD (Solid State Drive) दे रही है जो कि HDD से 10 गुना तेज़ होती है?
+                        </p>
+                    </div>
+
+                    <div class="bg-emerald-50/70 p-4 rounded-lg border border-emerald-100">
+                        <h4 class="font-bold ink-green text-lg"><i class="fa-solid fa-gauge-high mr-2"></i>B. Bandwidth (बैंडविड्थ सीमा)</h4>
+                        <p class="text-sm mt-1 leading-6">
+                            यह वह डेटा है जो वेबसाइट और विज़िटर के बीच ट्रांसफर होता है। <br>
+                            <span class="bg-emerald-100 px-1 rounded font-bold">Formula:</span> <code class="bg-white px-1">Page Size × No. of Monthly Visitors</code>. अगर विज़िटर ज़्यादा हैं तो आपको <strong>Unlimited Bandwidth</strong> वाली होस्टिंग लेनी होगी।
+                        </p>
+                    </div>
+
+                    <div class="bg-rose-50/70 p-4 rounded-lg border border-rose-100">
+                        <h4 class="font-bold ink-red text-lg"><i class="fa-solid fa-clock mr-2"></i>C. Server Uptime (सर्वर अपटाइम)</h4>
+                        <p class="text-sm mt-1 leading-6">
+                            यह प्रतिशत में आंका जाता है। होस्टिंग सर्वर साल भर में कितने प्रतिशत समय ऑनलाइन रहा। एक अच्छी होस्टिंग सर्विस का अपटाइम न्यूनतम <span class="underline font-bold text-red-600">99.9%</span> होना ही चाहिए।
+                        </p>
+                    </div>
+
+                    <div class="bg-amber-50/70 p-4 rounded-lg border border-amber-100">
+                        <h4 class="font-bold text-amber-800 text-lg"><i class="fa-solid fa-shield-halved mr-2"></i>D. SSL & Security</h4>
+                        <p class="text-sm mt-1 leading-6">
+                            आपकी साइट का पता सुरक्षित होना चाहिए। इसके लिए <strong>SSL Certificate</strong> आवश्यक है ताकि URL के आगे सुरक्षित ताल <span class="text-emerald-600 font-bold">https://</span> दिखाई दे।
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Web Hosting Types - Visual Layout inside notes -->
+                <div class="bg-white p-5 rounded-lg border-2 border-slate-200 shadow-sm mt-6">
+                    <h3 class="font-bold text-xl ink-purple mb-3"><i class="fa-solid fa-layer-group mr-2"></i>Types of Hosting Plans (होस्टिंग के मुख्य प्रकार):</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="border-l-4 border-yellow-500 pl-4 py-1">
+                            <span class="font-bold text-yellow-800">1. Shared Hosting (साझा होस्टिंग):</span>
+                            <p class="text-sm leading-6">
+                                बिल्कुल एक हॉस्टल के कमरे की तरह जहां एक ही कंप्यूटर (Server) के रिसोर्सेज को कई अलग-अलग वेबसाइट्स आपस में साझा करती हैं। <br>
+                                <strong class="ink-green">Pro:</strong> बहुत सस्ती। <strong class="ink-red">Con:</strong> अगर एक साइट पर अत्यधिक ट्रैफिक आता है, तो बाकी सारी साइट्स भी स्लो हो जाती हैं।
+                            </p>
+                        </div>
+                        <div class="border-l-4 border-blue-500 pl-4 py-1">
+                            <span class="font-bold text-blue-800">2. Dedicated Hosting (समर्पित होस्टिंग):</span>
+                            <p class="text-sm leading-6">
+                                पूरा का पूरा कंप्यूटर सर्वर सिर्फ आपकी वेबसाइट के लिए रिज़र्व होता है। यह अपना आलीशान स्वतंत्र बंगला खरीदने जैसा है। <br>
+                                <strong class="ink-green">Pro:</strong> सुपरफास्ट स्पीड और पूरी प्राइवेसी। <strong class="ink-red">Con:</strong> बहुत ज़्यादा महंगी।
+                            </p>
+                        </div>
+                        <div class="border-l-4 border-purple-500 pl-4 py-1">
+                            <span class="font-bold text-purple-800">3. Cloud Hosting (क्लाउड होस्टिंग):</span>
+                            <p class="text-sm leading-6">
+                                आपकी साइट किसी एक सिंगल कंप्यूटर पर नहीं बल्कि पूरी दुनिया में फैले दर्जनों कंप्यूटर्स के "वर्चुअल ग्रिड" पर काम करती है। यदि एक सर्वर क्रैश हो जाए, तो दूसरा तुरंत उसे संभाल लेता है।
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-t-2 border-pink-200 my-8">
+
+            <!-- TOPIC 3: CHOOSING WEB SERVERS -->
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold ink-red mb-3">
+                    <i class="fa-solid fa-server-network mr-2"></i>3. Choosing Web Servers
+                </h2>
+                <p class="mb-4 leading-8">
+                    <strong>Web Server</strong> असल में वह स्पेशल कंप्यूटर और उसपर चलने वाला सॉफ्टवेयर इंजन है जो यूजर के वेब ब्राउज़र (Client) से भेजी गई <span class="ink-purple font-bold">HTTP Request</span> को सुनता है और सही HTML पेज को वापस <span class="ink-green font-bold">HTTP Response</span> के रूप में वापस भेजता है।
+                </p>
+
+                <!-- Comparison Table of Web Server Software in Student Style -->
+                <div class="overflow-x-auto my-6">
+                    <table class="min-w-full bg-white border border-slate-300 rounded-lg text-sm sm:text-base">
+                        <thead>
+                            <tr class="bg-amber-100 border-b border-slate-300 text-left">
+                                <th class="p-3 font-bold ink-red">Server Engine Name</th>
+                                <th class="p-3 font-bold ink-red">Best Known For</th>
+                                <th class="p-3 font-bold ink-red">Ideal Usage Scenario</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200">
+                            <tr>
+                                <td class="p-3 font-bold ink-blue">Apache HTTP Server</td>
+                                <td class="p-3">अत्यंत पुराना, फ्लेक्सिबल, ओपन-सोर्स और विश्वसनीय। (.htaccess सपोर्ट)</td>
+                                <td class="p-3 font-sans">Shared hosting and Standard PHP (WordPress) sites.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold ink-blue">Nginx (Engine-X)</td>
+                                <td class="p-3">बेहद हल्का और सुपरफास्ट। लाखों पैरेलल रिक्वेस्ट झेलने में सक्षम।</td>
+                                <td class="p-3 font-sans">Reverse Proxy and High-Traffic modern Node.js apps.</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold ink-blue">Microsoft IIS (Internet Information Services)</td>
+                                <td class="p-3">माइक्रोसॉफ्ट विंडोज़ सर्वर के साथ इन-बिल्ट आता है।</td>
+                                <td class="p-3 font-sans">Enterprise scale applications built with ASP.NET framework.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr class="border-t-2 border-pink-200 my-8">
+
+            <!-- TOPIC 4: DOMAIN NAME & DNS WORKFLOW (Tough Topic) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                <div class="lg:col-span-2">
+                    <h2 class="text-2xl font-bold ink-red mb-3">
+                        <i class="fa-solid fa-globe mr-2"></i>4. Domain Name Registration & DNS Resolution
+                    </h2>
+                    
+                    <p class="mb-4 leading-8">
+                        इंटरनेट पर हर एक सर्वर का एक यूनिक नंबर आधारित एड्रेस होता है जिसे <span class="highlight-pink text-black font-bold">IP Address</span> (जैसे: `172.217.16.142`) कहते हैं। लेकिन इंसानी दिमाग के लिए इसे याद रखना असंभव है।
+                    </p>
+                    <p class="mb-4 leading-8">
+                        इसलिए हम शब्दों वाले पते यानी <span class="highlight-yellow text-black font-bold">Domain Name</span> (जैसे: `google.com`) का प्रयोग करते हैं। 
+                    </p>
+                    <p class="mb-4 leading-8">
+                        <strong>DNS (Domain Name System)</strong> इंटरनेट की फोनबुक है जो इन नाम वाले डोमेन एड्रेस को वापस सर्वर के आईपी एड्रेस में कनवर्ट करती है।
+                    </p>
+
+                    <h3 class="text-lg font-bold ink-red mb-2"><i class="fa-solid fa-list-check mr-1"></i> DNS Resolution Steps (काम कैसे करता है):</h3>
+                    <ol class="list-decimal pl-6 space-y-3 leading-7 text-sm sm:text-base">
+                        <li>यूजर ने ब्राउज़र में टाइप किया: <code class="bg-amber-100 p-0.5 rounded">www.mysite.com</code></li>
+                        <li>ब्राउज़र सबसे पहले आपके इंटरनेट सर्विस प्रोवाइडर (ISP) के पास बने <strong class="ink-purple">DNS Resolver</strong> से पूछता है।</li>
+                        <li>रिज़ॉल्वर सबसे ऊपर बैठे <strong class="ink-red">Root Servers (.)</strong> से पूछता है कि <code class="bg-gray-100 px-1 rounded">.com</code> कहाँ मिलेगा?</li>
+                        <li>रूट सर्वर उसे <strong class="ink-green">TLD (Top Level Domain) Server</strong> का रास्ता बताता है।</li>
+                        <li>TLD सर्वर आगे <strong class="ink-blue">Authoritative Nameserver</strong> का पता देता है जो उस विशेष डोमेन के असली आईपी पते की चाबी रखता है।</li>
+                        <li>अंततः IP पता ब्राउज़र को मिलता है, ब्राउज़र सर्वर से कनेक्ट होता है, और वेबसाइट लोड होती है!</li>
+                    </ol>
+                </div>
+
+                <!-- Sticky Note for DNS illustration explanation -->
+                <div class="lg:col-span-1 flex justify-center items-start pt-6">
+                    <div class="sticky-note bg-blue-100 p-5 rounded relative transform -rotate-1 w-72 border border-blue-200 shadow-md">
+                        <div class="tape bg-blue-300/40"></div>
+                        <h4 class="font-bold text-blue-800 border-b border-blue-300 pb-1 mb-2"><i class="fa-solid fa-lightbulb mr-1"></i> DNS Analogy</h4>
+                        <p class="text-sm text-slate-800">
+                            मानो तुम किसी दोस्त के घर जाना चाहते हो। तुम्हें उसका नाम <strong>"आकाश"</strong> याद है, लेकिन घर की लोकेशन नहीं पता। <br><br>तुम अपनी <strong>Phonebook</strong> (DNS) खोलते हो और "आकाश" पर क्लिक करते हो। फोनबुक उसका मोबाइल नंबर (IP Address) डायल कर देती है। यही DNS का मूलभूत काम है!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hand-drawn style SVG flow diagram for DNS lookup -->
+            <div class="my-8 p-4 bg-white rounded-lg border border-slate-300 shadow-sm">
+                <span class="ink-purple font-bold block mb-4 text-center"><i class="fa-solid fa-diagram-project mr-1"></i> Visual Guide: The DNS Lookup Sequence</span>
+                <div class="flex justify-center">
+                    <svg viewBox="0 0 650 180" class="w-full max-w-2xl h-auto" style="font-family: 'Kalam', cursive;">
+                        <!-- Client Browser Box -->
+                        <rect x="10" y="40" width="100" height="80" rx="10" fill="#eff6ff" stroke="#2563eb" stroke-width="2" stroke-dasharray="5 5" />
+                        <text x="60" y="80" text-anchor="middle" fill="#1e40af" font-weight="bold" font-size="14">Browser</text>
+                        <text x="60" y="100" text-anchor="middle" fill="#64748b" font-size="11">(Client)</text>
+
+                        <!-- Arrow 1 Browser to ISP -->
+                        <path d="M 110 80 L 190 80" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow)" />
+                        <text x="150" y="70" text-anchor="middle" fill="#dc2626" font-size="11">1. Request IP</text>
+
+                        <!-- ISP Resolver Box -->
+                        <rect x="200" y="40" width="120" height="80" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2" />
+                        <text x="260" y="80" text-anchor="middle" fill="#92400e" font-weight="bold" font-size="14">DNS Resolver</text>
+                        <text x="260" y="100" text-anchor="middle" fill="#64748b" font-size="11">(ISP System)</text>
+
+                        <!-- Arrow 2 ISP to Web Server -->
+                        <path d="M 320 80 L 450 80" fill="none" stroke="#16a34a" stroke-width="2" />
+                        <text x="385" y="70" text-anchor="middle" fill="#16a34a" font-size="11">2. Resolves Path</text>
+
+                        <!-- Remote Web Server Web hosting Box -->
+                        <rect x="460" y="40" width="160" height="80" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" stroke-dasharray="2 2" />
+                        <text x="540" y="75" text-anchor="middle" fill="#166534" font-weight="bold" font-size="13">Authoritative Server</text>
+                        <text x="540" y="95" text-anchor="middle" fill="#166534" font-size="11">Hits IP: 192.0.2.1</text>
+
+                        <!-- Curved feedback arrow -->
+                        <path d="M 460 100 Q 285 170 110 110" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="4 4" />
+                        <text x="285" y="160" text-anchor="middle" fill="#2563eb" font-size="11">3. Deliver Page Files to User</text>
+                    </svg>
+                </div>
+            </div>
+
+            <hr class="border-t-2 border-pink-200 my-8">
+
+            <!-- TOPIC 5: THE CORE STEPS OF HOSTING (Deep Practical Step-by-Step) -->
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold ink-red mb-3">
+                    <i class="fa-solid fa-cloud-arrow-up mr-2"></i>5. Practical Guide: Steps to Host a Website
+                </h2>
+                <p class="mb-4 leading-8">
+                    आइए अब उस वास्तविक प्रक्रिया को देखते हैं जिसका उपयोग करके हम अपनी कोडिंग की फाइलों को लोकल मशीन से क्लाउड सर्वर पर भेज कर लाइव करते हैं। इसे 6 व्यवस्थित चरणों में पूरा किया जा सकता है:
+                </p>
+
+                <!-- Step-by-step visual bullet tree -->
+                <div class="space-y-8 my-8 relative">
+                    <!-- Vertical hand-drawn line connecting steps -->
+                    <div class="absolute left-6 top-2 w-0.5 h-full bg-pink-300 z-0"></div>
+
+                    <!-- Step 1 -->
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-red-100 border-2 border-red-400 flex items-center justify-center font-bold text-red-700 text-lg shadow">
+                            1
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm flex-1">
+                            <span class="font-bold text-lg ink-blue block"><i class="fa-solid fa-code mr-1"></i> Root Directory Preparation (फाइलों को संजोना)</span>
+                            <p class="text-sm text-slate-700 mt-1 leading-6">
+                                अपने कंप्यूटर पर सभी HTML, CSS, JS और Images को एक मुख्य प्रोजेक्ट फोल्डर (Root Folder) में सहेजें। ध्यान दें कि मुख्य पेज का नाम अनिवार्यतः <strong class="text-red-600 font-mono">index.html</strong> होना चाहिए और सभी फाइलों के इंटरनल पाथ (internal paths) "Relative" होने चाहिए, न कि आपके C: drive का लोकल एड्रेस!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-blue-100 border-2 border-blue-400 flex items-center justify-center font-bold text-blue-700 text-lg shadow">
+                            2
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm flex-1">
+                            <span class="font-bold text-lg ink-blue block"><i class="fa-solid fa-cart-shopping mr-1"></i> Buy Domain & Hosting (डोमेन व स्पेस खरीदना)</span>
+                            <p class="text-sm text-slate-700 mt-1 leading-6">
+                                किसी नामी डोमेन रजिस्ट्रार (जैसे Namecheap, GoDaddy) से जाकर अपनी पसंद का डोमेन एड्रेस खरीदें। साथ ही होस्टिंग सर्विस प्रदाता से अपनी साइट के डेटा साइज के अनुसार क्लाउड स्पेस खरीदें।
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-emerald-100 border-2 border-emerald-400 flex items-center justify-center font-bold text-emerald-700 text-lg shadow">
+                            3
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm flex-1">
+                            <span class="font-bold text-lg ink-blue block"><i class="fa-solid fa-screwdriver-wrench mr-1"></i> Configure Nameservers (डोमेन पॉइंटिंग)</span>
+                            <p class="text-sm text-slate-700 mt-1 leading-6">
+                                अपने डोमेन की सेटिंग्स में जाएं। वहां पुराने डिफ़ॉल्ट नेमसर्वर्स को हटाएं और अपनी होस्टिंग कंपनी द्वारा प्रदान किए गए नेमसर्वर्स (जैसे: <code class="bg-gray-100 p-0.5 rounded">ns1.hostingprovider.com</code>) को पेस्ट करें। यह आपके डोमेन को सही सर्वर कंप्यूटर से जोड़ता है।
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-amber-100 border-2 border-amber-400 flex items-center justify-center font-bold text-amber-700 text-lg shadow">
+                            4
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm flex-1">
+                            <span class="font-bold text-lg ink-blue block"><i class="fa-solid fa-arrow-right-to-bracket mr-1"></i> Connect via FTP Client (सर्वर से संपर्क स्थापित करना)</span>
+                            <p class="text-sm text-slate-700 mt-1 leading-6">
+                                अपने लोकल पीसी पर **FileZilla** या **WinSCP** सॉफ्टवेयर इंस्टॉल करें। ऊपर दिए गए फ़ील्ड में अपने सर्वर का IP, FTP यूजरनेम, पासवर्ड, और पोर्ट नंबर <strong>21</strong> दर्ज करके <strong>Quickconnect</strong> पर क्लिक करें।
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-purple-100 border-2 border-purple-400 flex items-center justify-center font-bold text-purple-700 text-lg shadow">
+                            5
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm flex-1">
+                            <span class="font-bold text-lg ink-blue block"><i class="fa-solid fa-folder-open mr-1"></i> Locate public_html & Upload (फाइलें अपलोड करना)</span>
+                            <p class="text-sm text-slate-700 mt-1 leading-6">
+                                कनेक्शन होने पर सर्वर वाले हिस्से (दाहिनी तरफ) में आपको <strong class="ink-red">`public_html`</strong> या <strong class="ink-red">`www`</strong> फोल्डर दिखेगा। इस फोल्डर को खोलें, और अपने लोकल कंप्यूटर की सभी फाइलों को ड्रैग करके सर्वर के इस फोल्डर में अपलोड कर दें।
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Step 6 -->
+                    <div class="flex items-start gap-4 relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-rose-100 border-2 border-rose-400 flex items-center justify-center font-bold text-rose-700 text-lg shadow">
+                            6
+                        </div>
+                        <div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm flex-1">
+                            <span class="font-bold text-lg ink-blue block"><i class="fa-solid fa-circle-check mr-1"></i> Verifying the Live Website (सत्यापन)</span>
+                            <p class="text-sm text-slate-700 mt-1 leading-6">
+                                अब किसी भी मोबाइल या कंप्यूटर पर अपना डोमेन नेम टाइप करें (उदा: <code class="bg-slate-100 p-0.5 rounded text-blue-600">www.yourdomain.com</code>)। बधाई हो, आपकी खुद की बनाई हुई वेबसाइट अब पूरे विश्व के सामने ऑनलाइन लाइव हो चुकी है!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-t-2 border-pink-200 my-8">
+
+            <!-- TOPIC 6: FTP SOFTWARE IN DETAIL -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                <div class="lg:col-span-2">
+                    <h2 class="text-2xl font-bold ink-red mb-3">
+                        <i class="fa-solid fa-network-wired mr-2"></i>6. FTP (File Transfer Protocol) Software
+                    </h2>
+                    
+                    <p class="mb-4 leading-8">
+                        अपने लोकल कंप्यूटर से वेब फाइलों को इंटरनेट के रिमोट सर्वर पर बिना किसी झंझट के अपलोड और डाउनलोड करने की प्रक्रिया को <strong class="highlight-pink text-black">File Transfer Protocol (FTP)</strong> कहा जाता है।
+                    </p>
+                    <p class="mb-4 leading-8">
+                        इसके लिए एक विशेष यूजर इंटरफेस सॉफ्टवेयर चाहिए जिसे **FTP Client** कहते हैं।
+                    </p>
+
+                    <h3 class="text-xl font-bold ink-purple mb-2">लोकप्रिय FTP सॉफ्टवेयर्स (Popular Clients):</h3>
+                    <ul class="list-disc pl-6 space-y-2 mb-6">
+                        <li><strong class="ink-blue">FileZilla:</strong> पूरी तरह ओपन-सोर्स, मुफ्त और सबसे लोकप्रिय सॉफ्टवेयर।</li>
+                        <li><strong class="ink-blue">WinSCP:</strong> मुख्य रूप से विंडोज़ यूजर्स के लिए बनाया गया सुरक्षित FTP क्लाइंट।</li>
+                        <li><strong class="ink-blue">Cyberduck:</strong> मैकओएस (macOS) यूजर्स के लिए बेहतरीन विजुअल और सुंदर इंटरफेस।</li>
+                    </ul>
+                </div>
+
+                <!-- Sticky note: Ports detailed diagram -->
+                <div class="lg:col-span-1 flex justify-center items-start pt-6">
+                    <div class="sticky-note bg-pink-100 p-5 rounded relative transform rotate-1 w-72 border border-pink-200 shadow-md">
+                        <div class="tape bg-pink-300/40"></div>
+                        <h4 class="font-bold text-pink-800 border-b border-pink-300 pb-1 mb-2"><i class="fa-solid fa-plug mr-1"></i> Tech Note: Connection Ports</h4>
+                        <p class="text-sm text-slate-800">
+                            कनेक्शन को सुरक्षित और सुचारू रखने के लिए पोर्ट्स का ज्ञान होना आवश्यक है:<br><br>
+                            💻 <strong class="ink-blue">Port 21:</strong> अनएन्क्रिप्टेड FTP के लिए इस्तेमाल होता है।<br>
+                            🛡️ <strong class="ink-red">Port 22:</strong> **SFTP (SSH File Transfer Protocol)** के लिए होता है जो पूर्णतः सुरक्षित और एन्क्रिप्टेड है।
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Handdrawn box for Filezilla connection parameters -->
+            <div class="bg-sky-50 border-2 border-indigo-200 p-5 rounded-lg mb-12 shadow-sm">
+                <span class="font-bold ink-red block mb-3"><i class="fa-solid fa-terminal mr-2"></i> FileZilla UI Cheat-Sheet: Connect parameters</span>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm font-mono text-center">
+                    <div class="bg-white p-2 rounded border border-indigo-100">
+                        <span class="text-xs text-gray-500 font-sans block">Host Address</span>
+                        <span class="ink-blue font-bold text-xs sm:text-sm">ftp.yourdomain.com</span>
+                    </div>
+                    <div class="bg-white p-2 rounded border border-indigo-100">
+                        <span class="text-xs text-gray-500 font-sans block">Username</span>
+                        <span class="ink-blue font-bold text-xs sm:text-sm">u18239012@domain</span>
+                    </div>
+                    <div class="bg-white p-2 rounded border border-indigo-100">
+                        <span class="text-xs text-gray-500 font-sans block">Password</span>
+                        <span class="ink-blue font-bold text-xs sm:text-sm">••••••••••••</span>
+                    </div>
+                    <div class="bg-white p-2 rounded border border-indigo-100">
+                        <span class="text-xs text-gray-500 font-sans block">Port Number</span>
+                        <span class="ink-red font-bold text-xs sm:text-sm">21 (or 22)</span>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-t-2 border-pink-200 my-8">
+
+            <!-- TOPIC 7: ADDING TO SEARCH ENGINES -->
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold ink-red mb-3">
+                    <i class="fa-solid fa-magnifying-glass mr-2"></i>7. Add Website on Search Engines
+                </h2>
+                <p class="mb-4 leading-8">
+                    वेबसाइट के लाइव होने के बावजूद भी वह गूगल पर सर्च करने से नहीं मिलेगी क्योंकि सर्च इंजन के पास अभी तक आपकी साइट के बारे में कोई जानकारी दर्ज नहीं है। इसके लिए हमें वेबसाइट को गूगल के डायरेक्टरी डेटाबेस में दर्ज कराना होता है।
+                </p>
+
+                <div class="bg-white p-5 rounded-lg border border-slate-300 space-y-4">
+                    <div>
+                        <strong class="ink-purple text-lg"><i class="fa-brands fa-google mr-2"></i>Google Search Console:</strong>
+                        <p class="text-sm mt-1 leading-6">
+                            यह गूगल की मुफ्त सेवा है जहां आपको अपने डोमेन ओनरशिप का सत्यापन करना होता है। इसके बाद गूगल का स्वचालित क्रॉलर रोबोट (जिसे <strong class="ink-red">Googlebot</strong> या <strong>Crawler / Spider</strong> कहते हैं) आपके वेब पेजों की हर एक लिंक को डीपली पढ़ना शुरू करता है।
+                        </p>
+                    </div>
+
+                    <div>
+                        <strong class="ink-purple text-lg"><i class="fa-solid fa-sitemap mr-2"></i>Sitemap.xml Creation:</strong>
+                        <p class="text-sm mt-1 leading-6">
+                            अपनी साइट के सभी एक्टिव लिंक्स की एक XML लिस्ट फाइल (सिटमैप) बनाएं और इसे सर्च कंसोल में अपलोड करें। यह फ़ाइल गूगल बोट्स के लिए एक मैप/नक्शे का काम करती है ताकि वह बिना किसी त्रुटि के हर पेज को आसानी से ट्रैक कर सके।
+                        </p>
+                    </div>
+
+                    <div>
+                        <strong class="ink-green text-lg"><i class="fa-solid fa-indent mr-2"></i>Indexing Process (इंडेक्सिंग):</strong>
+                        <p class="text-sm mt-1 leading-6">
+                            क्रॉल करने के बाद जब गूगल आपके पेज के कंटेंट से संतुष्ट हो जाता है तो वह उसे अपने लाइब्रेरी रिकॉर्ड यानी **Google Index** में शामिल कर लेता है। इसी के बाद आपकी साइट कीवर्ड्स सर्च करने पर सर्च पेजों (SERP) पर दिखाई देने लगती है।
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-t-2 border-pink-200 my-8">
+
+            <!-- TOPIC 8: ISSUES IN WEB CREATION & MAINTENANCE -->
+            <div class="mb-12">
+                <h2 class="text-2xl font-bold ink-red mb-3">
+                    <i class="fa-solid fa-gears mr-2"></i>8. Issues in Website Creation & Maintenance
+                </h2>
+                <p class="mb-4 leading-8">
+                    एक बार वेबसाइट पब्लिश होने के बाद डेवलपर की ज़िम्मेदारी खत्म नहीं हो जाती, असल में असली काम वहीं से शुरू होता है! वेबसाइट को हमेशा सुरक्षित, तेज, और सुचारू बनाए रखने के लिए मुख्य चुनौतियों का सामना करना पड़ता है:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 my-6">
+                    <div class="border-l-4 border-rose-500 pl-4 py-2 bg-rose-50/50">
+                        <span class="font-bold text-rose-800 text-lg"><i class="fa-solid fa-ban mr-2"></i>A. Broken Links (टूटे हुए लिंक्स)</span>
+                        <p class="text-sm mt-1 leading-6">
+                            भविष्य में किसी पेज का URL बदलने या फ़ाइल डिलीट होने से यूजर के सामने निराशाजनक <strong class="text-red-600 font-mono">404 Not Found</strong> जैसी एरर आ जाती है। इसके समाधान के लिए लगातार चेकिंग और 301 रिडायरेक्शन की आवश्यकता होती है।
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-amber-500 pl-4 py-2 bg-amber-50/50">
+                        <span class="font-bold text-amber-800 text-lg"><i class="fa-solid fa-bug mr-2"></i>B. Cross-Browser Compatibility</span>
+                        <p class="text-sm mt-1 leading-6">
+                            कई बार वेबसाइट क्रोम (Chrome) ब्राउज़र पर तो बिल्कुल परफेक्ट दिखती है, पर सफारी (Safari) या ओपेरा (Opera) पर उसका लेआउट बिखर जाता है। इसे दूर करने के लिए लगातार क्रॉस-ब्राउज़र टेस्टिंग करनी होती है।
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-blue-500 pl-4 py-2 bg-blue-50/50">
+                        <span class="font-bold text-blue-800 text-lg"><i class="fa-solid fa-mobile-screen mr-2"></i>C. Mobile Responsiveness</span>
+                        <p class="text-sm mt-1 leading-6">
+                            यूजर आपकी वेबसाइट को टीवी स्क्रीन, बड़ी एलसीडी मॉनिटर, टैबलेट या एक छोटे से मोबाइल पर भी खोल सकते हैं। वेबसाइट का लेआउट स्क्रीन साइज के अनुसार एडजस्ट होना चाहिए (Responsive Web Design via Media Queries)।
+                        </p>
+                    </div>
+
+                    <div class="border-l-4 border-purple-500 pl-4 py-2 bg-purple-50/50">
+                        <span class="font-bold text-purple-800 text-lg"><i class="fa-solid fa-shield-virus mr-2"></i>D. Security Patches & Spam</span>
+                        <p class="text-sm mt-1 leading-6">
+                            वेब सर्वर्स पर लगातार रोबोटिक डीडीओएस हमले और मालवेयर अटैक का खतरा बना रहता है। इससे बचने के लिए सुरक्षा प्लगइन्स, फ़ायरवॉल इंस्टॉल करना, डेटाबेस बैकअप रखना और हर सॉफ्टवेयर को अपडेट रखना बेहद आवश्यक है।
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-t-2 border-pink-200 my-8">
+
+            <!-- GLOSSARY SECTION / QUICK SUMMARY -->
+            <div class="mb-12 bg-green-50/60 border-2 border-green-300 p-6 rounded-lg relative shadow-sm">
+                <span class="absolute -top-3 right-4 bg-green-600 text-white font-bold px-3 py-1 rounded text-xs tracking-wider font-sans uppercase">Quick Revision Checklist</span>
+                <h3 class="text-xl font-bold text-green-800 mb-4"><i class="fa-solid fa-circle-check mr-2"></i> Exam-Time Quick Revision Terms</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm leading-6">
+                    <div>
+                        📌 <strong class="ink-blue">index.html:</strong> वेब सर्वर का डिफ़ॉल्ट होमपेज जो ब्राउज़र रिक्वेस्ट पर स्वतः लोड होता है।<br>
+                        📌 <strong class="ink-blue">DNS:</strong> नाम वाले डोमेन को सर्वर के आईपी एड्रेस (संख्या) में बदलने वाली प्रणाली।<br>
+                        📌 <strong class="ink-blue">FTP:</strong> फाइलों को लोकल सिस्टम से इंटरनेट सर्वर पर ट्रांसफर करने का मुख्य प्रोटोकॉल।
+                    </div>
+                    <div>
+                        📌 <strong class="ink-blue">Googlebot:</strong> गूगल का वेब क्रॉलर स्पाइडर जो नए वेब पेजों को सर्च करता है।<br>
+                        📌 <strong class="ink-blue">Sitemap:</strong> आपकी संपूर्ण वेबसाइट के एक्टिव वेब पेजों का एक XML आधारित मानचित्र।<br>
+                        📌 <strong class="ink-blue">SSL (https):</strong> डेटा ट्रांसफर को एन्क्रिप्ट कर वेबसाइट को हैकर्स से सुरक्षित रखने वाला डिजिटल सर्टिफिकेट।
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fun hand-drawn signature line -->
+            <div class="text-right py-10">
+                <span class="font-bold ink-red text-xl">~ Written by: Aakash Sen 📝✨</span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bottom aesthetic footer note -->
+    <div class="text-center mt-8 text-sm text-slate-500 font-sans">
+        <p>© 2026 CS School Book - Chapter Handout notes designed by Aakash Sen exactly for classroom study purposes.</p>
+    </div>
+
+</body>
+</html>

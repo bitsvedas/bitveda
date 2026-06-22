@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theory of Computation (TOC) Comprehensive Study Companion</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code:wght@500;600&display=swap');
+
+        :root {
+            --bg-color: #f0f2f5;
+            --text-color: #2d3436;
+            --heading-color: #1e272e;
+            --border-color: rgba(0, 0, 0, 0.08);
+            --header-bg: linear-gradient(135deg, #0984e3, #6c5ce7);
+            
+            /* High Saturation Color Palette for Cheat Sheet Cards */
+            --c-hierarchy: #ffbe0b;
+            --c-regex: #00b4d8;
+            --c-regularity: #ff006e;
+            --c-decidability: #8338ec;
+            --c-closure: #3a86c8;
+            --c-examples: #06d6a0;
+            --c-normalforms: #f77f00;
+
+            /* Card Tint Backgrounds (High Saturation, Low Opacity) */
+            --bg-hierarchy: rgba(255, 190, 11, 0.08);
+            --bg-regex: rgba(0, 180, 216, 0.08);
+            --bg-regularity: rgba(255, 0, 110, 0.08);
+            --bg-decidability: rgba(131, 56, 236, 0.08);
+            --bg-closure: rgba(58, 134, 200, 0.08);
+            --bg-examples: rgba(6, 214, 160, 0.08);
+            --bg-normalforms: rgba(247, 127, 0, 0.08);
+
+            --card-body-bg: #ffffff;
+            --card-shadow-intensity: rgba(0, 0, 0, 0.06);
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #0f1115;
+            --text-color: #e2e8f0;
+            --heading-color: #ffffff;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --header-bg: linear-gradient(135deg, #1e272e, #2c3e50);
+
+            --bg-hierarchy: rgba(255, 190, 11, 0.12);
+            --bg-regex: rgba(0, 180, 216, 0.12);
+            --bg-regularity: rgba(255, 0, 110, 0.12);
+            --bg-decidability: rgba(131, 56, 236, 0.12);
+            --bg-closure: rgba(58, 134, 200, 0.12);
+            --bg-examples: rgba(6, 214, 160, 0.12);
+            --bg-normalforms: rgba(247, 127, 0, 0.12);
+
+            --card-body-bg: #161a22;
+            --card-shadow-intensity: rgba(0, 0, 0, 0.4);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s, color 0.3s;
+            padding: 20px;
+        }
+
+        /* Highly Styled Colorful Header */
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto 30px;
+            padding: 30px;
+            background: var(--header-bg);
+            border-radius: 24px;
+            box-shadow: 0 10px 30px rgba(108, 92, 231, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            color: #ffffff;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+
+        h1 { font-size: 2.4rem; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.15); }
+        .subtitle { font-size: 1rem; opacity: 0.9; margin-top: 4px; font-weight: 500; }
+
+        .nav-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #ffffff;
+            padding: 12px 24px;
+            border-radius: 14px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .nav-btn.active {
+            background: #ffffff;
+            color: #1e272e;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+            border-color: #ffffff;
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #ffffff;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .theme-toggle:hover {
+            background: #ffffff;
+            color: #1e272e;
+        }
+
+        /* Views management */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* MASONRY GRID (CHEAT SHEET) */
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: start;
+        }
+
+        /* Colorful Glowing Cards */
+        .card {
+            background-color: var(--card-body-bg);
+            border: 1px solid var(--border-color);
+            border-top: 6px solid var(--card-color);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 24px var(--card-shadow-intensity), 0 2px 8px -2px color-mix(in srgb, var(--card-color) 40%, transparent);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px -3px color-mix(in srgb, var(--card-color) 60%, transparent);
+        }
+
+        .card h2 {
+            color: var(--heading-color);
+            border-bottom: 2px solid color-mix(in srgb, var(--card-color) 30%, transparent);
+            padding-bottom: 12px;
+            margin-bottom: 18px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card h2 .icon {
+            background-color: color-mix(in srgb, var(--card-color) 15%, transparent);
+            color: var(--card-color);
+            padding: 6px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Colorized Code & Math Blocks */
+        .math {
+            font-family: 'Fira Code', monospace;
+            background: color-mix(in srgb, var(--card-color) 10%, var(--bg-color));
+            border-left: 3px solid var(--card-color);
+            padding: 4px 10px;
+            border-radius: 4px 8px 8px 4px;
+            font-size: 0.95em;
+            color: var(--heading-color);
+            font-weight: 600;
+            display: inline-block;
+        }
+
+        .list-item { margin-bottom: 12px; padding-left: 20px; position: relative; }
+        .list-item::before { 
+            content: "✦"; 
+            position: absolute; 
+            left: 0; 
+            color: var(--card-color); 
+            font-weight: bold; 
+            font-size: 1em; 
+        }
+
+        .concept-block {
+            background: var(--card-tint);
+            border-radius: 14px;
+            padding: 16px;
+            margin: 15px 0;
+            border-left: 5px solid var(--card-color);
+            font-size: 0.92rem;
+        }
+
+        .concept-block h4 {
+            margin-bottom: 6px;
+            color: var(--card-color);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            font-weight: 700;
+        }
+
+        .example-box {
+            background: color-mix(in srgb, var(--card-color) 6%, var(--card-body-bg));
+            border-left: 4px solid var(--card-color);
+            padding: 14px;
+            margin: 14px 0;
+            border-radius: 0 12px 12px 0;
+            font-size: 0.92rem;
+            border-top: 1px solid color-mix(in srgb, var(--card-color) 10%, transparent);
+            border-bottom: 1px solid color-mix(in srgb, var(--card-color) 10%, transparent);
+            border-right: 1px solid color-mix(in srgb, var(--card-color) 10%, transparent);
+        }
+
+        /* BASICS SECTION LAYOUT */
+        .basics-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        /* Sidebar navigation */
+        .basics-sidebar {
+            background: var(--card-body-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 25px;
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+            box-shadow: 0 8px 24px var(--card-shadow-intensity);
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-color);
+            margin-bottom: 20px;
+            outline: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: all 0.2s ease;
+        }
+
+        .search-box:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.15);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-item a {
+            display: block;
+            padding: 12px 18px;
+            border-radius: 10px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.92rem;
+            transition: all 0.25s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .sidebar-item a:hover {
+            background: var(--bg-color);
+            color: var(--heading-color);
+        }
+
+        .sidebar-item.active a {
+            background: var(--bg-color);
+            color: var(--heading-color);
+            padding-left: 20px;
+            border-left-color: #6c5ce7;
+        }
+
+        /* Content Hub */
+        .basics-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        .basics-section {
+            background: var(--card-body-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            scroll-margin-top: 20px;
+            box-shadow: 0 8px 24px var(--card-shadow-intensity);
+        }
+
+        .basics-section h2 {
+            color: var(--heading-color);
+            font-size: 1.9rem;
+            margin-bottom: 25px;
+            border-bottom: 3px solid var(--border-color);
+            padding-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topic-block {
+            margin-bottom: 35px;
+            padding-bottom: 35px;
+            border-bottom: 1px dashed var(--border-color);
+        }
+
+        .topic-block:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .topic-block h3 {
+            color: var(--heading-color);
+            font-size: 1.35rem;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tuple-list {
+            background: var(--bg-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.92rem;
+            border-left: 4px solid #00b4d8;
+            font-weight: 600;
+        }
+
+        .algorithm-box {
+            background: rgba(108, 92, 231, 0.08);
+            border-left: 4px solid #6c5ce7;
+            padding: 18px;
+            border-radius: 0 16px 16px 0;
+            margin: 18px 0;
+            border-top: 1px solid rgba(108, 92, 231, 0.1);
+            border-bottom: 1px solid rgba(108, 92, 231, 0.1);
+            border-right: 1px solid rgba(108, 92, 231, 0.1);
+        }
+
+        details {
+            background: var(--bg-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-top: 15px;
+            transition: background 0.2s;
+            font-size: 0.9rem;
+            border: 1px solid var(--border-color);
+        }
+        details[open] {
+            background: var(--card-body-bg);
+            border-color: var(--card-color);
+        }
+        summary {
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            user-select: none;
+            color: var(--heading-color);
+        }
+
+        /* Hierarchy Nested Boxes (Bright, saturated, high contrast) */
+        .h-box {
+            border: 2px solid var(--text-color);
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 14px;
+            font-weight: 700;
+            font-size: 0.92rem;
+        }
+        .h-box-0 { background-color: #ffdde1; color: #c0392b; border-color: #c0392b; }
+        .h-box-1 { background-color: #e2f0d9; color: #27ae60; border-color: #27ae60; }
+        .h-box-2 { background-color: #e8f4f8; color: #2980b9; border-color: #2980b9; }
+        .h-box-3 { background-color: #fef5d1; color: #b7791f; border-color: #b7791f; }
+
+        [data-theme="dark"] .h-box-0 { background-color: rgba(192, 57, 43, 0.25); color: #ff8a80; border-color: #ff8a80; }
+        [data-theme="dark"] .h-box-1 { background-color: rgba(39, 174, 96, 0.25); color: #a3e4d7; border-color: #a3e4d7; }
+        [data-theme="dark"] .h-box-2 { background-color: rgba(41, 128, 185, 0.25); color: #85c1e9; border-color: #85c1e9; }
+        [data-theme="dark"] .h-box-3 { background-color: rgba(183, 121, 31, 0.25); color: #f9e79f; border-color: #f9e79f; }
+
+        .machine-tag { 
+            font-size: 0.72rem; 
+            font-weight: 700; 
+            font-family: 'Fira Code', monospace; 
+            float: right; 
+            background: var(--text-color); 
+            color: var(--bg-color); 
+            padding: 2px 8px; 
+            border-radius: 6px; 
+        }
+
+        /* Colorful Table Elements */
+        .table-responsive { overflow-x: auto; border-radius: 16px; border: 2px solid var(--border-color); }
+        .matrix-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-body-bg);
+            font-size: 0.9rem;
+        }
+        .matrix-table th, .matrix-table td {
+            border: 1px solid var(--border-color);
+            padding: 14px;
+            text-align: center;
+        }
+        .matrix-table th { background: rgba(0, 0, 0, 0.03); color: var(--heading-color); font-weight: 700; }
+        [data-theme="dark"] .matrix-table th { background: rgba(255, 255, 255, 0.03); }
+        
+        /* Colorful cells */
+        .td-closed { background-color: rgba(46, 204, 113, 0.15); color: #27ae60; font-weight: 600; }
+        .td-not-closed { background-color: rgba(231, 76, 60, 0.15); color: #c0392b; font-weight: 600; }
+        [data-theme="dark"] .td-closed { background-color: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+        [data-theme="dark"] .td-not-closed { background-color: rgba(231, 76, 60, 0.2); color: #ff6b6b; }
+
+        .check { font-size: 1.15em; margin-right: 4px; }
+        .cross { font-size: 1.15em; margin-right: 4px; }
+
+        .highlight-badge {
+            display: inline-block;
+            background: var(--card-color);
+            color: #ffffff;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin: 5px 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .c-hierarchy .highlight-badge, .c-normalforms .highlight-badge { color: #1e272e; }
+
+        /* Card color associations */
+        .c-hierarchy { --card-color: var(--c-hierarchy); --card-tint: var(--bg-hierarchy); }
+        .c-regex { --card-color: var(--c-regex); --card-tint: var(--bg-regex); }
+        .c-regularity { --card-color: var(--c-regularity); --card-tint: var(--bg-regularity); }
+        .c-decidability { --card-color: var(--c-decidability); --card-tint: var(--bg-decidability); }
+        .c-closure { --card-color: var(--c-closure); --card-tint: var(--bg-closure); grid-column: 1 / -1; }
+        .c-examples { --card-color: var(--c-examples); --card-tint: var(--bg-examples); }
+        .c-normalforms { --card-color: var(--c-normalforms); --card-tint: var(--bg-normalforms); }
+
+        @media (max-width: 992px) {
+            .basics-layout {
+                grid-template-columns: 1fr;
+            }
+            .basics-sidebar {
+                position: static;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .c-closure { grid-column: span 1; }
+            .header-container { flex-direction: column; gap: 15px; text-align: center; }
+            .header-top { flex-direction: column; gap: 15px; }
+            .nav-controls { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Unified Colorful Header -->
+    <div class="header-container">
+        <div class="header-top">
+            <div>
+                <h1>Theory of Computation (TOC)</h1>
+                <p class="subtitle">Ultimate Multi-Colored Study Companion & Syllabus Reference Guide</p>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()">Toggle Dark Mode</button>
+        </div>
+        <div class="nav-controls">
+            <button class="nav-btn active" id="btn-cheat" onclick="switchView('cheat')">
+                🌈 Colorful Cheat Sheet
+            </button>
+            <button class="nav-btn" id="btn-basics" onclick="switchView('basics')">
+                📚 Basics Reference Library
+            </button>
+        </div>
+    </div>
+
+    <!-- VIEW 1: CHEAT SHEET (VIBRANT GLOWING MASONRY GRID) -->
+    <div id="view-cheat" class="view-section active">
+        <main class="masonry-grid">
+            
+            <!-- Card 1: Chomsky Hierarchy -->
+            <section class="card c-hierarchy">
+                <h2>Chomsky Hierarchy <span class="icon">🏷️</span></h2>
+                
+                <div class="concept-block">
+                    <h4>Core Concept</h4>
+                    A <strong>Formal Grammar</strong> is defined as a 4-tuple: <span class="math">G = (V, T, P, S)</span> where <strong>V</strong> is variables, <strong>T</strong> is terminals, <strong>P</strong> is production rules, and <strong>S</strong> is the start symbol.
+                </div>
+
+                <div class="math" style="display:block; text-align:center; margin-bottom: 12px; border-color: var(--card-color);">
+                    Type-3 &sub; Type-2 &sub; Type-1 &sub; Type-0
+                </div>
+                
+                <div class="h-box h-box-0">
+                    Type-0: Unrestricted Grammar <span class="machine-tag">TM</span>
+                    <div style="font-size: 0.8em; margin-bottom: 5px; font-weight: normal; opacity:0.9;">Recursively Enumerable</div>
+                    <div class="h-box h-box-1">
+                        Type-1: Context Sensitive (CSL) <span class="machine-tag">LBA / TM</span>
+                        <div style="font-size: 0.8em; margin-bottom: 5px; font-weight: normal; opacity:0.9;">|&alpha;| &le; |&beta;|</div>
+                        <div class="h-box h-box-2">
+                            Type-2: Context Free (CFG) <span class="machine-tag">PDA</span>
+                            <div style="font-size: 0.8em; margin-bottom: 5px; font-weight: normal; opacity:0.9;">A &rarr; &alpha;</div>
+                            <div class="h-box h-box-3">
+                                Type-3: Regular Language <span class="machine-tag">FA</span>
+                                <div style="font-size: 0.8em; font-weight: normal; opacity:0.9;">A &rarr; aB or A &rarr; a</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <details style="--card-color: var(--c-hierarchy)">
+                    <summary>Deep Definition: Containment</summary>
+                    <p style="margin-top: 8px;">
+                        Every Regular language is Context-Free, every Context-Free language is Context-Sensitive, and every Context-Sensitive language is Recursive Enumerable. The inclusion is <strong>strict</strong> and complete.
+                    </p>
+                </details>
+            </section>
+
+            <!-- Card 2: Regular Expressions -->
+            <section class="card c-regex">
+                <h2>RegEx & Identities <span class="icon">✨</span></h2>
+                
+                <div class="concept-block">
+                    <h4>Formal Definition</h4>
+                    A <strong>Regular Expression (RE)</strong> describes a Regular Language over an alphabet &Sigma;. It uses operators Union (<span class="math">+</span>), Concatenation (<span class="math">&bull;</span>), and Kleene Star (<span class="math">*</span>).
+                </div>
+
+                <div class="list-item"><span class="math">a*</span> &rarr; <strong>Kleene Closure:</strong> 0 or more occurrences of <span class="math">a</span>. Includes empty string <span class="math">&epsilon;</span>.</div>
+                <div class="list-item"><span class="math">a+</span> &rarr; <strong>Positive Closure:</strong> 1 or more occurrences of <span class="math">a</span>. Does not include <span class="math">&epsilon;</span>.</div>
+                
+                <div class="example-box">
+                    <strong>Crucial Difference:</strong><br>
+                    <span class="math">a* - a+ = &epsilon;</span> (also written as &wedge; or NULL)
+                </div>
+                
+                <h3 style="margin-top: 15px; font-size: 1.1em; border-bottom: 1px solid; display: inline-block;">Algebraic Identities</h3>
+                <div class="math" style="display:block; margin-top: 10px; padding: 10px; text-align: center;">
+                    (a+b)* = (a*+b)* = (a*b*)* = (a*+b*)*
+                </div>
+
+                <details style="--card-color: var(--c-regex)">
+                    <summary>Definitions of Notations</summary>
+                    <div style="margin-top: 8px; display: flex; flex-direction: column; gap: 5px;">
+                        <div><span class="math">aⁿ aᵐ</span> : Concrete generated string sequences.</div>
+                        <div><span class="math">a+b*</span> : A Regular Expression representing set <span class="math">{a, &epsilon;, b, bb, bbb, ...}</span>.</div>
+                        <div><strong>Regular Grammar:</strong> Constrained to rules like <span class="math">S &rarr; a | b</span>.</div>
+                    </div>
+                </details>
+            </section>
+
+            <!-- Card 3: Checking Regularity -->
+            <section class="card c-regularity">
+                <h2>Checking Regularity <span class="icon">🔍</span></h2>
+                
+                <div class="concept-block">
+                    <h4>Core Rule of Regularity</h4>
+                    Regular Languages possess <strong>no memory</strong> of past symbols beyond a finite number of active states. If a language requires counting or matching arbitrary values, it is <strong>not Regular</strong>.
+                </div>
+
+                <div class="list-item"><strong>Finite Languages:</strong> Always Regular! Can always be mapped by a DFA with finite states.</div>
+                <div class="list-item"><strong>Infinite Languages:</strong> Must be analyzed carefully. Ask: <em>Is memory/counting required?</em></div>
+                
+                <div style="padding-left: 15px;">
+                    <div class="list-item"><strong>No Matching:</strong> If no comparison is done &rarr; <strong>Regular</strong>. Matching <span class="math">(aⁿbⁿ)</span> is <strong>Not Regular</strong>.</div>
+                    <div class="list-item"><strong>Arithmetic Checks:</strong> If comparisons like <span class="math">a=b</span>, <span class="math">a&ne;b</span>, <span class="math">a&gt;b</span>, or <span class="math">a&lt;b</span> are done &rarr; <strong>Not Regular</strong>.</div>
+                    <div class="list-item"><strong>Required Memory:</strong> Relationships like <span class="math">aⁿbᵐ | a=b+1</span> require tracking counts &rarr; <strong>Not Regular</strong>.</div>
+                    <div class="list-item"><strong>Non-Linear Power:</strong> Power progressions like <span class="math">a^{n²}</span> or <span class="math">a^{2ⁿ}</span> &rarr; <strong>Not Regular</strong>.</div>
+                </div>
+
+                <details style="--card-color: var(--c-regularity)">
+                    <summary>Concept: The Pumping Lemma</summary>
+                    <p style="margin-top: 8px;">
+                        The <strong>Pumping Lemma</strong> is a proof tool used to prove a language is <em>not regular</em>. It states that all sufficiently long strings in a regular language can be split into three parts (<span class="math">xyz</span>) where <span class="math">xyⁿz</span> must also belong to the language for all <span class="math">n &ge; 0</span>.
+                    </p>
+                </details>
+            </section>
+
+            <!-- Card 4: Decidability (Recursive vs RE) -->
+            <section class="card c-decidability">
+                <h2>Decidability <span class="icon">⚖️</span></h2>
+                
+                <div class="concept-block">
+                    <h4>What is Decidability?</h4>
+                    A problem is <strong>Decidable</strong> if there exists an algorithm (represented by a Turing Machine) that halts on <strong>all</strong> inputs, returning either 'Yes' or 'No'.
+                </div>
+
+                <div class="example-box">
+                    <div class="highlight-badge">Recursive (Decidable)</div>
+                    <div class="list-item" style="margin-top:5px;">A Turing Machine (TM) halts on every input.</div>
+                    <div class="list-item">Accepts valid strings, explicitly rejects invalid ones.</div>
+                    <div class="list-item"><strong>Never enters an infinite loop.</strong></div>
+                </div>
+
+                <div class="example-box">
+                    <div class="highlight-badge">Recursive Enumerable (RE)</div>
+                    <div class="list-item" style="margin-top:5px;">Also known as <strong>Turing-Recognizable</strong>.</div>
+                    <div class="list-item">If string is valid &rarr; TM halts and accepts.</div>
+                    <div class="list-item">If string is invalid &rarr; TM may halt and reject, <strong>or run forever in an infinite loop</strong>.</div>
+                </div>
+
+                <details style="--card-color: var(--c-decidability)">
+                    <summary>Concept: Halting Problem</summary>
+                    <p style="margin-top: 8px;">
+                        The famous <strong>Halting Problem</strong> (determining if an arbitrary program/TM halts on a given input) is the classic example of an <strong>undecidable</strong> problem. It is RE but not Recursive.
+                    </p>
+                </details>
+            </section>
+
+            <!-- Card 5: Closure Properties Table (Full Width & Color Highlighted) -->
+            <section class="card c-closure">
+                <h2>Closure Properties <span class="icon">🛡️</span></h2>
+                
+                <div class="concept-block" style="margin-bottom: 20px;">
+                    <h4>Definition of Closure</h4>
+                    A class of languages is said to be <strong>closed</strong> under a specific operation (like Union or Complement) if applying that operation to any languages in that class always yields another language that also belongs to the same class.
+                </div>
+
+                <div class="table-responsive">
+                    <table class="matrix-table">
+                        <thead>
+                            <tr>
+                                <th>Operation</th>
+                                <th>Regular</th>
+                                <th>DFA (DCFL)</th>
+                                <th>NFA (CFL)</th>
+                                <th>CSL</th>
+                                <th>Recursive <br><small>(Decidable)</small></th>
+                                <th>Recursive Enumerable <br><small>(Recognizable)</small></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>&cup; (Union)</strong></td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-not-closed"><span class="cross">&cross;</span> Not Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>&cap; (Intersection)</strong></td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-not-closed"><span class="cross">&cross;</span> Not Closed</td>
+                                <td class="td-not-closed"><span class="cross">&cross;</span> Not Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Complement</strong></td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-not-closed"><span class="cross">&cross;</span> Not Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-not-closed"><span class="cross">&cross;</span> Not Closed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Concatenation</strong></td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-not-closed"><span class="cross">&cross;</span> Not Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Closure (*)</strong></td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-not-closed"><span class="cross">&cross;</span> Not Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                                <td class="td-closed"><span class="check">&check;</span> Closed</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="text-align: right; font-size: 0.85em; opacity: 0.8; margin-top: 10px;">
+                    * DCFL = Deterministic Context Free Language. Context Free is closed under Union, but NOT under Intersection or Complement!
+                </div>
+            </section>
+
+            <!-- Card 6: Memory & Context Examples -->
+            <section class="card c-examples">
+                <h2>Memory & Context Rules <span class="icon">🧠</span></h2>
+                
+                <div class="concept-block">
+                    <h4>Memory Limits by Automata</h4>
+                    <div>• <strong>Regular (FA):</strong> 0 memory slots (states only).</div>
+                    <div>• <strong>Context-Free (PDA):</strong> 1 stack (LIFO storage).</div>
+                    <div>• <strong>Context-Sensitive (LBA):</strong> Bounded tape memory.</div>
+                </div>
+
+                <div class="example-box">
+                    <span class="math">aᵐbⁿ | m = 3n+5</span><br>
+                    &rarr; <strong>CFG</strong> (1 memory stack is enough to keep track of multiplier relationships).
+                </div>
+                <div class="example-box">
+                    <span class="math">aⁿbⁿcⁿ | n &ge; 0</span><br>
+                    &rarr; <strong>CSL</strong> (Requires matching 2 dependent sets &rarr; 2 memory spaces/Linear Tape).
+                </div>
+                <div class="example-box" style="border-left-color: #d63031;">
+                    <span class="math">ww | w &isin; (a,b)*</span><br>
+                    &rarr; <strong>Not Regular / Not CFG</strong> (Requires FIFO storage which a stack cannot do).
+                </div>
+
+                <hr style="margin: 15px 0; border: 1px solid rgba(0,0,0,0.1)">
+                
+                <div class="list-item">
+                    <strong>Context Sensitive Grammar Rule:</strong> <span class="math">a A b &rarr; a b b</span><br>
+                    <small>The variable <span class="math">A</span> can only be replaced when flanked by left-neighbor 'a' and right-neighbor 'b'.</small>
+                </div>
+                <div class="list-item">
+                    <strong>Context Free Grammar Rule:</strong> <span class="math">A &rarr; b</span><br>
+                    <small>Variable <span class="math">A</span> can be replaced entirely independent of its environment.</small>
+                </div>
+                
+                <div class="example-box" style="margin-top: 15px;">
+                    <strong>Ambiguity:</strong> <span class="math">L₁: {aⁿbⁿcᵐ} &cup; {aᵐbⁿcⁿ}</span><br>
+                    &rarr; Merging multiple context grammars causes parsing paths to conflict, leading to an <strong>Ambiguous</strong> language.
+                </div>
+            </section>
+
+            <!-- Card 7: Normal Forms -->
+            <section class="card c-normalforms">
+                <h2>Normal Forms (CFG) <span class="icon">📐</span></h2>
+                
+                <div class="concept-block">
+                    <h4>Why Normalize?</h4>
+                    Normalizing simplifies Context-Free Grammars by restricting production rules. This ensures structured, predictable parsing trees (useful for compilers).
+                </div>
+
+                <div class="example-box">
+                    <div class="highlight-badge">Chomsky Normal Form (CNF)</div>
+                    <div class="math" style="display:block; margin: 8px 0;">
+                        A &rarr; a (one terminal)<br>
+                        A &rarr; BC (exactly two non-terminals)
+                    </div>
+                    <strong>Properties:</strong><br>
+                    To derive a string of length <span class="math">n</span>, the number of steps required is always exactly <span class="math">(2n - 1)</span>.
+                </div>
+
+                <div class="example-box">
+                    <div class="highlight-badge">Greibach Normal Form (GNF)</div>
+                    <div class="math" style="display:block; margin: 8px 0;">
+                        A &rarr; a (one terminal)<br>
+                        A &rarr; a C₁C₂...Cₙ (one terminal followed by variables)
+                    </div>
+                    <strong>Properties:</strong><br>
+                    Highly efficient because every step of the derivation generates exactly 1 terminal symbol, making it easy to track parsing progress.
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- VIEW 2: BASICS SYLLABUS REFERENCE -->
+    <div id="view-basics" class="view-section">
+        <div class="basics-layout">
+            <!-- Sidebar with Search Filter -->
+            <aside class="basics-sidebar">
+                <input type="text" id="topic-search" class="search-box" placeholder="Search topics..." oninput="filterTopics()">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item active" id="side-automata"><a href="#sec-automata" onclick="highlightSidebar('side-automata')">🤖 Automata Theory</a></li>
+                    <li class="sidebar-item" id="side-regex"><a href="#sec-regex" onclick="highlightSidebar('side-regex')">✨ Regular Expressions</a></li>
+                    <li class="sidebar-item" id="side-cfg"><a href="#sec-cfg" onclick="highlightSidebar('side-cfg')">📐 Context-Free Grammars</a></li>
+                    <li class="sidebar-item" id="side-pda"><a href="#sec-pda" onclick="highlightSidebar('side-pda')">🥞 Pushdown Automata</a></li>
+                    <li class="sidebar-item" id="side-tm"><a href="#sec-tm" onclick="highlightSidebar('side-tm')">⚙️ Turing Machines & complexity</a></li>
+                </ul>
+            </aside>
+
+            <!-- Main Scrollable Content -->
+            <div class="basics-content">
+                
+                <!-- AUTOMATA -->
+                <section id="sec-automata" class="basics-section">
+                    <h2>Automata & Finite State Machines</h2>
+                    
+                    <div class="topic-block" data-keywords="automata tutorial theory of automata">
+                        <h3>1. Theory of Automata</h3>
+                        <p>Automata Theory is the study of abstract machines and computational problems that can be solved using these machines. It provides the mathematical foundations for parsing, compiler design, and regular searching.</p>
+                    </div>
+
+                    <div class="topic-block" data-keywords="finite automata fa">
+                        <h3>2. Finite Automata (FA)</h3>
+                        <p>A Finite Automaton is a mathematical model of computation consisting of a finite set of states, transitions between those states based on input symbols, and an initial and set of final states. Mathematically represented as a <strong>5-tuple</strong>:</p>
+                        <div class="tuple-list">
+                            M = (Q, &Sigma;, &delta;, q&#x2080;, F)
+                        </div>
+                        <ul style="padding-left: 20px; font-size: 0.9rem;">
+                            <li><strong>Q</strong>: Finite non-empty set of states.</li>
+                            <li><strong>&Sigma;</strong>: Finite set of input symbols (alphabet).</li>
+                            <li><strong>&delta;</strong>: Transition function.</li>
+                            <li><strong>q&#x2080;</strong>: Start/Initial State (<span class="math">q&#x2080; &isin; Q</span>).</li>
+                            <li><strong>F</strong>: Set of final/accepting states (<span class="math">F &sube; Q</span>).</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic-block" data-keywords="transition diagram transition table">
+                        <h3>3. Transition Diagrams & Tables</h3>
+                        <p><strong>Transition Diagram:</strong> A directed graph representation of a finite automaton. Nodes represent states, directed edges denote transitions labeled with input symbols, and accepting states are denoted with double circles.</p>
+                        <p><strong>Transition Table:</strong> A tabular matrix format mapping current states (rows) and input symbols (columns) to their respective next states.</p>
+                    </div>
+
+                    <div class="topic-block" data-keywords="dfa deterministic finite automata examples of dfa">
+                        <h3>4. Deterministic Finite Automata (DFA)</h3>
+                        <p>In a DFA, for each state and each input symbol, there is exactly <strong>one</strong> next transition. There are no epsilon (<span class="math">&epsilon;</span>) transitions.</p>
+                        <div class="concept-block" style="--card-color: var(--c-closure)">
+                            <strong>DFA Transition Function (&delta;):</strong> <br>
+                            <span class="math">&delta; : Q &times; &Sigma; &rarr; Q</span>
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> DFA accepting strings over <span class="math">{a,b}</span> ending in "ab":<br>
+                            <span class="math">Q = {q&#x2080;, q&#x2081;, q&#x2082;}</span>, Start = <span class="math">q&#x2080;</span>, Final = <span class="math">q&#x2082;</span>.<br>
+                            &bull; <span class="math">&delta;(q&#x2080;, a) = q&#x2081;</span>, <span class="math">&delta;(q&#x2080;, b) = q&#x2080;</span><br>
+                            &bull; <span class="math">&delta;(q&#x2081;, a) = q&#x2081;</span>, <span class="math">&delta;(q&#x2081;, b) = q&#x2082;</span><br>
+                            &bull; <span class="math">&delta;(q&#x2082;, a) = q&#x2081;</span>, <span class="math">&delta;(q&#x2082;, b) = q&#x2080;</span>
+                        </div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="nfa non-deterministic finite automata examples of nfa">
+                        <h3>5. Non-Deterministic Finite Automata (NFA)</h3>
+                        <p>In an NFA, for a given state and input symbol, there can be <strong>zero, one, or multiple</strong> transitions to different states.</p>
+                        <div class="concept-block" style="--card-color: var(--c-regex)">
+                            <strong>NFA Transition Function (&delta;):</strong> <br>
+                            <span class="math">&delta; : Q &times; &Sigma; &rarr; 2&#x1d1c;</span> (Power set of Q)
+                        </div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="eliminating epsilon transitions epsilon-nfa">
+                        <h3>6. Eliminating &epsilon;-Transitions</h3>
+                        <p>To convert an NFA with &epsilon; transitions (&epsilon;-NFA) to an equivalent standard NFA, compute the <strong>&epsilon;-Closure</strong> of each state.</p>
+                        <div class="algorithm-box">
+                            <strong>&epsilon;-Closure(q):</strong> The set of all states reachable from state <span class="math">q</span> by taking only &epsilon;-labeled edges (including <span class="math">q</span> itself).<br>
+                            The new transition function is calculated as:<br>
+                            <span class="math">&delta;'(q, a) = &epsilon;-Closure(&delta;(&epsilon;-Closure(q), a))</span>
+                        </div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="conversion from nfa to dfa subset construction">
+                        <h3>7. Conversion from NFA to DFA</h3>
+                        <p>Every NFA can be transformed into an equivalent DFA using the <strong>Subset Construction Algorithm</strong>.</p>
+                        <div class="algorithm-box">
+                            <strong>Algorithm Steps:</strong><br>
+                            1. Start with the initial state of the DFA as the subset <span class="math">{q&#x2080;}</span>.<br>
+                            2. For each new state subset, find the union of transitions for all symbols in <span class="math">&Sigma;</span>.<br>
+                            3. Add these resulting subsets as new DFA states and repeat until no new states are discovered.<br>
+                            4. Final states of the DFA are any subsets containing at least one final state of the NFA.
+                        </div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="minimization of dfa Myhill-Nerode partitioning">
+                        <h3>8. Minimization of DFA</h3>
+                        <p>Minimizing a DFA removes redundant states, producing the smallest possible equivalent DFA. This is achieved via <strong>Equivalence Partitioning</strong> (or the table-filling method).</p>
+                        <div class="algorithm-box">
+                            <strong>Partitioning Algorithm:</strong><br>
+                            1. Split states into two groups: Accepting (<span class="math">F</span>) and Non-accepting (<span class="math">Q - F</span>).<br>
+                            2. Repeatedly split these groups if transitions on any symbol land in different partitions.<br>
+                            3. Stop when no further splits are possible. Merge all remaining states inside each partition group.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- REGULAR EXPRESSIONS -->
+                <section id="sec-regex" class="basics-section">
+                    <h2>Regular Expressions & Transducers</h2>
+
+                    <div class="topic-block" data-keywords="regular expression re examples of regular expression">
+                        <h3>1. Regular Expressions (RE)</h3>
+                        <p>Regular expressions are algebraic descriptors used to define the strings within a Regular Language. The base elements are symbols from alphabet <span class="math">&Sigma;</span>, <span class="math">&epsilon;</span> (empty string), and <span class="math">&empty;</span> (empty set).</p>
+                        <div class="example-box">
+                            <strong>Examples:</strong><br>
+                            &bull; <span class="math">(a+b)*</span> : All strings over <span class="math">{a,b}</span>.<br>
+                            &bull; <span class="math">a(a+b)*b</span> : All strings starting with <span class="math">a</span> and ending with <span class="math">b</span>.<br>
+                            &bull; <span class="math">(aa)*</span> : Strings with an even number of <span class="math">a</span> symbols.
+                        </div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="conversion of re to fa thompson construction">
+                        <h3>2. Conversion of RE to FA</h3>
+                        <p>This is commonly done using <strong>Thompson's Construction Algorithm</strong>, which recursively builds an equivalent &epsilon;-NFA from the base parts of a Regular Expression.</p>
+                    </div>
+
+                    <div class="topic-block" data-keywords="ardens theorem arden">
+                        <h3>3. Arden's Theorem</h3>
+                        <p>Arden's Theorem is a mathematical tool used to find a unique regular expression representing transition systems (converting a transition diagram to an RE).</p>
+                        <div class="concept-block" style="--card-color: var(--c-normalforms)">
+                            <strong>Theorem Formulation:</strong><br>
+                            If <span class="math">P</span> and <span class="math">Q</span> are regular expressions over <span class="math">&Sigma;</span>, and <span class="math">P</span> does not contain <span class="math">&epsilon;</span>, then the equation:<br>
+                            <span class="math">R = Q + RP</span><br>
+                            has a unique solution given by:<br>
+                            <span class="math">R = QP*</span>
+                        </div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="moore machine mealy machine mealy moore">
+                        <h3>4. Mealy & Moore Machines</h3>
+                        <p>These are Finite State Machines with <strong>outputs</strong> (Transducers):</p>
+                        <div class="list-item"><strong>Moore Machine:</strong> Output depends strictly on the <strong>current state</strong>. <br><span class="math">&lambda; : Q &rarr; &Delta;</span> (where &Delta; is the output alphabet).</div>
+                        <div class="list-item"><strong>Mealy Machine:</strong> Output depends on both the <strong>current state and input symbol</strong>. <br><span class="math">&lambda; : Q &times; &Sigma; &rarr; &Delta;</span>.</div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="conversion from mealy machine to moore machine conversion from moore machine to mealy machine">
+                        <h3>5. Mealy / Moore Conversion</h3>
+                        <div class="algorithm-box">
+                            <strong>Moore to Mealy:</strong> Highly straightforward. For each transition, copy the output of the destination Moore state onto the incoming transition edge of the Mealy machine.<br>
+                            <strong>Mealy to Moore:</strong> If a state in a Mealy machine has incoming transitions with different output symbols, split that state into multiple states in the Moore machine (one state for each unique output symbol).
+                        </div>
+                    </div>
+                </section>
+
+                <!-- CONTEXT-FREE GRAMMARS -->
+                <section id="sec-cfg" class="basics-section">
+                    <h2>Context-Free Grammars (CFG)</h2>
+
+                    <div class="topic-block" data-keywords="context-free grammar cfg">
+                        <h3>1. Context-Free Grammar (CFG)</h3>
+                        <p>A Context-Free Grammar is used to generate Context-Free Languages. Production rules are restricted such that the left-hand side must always be a single variable.</p>
+                        <div class="tuple-list">
+                            G = (V, T, P, S)
+                        </div>
+                        <p>Rules are of the form: <span class="math">A &rarr; &alpha;</span> (where <span class="math">A &in; V</span> and <span class="math">&alpha; &in; (V &cup; T)*</span>).</p>
+                    </div>
+
+                    <div class="topic-block" data-keywords="derivation derivation tree left most right most parse tree">
+                        <h3>2. Derivations & Derivation Trees</h3>
+                        <p><strong>Leftmost Derivation (LMD):</strong> Replacing the leftmost non-terminal variable first in every step of the derivation.</p>
+                        <p><strong>Rightmost Derivation (RMD):</strong> Replacing the rightmost variable first.</p>
+                        <p><strong>Derivation (Parse) Tree:</strong> A graphic tree representation showing the step-by-step substitution hierarchy. The root is the start variable <span class="math">S</span>, internal nodes are variables, and leaves are terminals.</p>
+                    </div>
+
+                    <div class="topic-block" data-keywords="ambiguity in grammar unambiguous grammar">
+                        <h3>3. Ambiguity in Grammars</h3>
+                        <p>A grammar is <strong>Ambiguous</strong> if there exists at least one string in the language that has more than one unique parse tree (or leftmost/rightmost derivation).</p>
+                        <p>An <strong>Unambiguous</strong> grammar guarantees exactly one parse tree for every valid string in the language.</p>
+                    </div>
+
+                    <div class="topic-block" data-keywords="simplification of cfg useless symbols unit productions epsilon productions">
+                        <h3>4. Simplification of CFGs</h3>
+                        <p>Simplification removes redundant variables and productions without changing the generated language. It involves three primary steps:</p>
+                        <div class="algorithm-box">
+                            1. <strong>Eliminating Useless Symbols:</strong> Remove variables that cannot generate terminals, or are unreachable from start symbol <span class="math">S</span>.<br>
+                            2. <strong>Eliminating &epsilon;-Productions:</strong> Find all nullable variables and adjust productions to simulate their removal.<br>
+                            3. <strong>Eliminating Unit Productions:</strong> Remove rules of the format <span class="math">A &rarr; B</span> to prevent looping transitions.
+                        </div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="chomsky normal form cnf greibach normal form gnf">
+                        <h3>5. Chomsky & Greibach Normal Forms</h3>
+                        <p>Normalizing sets a clean, mathematical standard for production formats:</p>
+                        <div class="list-item"><strong>Chomsky Normal Form (CNF):</strong> All rules are strictly <span class="math">A &rarr; BC</span> or <span class="math">A &rarr; a</span>. Parses always form binary trees.</div>
+                        <div class="list-item"><strong>Greibach Normal Form (GNF):</strong> All rules are of the format <span class="math">A &rarr; a&alpha;</span> (one terminal followed by zero or more variables). Excellent for left-to-right parsing.</div>
+                    </div>
+                </section>
+
+                <!-- PUSHDOWN AUTOMATA -->
+                <section id="sec-pda" class="basics-section">
+                    <h2>Pushdown Automata (PDA)</h2>
+
+                    <div class="topic-block" data-keywords="pushdown automata pda">
+                        <h3>1. Pushdown Automata (PDA)</h3>
+                        <p>A PDA is essentially an NFA equipped with an auxiliary, infinite <strong>LIFO Stack Memory</strong>. This allows the machine to recognize nested structures and patterns. Mathematically represented as a <strong>7-tuple</strong>:</p>
+                        <div class="tuple-list">
+                            M = (Q, &Sigma;, &Gamma;, &delta;, q&#x2080;, Z&#x2080;, F)
+                        </div>
+                        <ul style="padding-left: 20px; font-size: 0.9rem;">
+                            <li><strong>&Gamma;</strong>: Finite set of Stack alphabet symbols.</li>
+                            <li><strong>Z&#x2080;</strong>: Start stack symbol (<span class="math">Z&#x2080; &in; &Gamma;</span>).</li>
+                            <li><strong>&delta;</strong>: Transition maps <span class="math">Q &times; (&Sigma; &cup; {&epsilon;}) &times; &Gamma; &rarr; 2^(Q &times; &Gamma;*)</span>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic-block" data-keywords="pda acceptance empty stack final state">
+                        <h3>2. PDA Acceptance Methods</h3>
+                        <p>There are two equivalent ways a PDA can accept input strings:</p>
+                        <div class="list-item"><strong>Acceptance by Final State:</strong> The PDA reads the entire string and lands in an accepting state (<span class="math">q &in; F</span>), regardless of stack contents.</div>
+                        <div class="list-item"><strong>Acceptance by Empty Stack:</strong> The PDA reads the entire string and successfully clears all elements from the stack (reaches null/empty stack), regardless of what state it ends in.</div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="non-deterministic pushdown automata npda dpda">
+                        <h3>3. Non-Deterministic PDA (NPDA)</h3>
+                        <p>Unlike finite automata, <strong>Non-deterministic PDA (NPDA) are strictly more powerful than Deterministic PDA (DPDA)</strong>. DPDAs cannot recognize languages like even palindromes <span class="math">ww&#x1d3f;</span> because they cannot guess the midpoint of the string without non-deterministic branching.</p>
+                    </div>
+
+                    <div class="topic-block" data-keywords="cfg to pda conversion">
+                        <h3>4. CFG to PDA Conversion</h3>
+                        <p>A Context-Free Grammar can be directly converted into an equivalent single-state empty-stack PDA:</p>
+                        <div class="algorithm-box">
+                            <strong>Conversion Steps (Top-Down Parser style):</strong><br>
+                            1. Push start symbol <span class="math">S</span> to stack.<br>
+                            2. If stack top is variable <span class="math">A</span>, non-deterministically replace it with the right-hand side of production <span class="math">A &rarr; &alpha;</span>.<br>
+                            3. If stack top is terminal <span class="math">a</span>, match it with current input symbol and pop it off stack.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- TURING MACHINES -->
+                <section id="sec-tm" class="basics-section">
+                    <h2>Turing Machines & Computability</h2>
+
+                    <div class="topic-block" data-keywords="automata turing machine basic model of turing machine language accepted by turing machine example of tm">
+                        <h3>1. Turing Machine (TM)</h3>
+                        <p>A Turing Machine is the ultimate abstract computing model. It features an infinite read-write tape and a tape head that can move left, right, or stay put. Represented as a <strong>7-tuple</strong>:</p>
+                        <div class="tuple-list">
+                            M = (Q, &Sigma;, &Gamma;, &delta;, q&#x2080;, B, F)
+                        </div>
+                        <ul style="padding-left: 20px; font-size: 0.9rem;">
+                            <li><strong>B</strong>: Blank symbol on tape (<span class="math">B &in; &Gamma;</span>, but <span class="math">B &notin; &Sigma;</span>).</li>
+                            <li><strong>&delta;</strong>: Transition function <span class="math">Q &times; &Gamma; &rarr; Q &times; &Gamma; &times; {L, R}</span>.</li>
+                        </ul>
+                    </div>
+
+                    <div class="topic-block" data-keywords="introduction to undecidability undecidable problem about tm halting problem rice theorem">
+                        <h3>2. Decidability & Undecidability</h3>
+                        <p>A problem is <strong>Undecidable</strong> if no algorithm can be written to solve it for all inputs in finite steps.</p>
+                        <div class="list-item"><strong>Halting Problem:</strong> Determining whether an arbitrary Turing Machine halts on an arbitrary input. (Proved undecidable by Alan Turing).</div>
+                        <div class="list-item"><strong>Rice's Theorem:</strong> Any non-trivial semantic property of the language recognized by a Turing Machine is undecidable.</div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="post correspondence problem pcp">
+                        <h3>3. Post Correspondence Problem (PCP)</h3>
+                        <p>The Post Correspondence Problem is an undecidable decision problem proposed by Emil Post. It involves matching sequence blocks of strings (dominoes).</p>
+                        <div class="concept-block" style="--card-color: var(--c-regularity)">
+                            <strong>PCP formulation:</strong> Given two lists of strings <span class="math">A = {w&#x2081;, w&#x2082;, ..., w&#x2098;}</span> and <span class="math">B = {x&#x2081;, x&#x2082;, ..., x&#x2098;}</span>, is there a sequence of indices <span class="math">i&#x2081;, i&#x2082;, ..., i&#x209e;</span> such that:<br>
+                            <span class="math">w_{i&#x2081;} w_{i&#x2082;} ... w_{i&#x209e;} = x_{i&#x2081;} x_{i&#x2082;} ... x_{i&#x209e;}</span> ?
+                        </div>
+                    </div>
+
+                    <div class="topic-block" data-keywords="chomsky hierarchy summary">
+                        <h3>4. The Chomsky Hierarchy Summary</h3>
+                        <p>A clean birds-eye look of formal grammars and corresponding automatas:</p>
+                        <div class="table-responsive">
+                            <table class="matrix-table">
+                                <thead>
+                                    <tr>
+                                        <th>Grammar</th>
+                                        <th>Language Class</th>
+                                        <th>Automaton Machine</th>
+                                        <th>Production Rules Limit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Type-0</strong></td>
+                                        <td>Recursively Enumerable</td>
+                                        <td>Turing Machine (TM)</td>
+                                        <td>No restriction (Unrestricted)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Type-1</strong></td>
+                                        <td>Context-Sensitive</td>
+                                        <td>Linear Bounded Automaton (LBA)</td>
+                                        <td><span class="math">|&alpha;| &le; |&beta;|</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Type-2</strong></td>
+                                        <td>Context-Free</td>
+                                        <td>Pushdown Automaton (PDA)</td>
+                                        <td><span class="math">A &rarr; &alpha;</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Type-3</strong></td>
+                                        <td>Regular Language</td>
+                                        <td>Finite Automata (FA)</td>
+                                        <td><span class="math">A &rarr; a</span> or <span class="math">A &rarr; aB</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab switching logic
+        function switchView(viewId) {
+            document.querySelectorAll('.view-section').forEach(view => {
+                view.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById('view-' + viewId).classList.add('active');
+            document.getElementById('btn-' + viewId).classList.add('active');
+        }
+
+        // Sidebar link highlighting
+        function highlightSidebar(itemId) {
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.getElementById(itemId).classList.add('active');
+        }
+
+        // Live syllabus search filter
+        function filterTopics() {
+            const query = document.getElementById('topic-search').value.toLowerCase();
+            const topics = document.querySelectorAll('.topic-block');
+            
+            topics.forEach(topic => {
+                const keywords = topic.getAttribute('data-keywords') || '';
+                const title = topic.querySelector('h3').textContent.toLowerCase();
+                const content = topic.textContent.toLowerCase();
+                
+                if (keywords.includes(query) || title.includes(query) || content.includes(query)) {
+                    topic.style.display = 'block';
+                } else {
+                    topic.style.display = 'none';
+                }
+            });
+
+            // Auto display matching sections
+            const sections = document.querySelectorAll('.basics-section');
+            sections.forEach(sec => {
+                const activeChildren = sec.querySelectorAll('.topic-block[style="display: block;"], .topic-block:not([style])');
+                if (activeChildren.length === 0 && query !== '') {
+                    sec.style.display = 'none';
+                } else {
+                    sec.style.display = 'block';
+                }
+            });
+        }
+
+        // Theme toggler
+        function toggleTheme() {
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+            }
+        }
+
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.body.setAttribute('data-theme', 'dark');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Studies Quiz - Bilingual</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .option-label:hover { border-color: #3b82f6; background-color: #eff6ff; }
+        .selected-option { border-color: #3b82f6; background-color: #eff6ff; ring: 2px; ring-color: #3b82f6; }
+        .correct-option { border-color: #10b981; background-color: #d1fae5; color: #065f46; }
+        .wrong-option { border-color: #ef4444; background-color: #fee2e2; color: #991b1b; }
+        
+        /* Custom scrollbar for grid */
+        .q-grid::-webkit-scrollbar { width: 6px; }
+        .q-grid::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px;}
+        .q-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .q-grid::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
+</head>
+<body class="text-gray-800 h-screen flex flex-col overflow-hidden">
+
+    <header class="bg-white shadow-sm z-10 p-4 flex justify-between items-center shrink-0">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-book-open text-blue-600 text-2xl"></i>
+            <h1 class="text-xl font-bold text-gray-800 hidden sm:block">General Studies / सामान्य अध्ययन</h1>
+            <h1 class="text-xl font-bold text-gray-800 sm:hidden">GS Quiz</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <div id="progress-text" class="text-sm font-medium text-gray-500">Loading...</div>
+            <button id="btn-submit-top" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm disabled:opacity-50">
+                Submit Exam
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- Sidebar: Question Grid -->
+        <aside id="sidebar" class="w-72 bg-white border-r border-gray-200 flex flex-col absolute md:relative z-20 h-full transition-transform transform -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h2 class="font-semibold text-gray-700">Question Navigator</h2>
+                <button id="btn-close-sidebar" class="md:hidden text-gray-500 hover:text-gray-800">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 flex gap-2 text-xs mb-2 border-b">
+                <span class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-gray-200"></div> Unseen</span>
+                <span class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-blue-500"></div> Answered</span>
+            </div>
+            <div id="question-grid" class="q-grid flex-1 overflow-y-auto p-4 grid grid-cols-5 gap-2 content-start">
+                <!-- Grid buttons injected here -->
+            </div>
+        </aside>
+
+        <!-- Main Question Area -->
+        <main class="flex-1 flex flex-col overflow-y-auto bg-gray-50 relative">
+            
+            <div class="md:hidden p-2 bg-white border-b flex items-center">
+                <button id="btn-open-sidebar" class="text-gray-600 hover:text-gray-900 px-3 py-1 border rounded bg-gray-100">
+                    <i class="fa-solid fa-bars mr-2"></i> Navigator
+                </button>
+            </div>
+
+            <div class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-8 flex flex-col">
+                
+                <!-- Loading State -->
+                <div id="loading-state" class="flex-1 flex flex-col items-center justify-center">
+                    <i class="fa-solid fa-circle-notch fa-spin text-4xl text-blue-500 mb-4"></i>
+                    <p class="text-gray-500">Parsing Bilingual Questions...</p>
+                </div>
+
+                <!-- Active Question Container -->
+                <div id="quiz-container" class="hidden flex-1 flex flex-col">
+                    
+                    <!-- Navigation Controls Moved to Top -->
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-3 shrink-0">
+                        <button id="btn-prev" class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 font-medium transition disabled:opacity-50">
+                            <i class="fa-solid fa-arrow-left sm:mr-2"></i> <span class="hidden sm:inline">Previous</span>
+                        </button>
+                        <button id="btn-show-answer" class="px-5 py-2.5 rounded-lg border border-yellow-400 bg-white text-yellow-700 hover:bg-yellow-50 font-medium transition flex-1 sm:flex-none text-center">
+                            <i class="fa-solid fa-eye mr-2"></i> Show Answer
+                        </button>
+                        <button id="btn-next" class="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition shadow-sm disabled:opacity-50">
+                            <span class="hidden sm:inline">Next</span> <i class="fa-solid fa-arrow-right sm:ml-2"></i>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 mb-6">
+                        <div class="flex justify-between items-start mb-6">
+                            <h3 id="q-number" class="text-sm font-bold text-blue-600 uppercase tracking-wider">Question 1</h3>
+                            <span id="q-status" class="text-xs font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">Unanswered</span>
+                        </div>
+                        
+                        <!-- Question Text (Bilingual) -->
+                        <div id="q-text-container" class="mb-8">
+                            <!-- Injected dynamically -->
+                        </div>
+                        
+                        <div id="options-container" class="flex flex-col gap-3">
+                            <!-- Options injected here -->
+                        </div>
+                        
+                        <!-- Solution / Explanation Section -->
+                        <div id="solution-section" class="hidden mt-8 p-5 bg-blue-50 border border-blue-200 rounded-xl">
+                            <h4 class="font-bold text-blue-800 mb-2 flex items-center">
+                                <i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i> Explanation / व्याख्या
+                            </h4>
+                            <p id="solution-text" class="text-sm text-blue-900 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results Container -->
+                <div id="results-container" class="hidden flex-1 flex flex-col items-center justify-center py-10">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 w-full text-center">
+                        <i class="fa-solid fa-trophy text-5xl text-yellow-400 mb-4"></i>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Exam Completed!</h2>
+                        <p class="text-gray-500 mb-6">Here is your final score based on the official SET-A answer key.</p>
+                        
+                        <div class="flex justify-center gap-6 mb-8">
+                            <div class="bg-blue-50 rounded-xl p-4 min-w-[120px]">
+                                <div id="score-text" class="text-4xl font-black text-blue-600">0</div>
+                                <div class="text-sm text-blue-800 font-medium mt-1">Out of <span id="total-score-text">50</span></div>
+                            </div>
+                            <div class="bg-gray-50 rounded-xl p-4 min-w-[120px] flex flex-col justify-center">
+                                <div id="percent-text" class="text-2xl font-bold text-gray-700">0%</div>
+                                <div class="text-xs text-gray-500 font-medium mt-1">Accuracy</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm mb-8 text-left">
+                            <div class="p-3 bg-green-50 text-green-700 rounded border border-green-100">
+                                <i class="fa-solid fa-check mr-1"></i> Correct: <strong id="res-correct">0</strong>
+                            </div>
+                            <div class="p-3 bg-red-50 text-red-700 rounded border border-red-100">
+                                <i class="fa-solid fa-times mr-1"></i> Incorrect: <strong id="res-wrong">0</strong>
+                            </div>
+                            <div class="p-3 bg-gray-50 text-gray-700 rounded border border-gray-200">
+                                <i class="fa-solid fa-minus mr-1"></i> Skipped: <strong id="res-skipped">0</strong>
+                            </div>
+                            <div class="p-3 bg-purple-50 text-purple-700 rounded border border-purple-100">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Deleted: <strong id="res-deleted">0</strong>
+                            </div>
+                        </div>
+
+                        <button id="btn-review" class="bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold transition w-full sm:w-auto">
+                            Review Answers
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Official SET-A Answer Key Updated
+        const answerKeyRaw = {
+            1:"C", 2:"C", 3:"D", 4:"C", 5:"A", 6:"B", 7:"B", 8:"D", 9:"A", 10:"B",
+            11:"B", 12:"A", 13:"D", 14:"A", 15:"D", 16:"D", 17:"C", 18:"B", 19:"D", 20:"A",
+            21:"A", 22:"A", 23:"Delete", 24:"C", 25:"A", 26:"C", 27:"B", 28:"B", 29:"C", 30:"B, D",
+            31:"A", 32:"B", 33:"B", 34:"B", 35:"D", 36:"B", 37:"C", 38:"A", 39:"B", 40:"B",
+            41:"A", 42:"B", 43:"B", 44:"C", 45:"C", 46:"C", 47:"A", 48:"C", 49:"C", 50:"D"
+        };
+
+        // Custom explanations can be added here
+        const solutionsRaw = {
+            35: "HTTPS (Hypertext Transfer Protocol Secure) is the secure version of HTTP, utilizing encryption for secure communication over a computer network.",
+            49: "South Korean author Han Kang was awarded the 2024 Nobel Prize in Literature."
+        };
+
+        const answerKey = {};
+        for(let key in answerKeyRaw) {
+            if(answerKeyRaw[key] === "Delete") {
+                answerKey[key] = ["Delete"];
+            } else {
+                answerKey[key] = answerKeyRaw[key].split(',').map(s => s.trim());
+            }
+        }
+
+        // Hardcoding the completely fixed, bilingual questions array to prevent any OCR parsing errors
+        let questions = [
+            {
+                id: 1,
+                textHi: "आदिम जातीय अनुसंधान और विकास संस्थान मध्यप्रदेश में कहाँ स्थित हैं?",
+                textEn: "The Tribal Research and Development Institute in Madhya Pradesh is located in-",
+                optionsHi: { A: "झाबुआ", B: "बालाघाट", C: "भोपाल", D: "मंडला" },
+                optionsEn: { A: "Jhabua", B: "Balaghat", C: "Bhopal", D: "Mandla" },
+                correct: answerKey[1]
+            },
+            {
+                id: 2,
+                textHi: "प्रथम स्वतन्त्रता संग्राम 1857 के प्रदेश के जनजातीय नायक श्री डेलन शाह का जन्म स्थान वर्तमान में किस जिले में है?",
+                textEn: "In which district is the Birthplace of Delan Shah, the tribal hero of the state in the first war of Independence of 1857, located at present-",
+                optionsHi: { A: "मण्डला", B: "छिन्दवाड़ा", C: "नरसिंहपुर", D: "जबलपुर" },
+                optionsEn: { A: "Mandla", B: "Chhindwara", C: "Narsinghpur", D: "Jabalpur" },
+                correct: answerKey[2]
+            },
+            {
+                id: 3,
+                textHi: "भारत शासन ने औपचारिक रूप से मध्य प्रांत की स्थापना का प्रस्ताव किस वर्ष रखा?",
+                textEn: "In which year did the Government of India formally propose the establishment of Central Province?",
+                optionsHi: { A: "1842", B: "1856", C: "1858", D: "1861" },
+                optionsEn: { A: "1842", B: "1856", C: "1858", D: "1861" },
+                correct: answerKey[3]
+            },
+            {
+                id: 4,
+                textHi: "जनगणना 2011 के अनुसार मध्य प्रदेश में सर्वाधिक साक्षरता के प्रतिशत वाले जिलों का अवरोही क्रम है-",
+                textEn: "According to the 2011 census the districts with the highest percentage of literacy in Madhya Pradesh are in descending order-",
+                optionsHi: { A: "भोपाल, जबलपुर, इन्दौर", B: "इन्दौर, भोपाल, जबलपुर", C: "जबलपुर, इन्दौर, भोपाल", D: "भोपाल, इन्दौर, जबलपुर" },
+                optionsEn: { A: "Bhopal, Jabalpur, Indore", B: "Indore, Bhopal, Jabalpur", C: "Jabalpur, Indore, Bhopal", D: "Bhopal, Indore, Jabalpur" },
+                correct: answerKey[4]
+            },
+            {
+                id: 5,
+                textHi: "बाण सागर परियोजना में किन राज्यों की भागीदारी है?",
+                textEn: "Which States are involved in Ban Sagar irrigation project?",
+                optionsHi: { A: "मध्य प्रदेश, उत्तर प्रदेश, बिहार", B: "मध्य प्रदेश, राजस्थान, उत्तर प्रदेश", C: "मध्य प्रदेश, उत्तर प्रदेश, महाराष्ट्र", D: "मध्य प्रदेश, राजस्थान, महाराष्ट्र" },
+                optionsEn: { A: "Madhya Pradesh, Uttar Pradesh, Bihar", B: "Madhya Pradesh, Rajasthan, Uttar Pradesh", C: "Madhya Pradesh, Uttar Pradesh, Maharashtra", D: "Madhya Pradesh, Rajasthan, Maharashtra" },
+                correct: answerKey[5]
+            },
+            {
+                id: 6,
+                textHi: "अनुसूचित जाति तथा अनुसूचित जनजाति (अत्याचार निवारण) अधिनियम 1989 के तहत विशेष न्यायालय की स्थापना का प्रावधान किस धारा के अन्तर्गत है?",
+                textEn: "Under which Section is the Provision for establishment of Special Court under the Scheduled Castes and Scheduled Tribes (Prevention of Atrocities) Act 1989?",
+                optionsHi: { A: "धारा - 13", B: "धारा - 14", C: "धारा - 15", D: "धारा - 16" },
+                optionsEn: { A: "Section 13", B: "Section 14", C: "Section 15", D: "Section 16" },
+                correct: answerKey[6]
+            },
+            {
+                id: 7,
+                textHi: "मध्य प्रदेश अनुसूचित जनजाति आयोग का गठन कब किया गया है?",
+                textEn: "When was the Madhya Pradesh Scheduled Tribe Commission Constituted?",
+                optionsHi: { A: "वित्तीय वर्ष 1993-94", B: "वित्तीय वर्ष 1995-96", C: "वित्तीय वर्ष 1997-98", D: "वित्तीय वर्ष 1999-2000" },
+                optionsEn: { A: "Financial Year 1993-94", B: "Financial Year 1995-96", C: "Financial Year 1997-98", D: "Financial Year 1999-2000" },
+                correct: answerKey[7]
+            },
+            {
+                id: 8,
+                textHi: "मध्य प्रदेश में शीतलपानी, गिधरी, धोर्ली, जट्टा खदानें किस खनिज से सम्बन्धित हैं?",
+                textEn: "Sheetalpani, Gidhari, Dhaurli and Jatta mines in Madhya Pradesh are related to which mineral?",
+                optionsHi: { A: "लोह-अयस्क", B: "मैगनीज", C: "रॉक फास्फेट", D: "तांबा" },
+                optionsEn: { A: "Iron-ore", B: "Manganese", C: "Rock Phosphate", D: "Copper" },
+                correct: answerKey[8]
+            },
+            {
+                id: 9,
+                textHi: "मध्यप्रदेश में कौन से प्रकार के वन सर्वाधिक पाए जाते हैं?",
+                textEn: "Which is the most found type of forest in Madhya Pradesh?",
+                optionsHi: { A: "उष्णकटिबंधीय शुष्क पतझड़ वन", B: "उष्णकटिबंधीय आर्द्र पतझड़ वन", C: "कंटीले वन", D: "उपार्द्र पहाड़ी वन" },
+                optionsEn: { A: "Tropical dry deciduous forest", B: "Tropical moist deciduous forest", C: "Thorny forest", D: "Sub humid hilly forest" },
+                correct: answerKey[9]
+            },
+            {
+                id: 10,
+                textHi: "नीति आयोग के एसडीजी इंडिया इंडेक्स (सतत विकास लक्ष्य सूचकांक) 2023-24 के अनुसार मध्य प्रदेश ने किस लक्ष्य में सर्वोत्तम अंक प्राप्त किया है?",
+                textEn: "According to the NITI Aayog's SDG India Index 2023-24 in which goal Madhya Pradesh got highest score?",
+                optionsHi: { A: "गुणवत्तापूर्ण शिक्षा", B: "जिम्मेदारीपूर्वक उपभोग एवं उत्पादन", C: "उद्योग, नवाचार और बुनियादी ढांचा", D: "लैंगिक समानता" },
+                optionsEn: { A: "Quality Education", B: "Responsibly Consumption & Production", C: "Industry, Innovation and Infrastructure", D: "Gender Equality" },
+                correct: answerKey[10]
+            },
+            {
+                id: 11,
+                textHi: "\"लमझेना\" का तात्पर्य जनजातीय समाज में क्या है?",
+                textEn: "What is 'Lamzhena' word prevalent in tribal society?",
+                optionsHi: { A: "नृत्य का प्रकार", B: "विवाह का प्रकार", C: "चित्र शैली", D: "जनजातीय उत्सव" },
+                optionsEn: { A: "A type of dance", B: "A type of marriage", C: "A type of portrait", D: "A tribal festival" },
+                correct: answerKey[11]
+            },
+            {
+                id: 12,
+                textHi: "किस जनजातीय योद्धा को कविता लिखने के कारण ब्रिटिश सरकार द्वारा मृत्यु दण्ड की सजा सुनाई गई?",
+                textEn: "Which tribal warrior was sentenced to death by the British Government for writing poetry?",
+                optionsHi: { A: "शंकरशाह", B: "टांट्या भील", C: "खाज्या नायक", D: "बादल भोई" },
+                optionsEn: { A: "Shankar Shah", B: "Tantya Bheel", C: "Khajya Nayak", D: "Badal Bhoi" },
+                correct: answerKey[12]
+            },
+            {
+                id: 13,
+                textHi: "मध्य प्रदेश आर्थिक सर्वेक्षण 2024-25 के अनुसार वित्त वर्ष 2023-24 में मध्य प्रदेश में प्रति व्यक्ति दूध की औसत उपलब्धता लगभग कितनी थी?",
+                textEn: "According to Madhya Pradesh Economic Survey 2024-25, what was the approximate average per capita milk availability in Madhya Pradesh in the financial year 2023-24?",
+                optionsHi: { A: "700 ग्राम/दिन", B: "600 ग्राम/दिन", C: "500 ग्राम/दिन", D: "652 ग्राम/दिन" },
+                optionsEn: { A: "700 gram/day", B: "600 gram/day", C: "500 gram/day", D: "652 gram/day" },
+                correct: answerKey[13]
+            },
+            {
+                id: 14,
+                textHi: "उपकरणों का एक नेटवर्क जिसमें एक ही नेटवर्क पर अन्य उपकरणों के साथ संचार (कनेक्ट और डेटा का आदान-प्रदान) करने के लिए एक एम्बेडेड हार्डवेयर और सॉफ्टवेयर होता है, उसे जाना जाता है-",
+                textEn: "A network of devices that have an embedded hardware and software to communicate (connect and exchange data) with other devices on the same network, is known as-",
+                optionsHi: { A: "इंटरनेट ऑफ थिंग्स", B: "मशीन लर्निंग", C: "डीप लर्निंग", D: "रोबोटिक्स" },
+                optionsEn: { A: "Internet of Things", B: "Machine Learning", C: "Deep Learning", D: "Robotics" },
+                correct: answerKey[14]
+            },
+            {
+                id: 15,
+                textHi: "अगस्त 1942 में, जब ब्रिटिश सरकार द्वारा प्रजामण्डल के सदस्यों की गिरफ्तारी शुरू हो गई, तब इन्दौर के सराफा बाजार में किस स्वतंत्रता संग्राम सेनानी के द्वारा 'हनुमान सत्याग्रह' शुरू किया गया?",
+                textEn: "In August 1942, when the British Government began arresting the members of the Prajamandal, which freedom fighter initiated the \"Hanuman Satyagraha\" in the Sarafa Bazaar of Indore?",
+                optionsHi: { A: "नारायण प्रसाद खरे", B: "गोविन्द नारायण सिंह", C: "विठ्ठलदास बजाज", D: "पुरूषोत्तम विजय" },
+                optionsEn: { A: "Narayan Prasad Khare", B: "Govind Narayan Singh", C: "Vitthal Das Bajaj", D: "Purushottam Vijay" },
+                correct: answerKey[15]
+            },
+            {
+                id: 16,
+                textHi: "मध्य प्रदेश के प्रथम निर्वाचन आयुक्त कौन थे?",
+                textEn: "Who was the first Election Commissioner of Madhya Pradesh?",
+                optionsHi: { A: "श्री प्रकाश चंद", B: "श्री गोपाल शरण शुक्ल", C: "श्री यशपाल कुमार", D: "श्री एन. बी. लोहानी" },
+                optionsEn: { A: "Shri Prakash Chand", B: "Shri Gopal Sharan Shukla", C: "Shri Yashpal Kumar", D: "Shri N.B. Lohani" },
+                correct: answerKey[16]
+            },
+            {
+                id: 17,
+                textHi: "मध्य प्रदेश में राज्य सूचना आयोग का गठन, सूचना का अधिकार 2005 की धारा----- के अनुसार किया गया है।",
+                textEn: "State Information Commission in Madhya Pradesh has been Constituted as per section ----- of the Right to Information Act 2005.",
+                optionsHi: { A: "12", B: "14", C: "15", D: "18" },
+                optionsEn: { A: "12", B: "14", C: "15", D: "18" },
+                correct: answerKey[17]
+            },
+            {
+                id: 18,
+                textHi: "निम्नलिखित में से कौन सी परियोजना मध्य प्रदेश राज्य में ई-गवर्नेस की परियोजना नहीं है?",
+                textEn: "Which one of the following is not a project of e-Governance in the State of Madhya Pradesh?",
+                optionsHi: { A: "ज्ञान दूत", B: "लोक मित्र", C: "ई-चालान", D: "ई-उपार्जन" },
+                optionsEn: { A: "Gyandoot", B: "Lok Mitra", C: "e-Challan", D: "e-Uparjan" },
+                correct: answerKey[18]
+            },
+            {
+                id: 19,
+                textHi: "किस जनजाति के लोग स्वयं को गोंडों का छोटा भाई कहते हैं?",
+                textEn: "Which tribal people call themselves the younger brothers of the Gonds?",
+                optionsHi: { A: "कोल", B: "सहरिया", C: "बैगा", D: "भारिया" },
+                optionsEn: { A: "Kol", B: "Sahariya", C: "Baiga", D: "Bhariya" },
+                correct: answerKey[19]
+            },
+            {
+                id: 20,
+                textHi: "राष्ट्रीय अल्पसंख्यक आयोग अधिनियम किस वर्ष अधिनियमित किया गया?",
+                textEn: "In which year was the National Commission for Minorities Act established?",
+                optionsHi: { A: "1992", B: "1988", C: "1980", D: "1990" },
+                optionsEn: { A: "1992", B: "1988", C: "1980", D: "1990" },
+                correct: answerKey[20]
+            },
+            {
+                id: 21,
+                textHi: "नीति आयोग के एसडीजी इंडिया इन्डेक्स 2023-24 के अनुसार मध्य प्रदेश ने बहुआयामी गरीबी में क्या प्रगति की है?",
+                textEn: "According to NITI Aayog's SDG India Index 2023-24. What progress has Madhya Pradesh made in reducing multidimensional poverty?",
+                optionsHi: { A: "1.36 करोड़ लोगों को गरीबी से बाहर निकाला", B: "50 लाख लोगों को गरीबी से बाहर निकाला", C: "गरीबी कां पूर्ण उन्मूलन कर दिया", D: "गरीबी को 10 प्रतिशत तक कम किया" },
+                optionsEn: { A: "1.36 crore people lifted out of poverty", B: "50 lakh people lifted out of poverty", C: "Complete eradication of Poverty", D: "Poverty reduced to 10%" },
+                correct: answerKey[21]
+            },
+            {
+                id: 22,
+                textHi: "भारत की प्रथम महिला विधि सचिव हैं-",
+                textEn: "India's first Woman Law Secretary is-",
+                optionsHi: { A: "अंजू राठी राणा", B: "शारदा सिंह", C: "अमृता सक्सेना", D: "प्रज्ञा श्रीवास्तव" },
+                optionsEn: { A: "Anju Rathi Rana", B: "Sharda Singh", C: "Amrita Saxena", D: "Pragya Shrivastava" },
+                correct: answerKey[22]
+            },
+            {
+                id: 23,
+                textHi: "महादजी सिन्धिया और जयपुर के राजा माधो सिंह के बीच 'लालसोट का युद्ध' कब हुआ?",
+                textEn: "When did the 'Battle of Lalsot' take place between Mahadji Scindia and Jaipur's King Madho Singh?",
+                optionsHi: { A: "1786 ई.", B: "1787 ई.", C: "1788 ई.", D: "1789 ई." },
+                optionsEn: { A: "1786 A.D.", B: "1787 A.D.", C: "1788 A.D.", D: "1789 A.D." },
+                correct: answerKey[23]
+            },
+            {
+                id: 24,
+                textHi: "शूलपाणि क्षेत्र किस पारंपरिक तीर्थयात्रा मार्ग का महत्वपूर्ण हिस्सा है?",
+                textEn: "The Shulpani region is a significant part of which traditional pilgrimage route?",
+                optionsHi: { A: "पंचक्रोशी यात्रा", B: "अमरनाथ यात्रा", C: "नर्मदा परिक्रमा", D: "कैलास मानसरोवर यात्रा" },
+                optionsEn: { A: "Panchakroshi Yatra", B: "Amarnath Yatra", C: "Narmada Parikrama", D: "Kailash Mansarovar Yatra" },
+                correct: answerKey[24]
+            },
+            {
+                id: 25,
+                textHi: "एफपीजीए एकीकृत सर्किट हैं जिनका उपयोग कृत्रिम बुद्धिमत्ता (एआई) को तैनात करने के लिए व्यापक रूप से किया जाता है। एफपीजीए का पूर्ण रूप क्या है?",
+                textEn: "FPGA are integrated circuits that are widely used to deploy Artificial Intelligence (AI). What is the full form of FPGA?",
+                optionsHi: { A: "फील्ड प्रोग्रामेबल गेट एरेज", B: "फॉरवर्ड प्रोग्रामेबल ग्राफिकल एडवांसमेंट", C: "फॉरवर्ड प्रोग्राम ग्रुप अरेंजमेंट", D: "फास्टर प्रोग्राम जेस्चर एनालिटिक्स" },
+                optionsEn: { A: "Field Programmable Gate Arrays", B: "Forward Programmable Graphical Advancements", C: "Forward Programme Group Arrangement", D: "Faster Program Gesture Analytics" },
+                correct: answerKey[25]
+            },
+            {
+                id: 26,
+                textHi: "सतपुड़ा तापीय विद्युत केन्द्र को कोयले की आपूर्ति कहां से होती है?",
+                textEn: "From where is coal supplied to Satpura Thermal Power Station?",
+                optionsHi: { A: "सोहागपुर कोयला क्षेत्र", B: "जोहिला कोयला क्षेत्र", C: "पाथाखेड़ा कोयला क्षेत्र", D: "उमरिया कोयला क्षेत्र" },
+                optionsEn: { A: "Sohagpur coal field", B: "Johila coal field", C: "Pathakheda coal field", D: "Umariya coal field" },
+                correct: answerKey[26]
+            },
+            {
+                id: 27,
+                textHi: "प्रसिद्ध गोंड राजा संग्राम शाह द्वारा लिखित संस्कृत ग्रंथ का नाम है-",
+                textEn: "Name of Sanskrit text written by the famous Gond King Sangram Shah-",
+                optionsHi: { A: "विवेक सिन्धु", B: "रस रत्न माला", C: "अद्वैत सिद्धि", D: "मुहूर्त मातृका" },
+                optionsEn: { A: "Vivek Sindhu", B: "Ras Ratna mala", C: "Advait Siddhi", D: "Muhurta Matrika" },
+                correct: answerKey[27]
+            },
+            {
+                id: 28,
+                textHi: "मध्यप्रदेश में राज्यसभा की कुल कितनी सीटें है?",
+                textEn: "How many Rajya Sabha seats are there in Madhya Pradesh?",
+                optionsHi: { A: "15", B: "11", C: "18", D: "29" },
+                optionsEn: { A: "15", B: "11", C: "18", D: "29" },
+                correct: answerKey[28]
+            },
+            {
+                id: 29,
+                textHi: "मध्य प्रदेश शासन के \"मेरा बजट 2025-26\" के अनुसार वर्ष 2047 तक मध्य प्रदेश सरकार कौन सा आर्थिक लक्ष्य हासिल करने की आकांक्षा रखती है?",
+                textEn: "According to 'My Budget 2025-26' of the Government of Madhya Pradesh, what economic target does the Madhya Pradesh Government aspire to achieve by 2047?",
+                optionsHi: { A: "5 ट्रिलियन डालर की अर्थव्यवस्था", B: "100 प्रतिशत डिजिटल अर्थव्यवस्था", C: "2 ट्रिलियन डालर की अर्थव्यवस्था", D: "शून्य राजकोषीय घाटा" },
+                optionsEn: { A: "5 trillion dollar economy", B: "100 percent digital economy", C: "2 trillion dollar economy", D: "No fiscal deficit" },
+                correct: answerKey[29]
+            },
+            {
+                id: 30,
+                textHi: "'बरूआ' परम्परागत पदवी का संबंध किस जनजातीय समुदाय से है?",
+                textEn: "Traditional Post \"Barua\" belongs to which tribal community?",
+                optionsHi: { A: "भील", B: "बैगा", C: "कमार", D: "कोल" },
+                optionsEn: { A: "Bhil", B: "Baiga", C: "Kamar", D: "Kol" },
+                correct: answerKey[30]
+            },
+            {
+                id: 31,
+                textHi: "मध्य प्रदेश में 'मुख्यमंत्री महिला सशक्तिकरण योजना' कब प्रारम्भ की गई?",
+                textEn: "When was the \"Chief Minister Women Empowerment Scheme\" started in Madhya Pradesh?",
+                optionsHi: { A: "वर्ष 2013 में", B: "वर्ष 2017 में", C: "वर्ष 2019 में", D: "वर्ष 2023 में" },
+                optionsEn: { A: "In the year 2013", B: "In the year 2017", C: "In the year 2019", D: "In the year 2023" },
+                correct: answerKey[31]
+            },
+            {
+                id: 32,
+                textHi: "खजुराहो में चतुर्भुज मंदिर का निर्माण किस चंदेल राजा ने करवाया?",
+                textEn: "Which Chandela King built the Chaturbhuj temple in Khajuraho?",
+                optionsHi: { A: "हर्षदेव", B: "यशोवर्मन", C: "धंग", D: "विद्याधर" },
+                optionsEn: { A: "Harshadev", B: "Yashovarman", C: "Dhang", D: "Vidyadhar" },
+                correct: answerKey[32]
+            },
+            {
+                id: 33,
+                textHi: "मध्यप्रदेश के निम्नलिखित में से किस जिले से कर्क रेखा नहीं गुजरती है?",
+                textEn: "In which of the following districts of Madhya Pradesh, the tropic of cancer does not pass through?",
+                optionsHi: { A: "विदिशा", B: "इंदौर", C: "उज्जैन", D: "भोपाल" },
+                optionsEn: { A: "Vidisha", B: "Indore", C: "Ujjain", D: "Bhopal" },
+                correct: answerKey[33]
+            },
+            {
+                id: 34,
+                textHi: "मध्य प्रदेश में सोयाबीन की खेती सर्व प्रथम किस जिले में आरम्भ हुई थी?",
+                textEn: "Soyabean cultivation in Madhya Pradesh was started first in which district?",
+                optionsHi: { A: "इन्दौर", B: "देवास", C: "रीवा", D: "मुरैना" },
+                optionsEn: { A: "Indore", B: "Dewas", C: "Rewa", D: "Morena" },
+                correct: answerKey[34]
+            },
+            {
+                id: 35,
+                textHi: "निम्नलिखित में से किसका उपयोग सुरक्षित वेबसाइट के लिए किया जाता है?",
+                textEn: "Which among the following is used for a secure website?",
+                optionsHi: { A: "FTP", B: "WWW", C: "SMTP", D: "HTTPS" },
+                optionsEn: { A: "FTP", B: "WWW", C: "SMTP", D: "HTTPS" },
+                correct: answerKey[35]
+            },
+            {
+                id: 36,
+                textHi: "मध्य प्रदेश के किस भाग में वर्षा की परिवर्तनशीलता अधिक पाई जाती है?",
+                textEn: "Which part of the Madhya Pradesh has the high variability of rainfall?",
+                optionsHi: { A: "दक्षिण पूर्वी भाग", B: "उत्तर पश्चिमी भाग", C: "पूर्वी भाग", D: "उपरोक्त सभी" },
+                optionsEn: { A: "Southern Eastern part", B: "North West part", C: "Eastern part", D: "All of above" },
+                correct: answerKey[36]
+            },
+            {
+                id: 37,
+                textHi: "यूनिक्स एक ऑपरेटिंग सिस्टम है जिसमें निम्न प्रकार का यूजर इंटरफेस होता है-",
+                textEn: "Unix is an operating system with the following type of user Interface-",
+                optionsHi: { A: "ध्वनि-आधारित इंटरफेस", B: "प्राकृतिक भाषा इंटरफेस", C: "कमांड-आधारित इंटरफेस", D: "टच-आधारित इंटरफेस" },
+                optionsEn: { A: "Voice-based Interface", B: "Natural Language Interface", C: "Command-based Interface", D: "Touch-based Interface" },
+                correct: answerKey[37]
+            },
+            {
+                id: 38,
+                textHi: "जनगणना 2011 के अनुसार मध्य प्रदेश के किस जिले में सर्वाधिक ग्रामीण जनसंख्या है?",
+                textEn: "According to the census 2011, which district of Madhya Pradesh has the highest rural population?",
+                optionsHi: { A: "रीवा", B: "डिंडोरी", C: "सतना", D: "सीधी" },
+                optionsEn: { A: "Rewa", B: "Dindori", C: "Satna", D: "Sidhi" },
+                correct: answerKey[38]
+            },
+            {
+                id: 39,
+                textHi: "मालवा की ताम्रपाषाणिक संस्कृति का प्रमुख स्थल नवदाटोली है। नवदाटोली का उत्खनन किसके द्वारा करवाया गया है?",
+                textEn: "The major site of the chalcolithic culture of Malwa is Navadatoli. Who has done the excavation of Navadatoli?",
+                optionsHi: { A: "मार्टिमर व्हीलर", B: "एच. डी. संकालिया", C: "अलेक्जेण्डर कनिंघम", D: "जॉन मार्शल" },
+                optionsEn: { A: "Mortimer Wheeler", B: "H. D. Sankalia", C: "Alexander Cunningham", D: "John Marshall" },
+                correct: answerKey[39]
+            },
+            {
+                id: 40,
+                textHi: "बीजागढ़ की पहाड़ियां कहाँ स्थित हैं?",
+                textEn: "Where are hills of Bijagarh situated?",
+                optionsHi: { A: "पूर्वी सतपुड़ा पर", B: "पश्चिमी सतपुड़ा पर", C: "मैकाल श्रेणी पर", D: "बुन्देलखण्ड पठार पर" },
+                optionsEn: { A: "Eastern Satpura", B: "Western Satpura", C: "Maikal Range", D: "Bhundelkhand Plateau" },
+                correct: answerKey[40]
+            },
+            {
+                id: 41,
+                textHi: "पंचायतों से संबंधित प्रावधानों को भारतीय संविधान में ............. संशोधन के द्वारा जोड़ा गया है।",
+                textEn: "The provision relating to Panchayats were added to the Indian Constitution vide the ............. amendment.",
+                optionsHi: { A: "73 वें", B: "74 वें", C: "75 वें", D: "76 वें" },
+                optionsEn: { A: "73rd", B: "74th", C: "75th", D: "76th" },
+                correct: answerKey[41]
+            },
+            {
+                id: 42,
+                textHi: "जनवरी 2025 में मध्य प्रदेश के राज्य निर्वाचन आयुक्त बनाए गए हैं?",
+                textEn: "In January 2025, who has been appointed as the State Election Commissioner of Madhya Pradesh?",
+                optionsHi: { A: "केशव श्रीवास्तव", B: "मनोज श्रीवास्तव", C: "विवेक मल्होत्रा", D: "अभिषेक सिंह" },
+                optionsEn: { A: "Keshav Shrivastava", B: "Manoj Shrivastava", C: "Vivek Malhotra", D: "Abhishek Singh" },
+                correct: answerKey[42]
+            },
+            {
+                id: 43,
+                textHi: "पेरिस ओलंम्पिक 2024 हॉकी में भारत की पुरुष टीम ने किस देश को हराकर कांस्य पदक पर कब्जा किया?",
+                textEn: "India men's team defeated which country to win bronze medal in Paris Olympic-2024 in Hockey?",
+                optionsHi: { A: "नीदरलैण्ड", B: "स्पेन", C: "जापान", D: "पोलैण्ड" },
+                optionsEn: { A: "Netherland", B: "Spain", C: "Japan", D: "Poland" },
+                correct: answerKey[43]
+            },
+            {
+                id: 44,
+                textHi: "वीर शंकर शाह एवं रघुनाथ शाह सम्मान वर्ष 2023 में किसे प्रदान किया गया?",
+                textEn: "Who was awarded the Veer Shankar Shah and Raghunath Shah Samman in the year 2023?",
+                optionsHi: { A: "श्रीमती सम्पतिया उइके", B: "डा. तापस चकमा", C: "श्री बुधपाल सिंह ठाकुर", D: "श्री राजाराम कटारा" },
+                optionsEn: { A: "Smt. Sampatiya Uikey", B: "Dr. Tapas Chakama", C: "Shree Budhpal Singh Thakur", D: "Shree Rajaram Katara" },
+                correct: answerKey[44]
+            },
+            {
+                id: 45,
+                textHi: "मई 2025 में मध्यप्रदेश के किस शहर में 'द चेंजमेकर कॉन्क्लेव' आयोजित की गई?",
+                textEn: "In which city of Madhya Pradesh was 'The Changemaker Conclave' organized in May 2025?",
+                optionsHi: { A: "भोपाल", B: "जबलपुर", C: "इंदौर", D: "उज्जैन" },
+                optionsEn: { A: "Bhopal", B: "Jabalpur", C: "Indore", D: "Ujjain" },
+                correct: answerKey[45]
+            },
+            {
+                id: 46,
+                textHi: "पिथौरा चित्रकला का संबंध किस जनजाति से है?",
+                textEn: "Pithora painting is related to which tribal community?",
+                optionsHi: { A: "गोंड", B: "बैगा", C: "भील", D: "सहरिया" },
+                optionsEn: { A: "Gond", B: "Baiga", C: "Bhil", D: "Sahariya" },
+                correct: answerKey[46]
+            },
+            {
+                id: 47,
+                textHi: "धार राज्य की स्थापना किसने किया?",
+                textEn: "Who established Dhar State?",
+                optionsHi: { A: "उदाजी राव पवार", B: "हेमेन्द्र राव पवार", C: "यशवंत राव पवार", D: "प्रथमेश्वर राव पवार" },
+                optionsEn: { A: "Udaji Rao Pawar", B: "Hemendra Rao Pawar", C: "Yashvant Rao Pawar", D: "Prathameshwar Rao Pawar" },
+                correct: answerKey[47]
+            },
+            {
+                id: 48,
+                textHi: "अबुल फजल ने आईने-ए-अकबरी में किस रियासत के विषय में लिखा है कि 'यह रियासत इतना समृद्धशाली था कि प्रजा लगान की अदायगी स्वर्ण मुद्राओं और हाथियों में करती थी?",
+                textEn: "Abul Fazal wrote in the Ain-i-Akbari about which princely state that, 'it was so prosperous that the people paid their taxes in gold coins and elephants?",
+                optionsHi: { A: "सिन्धिया", B: "रायसेन", C: "गोंडवाना", D: "बुन्देलखण्ड" },
+                optionsEn: { A: "Scindia", B: "Raisen", C: "Gondwana", D: "Bundelkhand" },
+                correct: answerKey[48]
+            },
+            {
+                id: 49,
+                textHi: "साहित्य का नोबेल पुरस्कार - 2024 किसने प्राप्त किया?",
+                textEn: "Who is the recipient of the Nobel Prize for Literature for 2024?",
+                optionsHi: { A: "डेविड बेकर", B: "जान फॉसे", C: "हान कांग", D: "साइमन जॉनसन" },
+                optionsEn: { A: "David Baker", B: "Jon Fosse", C: "Han Kang", D: "Simon Johnson" },
+                correct: answerKey[49]
+            },
+            {
+                id: 50,
+                textHi: "मनुआभान की टेकरी से अनेक लघु पाषाण उपकरण एकत्रित किए गए हैं। मनुआभान की टेकरी मध्य प्रदेश के किस जिले में स्थित है?",
+                textEn: "Numerous microlithic tools have been collected from Manuabhan's Tekri. In which district of Madhya Pradesh is Manuabhan's Tekri located?",
+                optionsHi: { A: "धार", B: "रायसेन", C: "ग्वालियर", D: "भोपाल" },
+                optionsEn: { A: "Dhar", B: "Raisen", C: "Gwalior", D: "Bhopal" },
+                correct: answerKey[50]
+            }
+        ];
+
+        function parseQuestions() {
+            // Function preserved for architecture, but we bypass fragile parsing by using predefined object logic.
+            return;
+        }
+
+        let currentIdx = 0;
+        let userAnswers = {}; 
+        let isSubmitted = false;
+        let revealedAnswers = {}; 
+
+        const DOM = {
+            loading: document.getElementById('loading-state'),
+            quiz: document.getElementById('quiz-container'),
+            results: document.getElementById('results-container'),
+            grid: document.getElementById('question-grid'),
+            qNum: document.getElementById('q-number'),
+            qStatus: document.getElementById('q-status'),
+            qTextContainer: document.getElementById('q-text-container'),
+            options: document.getElementById('options-container'),
+            solutionSection: document.getElementById('solution-section'),
+            solutionText: document.getElementById('solution-text'),
+            btnPrev: document.getElementById('btn-prev'),
+            btnNext: document.getElementById('btn-next'),
+            btnShowAnswer: document.getElementById('btn-show-answer'),
+            btnSubmit: document.getElementById('btn-submit-top'),
+            progressText: document.getElementById('progress-text'),
+            sidebar: document.getElementById('sidebar'),
+            btnOpenSidebar: document.getElementById('btn-open-sidebar'),
+            btnCloseSidebar: document.getElementById('btn-close-sidebar'),
+        };
+
+        function initApp() {
+            parseQuestions();
+            DOM.loading.classList.add('hidden');
+            DOM.quiz.classList.remove('hidden');
+            
+            buildGrid();
+            renderQuestion(currentIdx);
+            updateProgress();
+
+            DOM.btnNext.addEventListener('click', () => {
+                if (currentIdx < questions.length - 1) {
+                    currentIdx++;
+                    renderQuestion(currentIdx);
+                }
+            });
+
+            DOM.btnPrev.addEventListener('click', () => {
+                if (currentIdx > 0) {
+                    currentIdx--;
+                    renderQuestion(currentIdx);
+                }
+            });
+
+            DOM.btnShowAnswer.addEventListener('click', () => {
+                const q = questions[currentIdx];
+                revealedAnswers[q.id] = true;
+                renderQuestion(currentIdx);
+            });
+
+            DOM.btnSubmit.addEventListener('click', submitQuiz);
+            document.getElementById('btn-review').addEventListener('click', () => {
+                DOM.results.classList.add('hidden');
+                DOM.quiz.classList.remove('hidden');
+                renderQuestion(currentIdx);
+            });
+
+            DOM.btnOpenSidebar.addEventListener('click', () => DOM.sidebar.classList.remove('-translate-x-full'));
+            DOM.btnCloseSidebar.addEventListener('click', () => DOM.sidebar.classList.add('-translate-x-full'));
+        }
+
+        function buildGrid() {
+            DOM.grid.innerHTML = '';
+            questions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `grid-btn-${q.id}`;
+                btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center transition
+                                ${userAnswers[q.id] ? 'bg-blue-500 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`;
+                btn.innerText = q.id;
+                btn.onclick = () => {
+                    currentIdx = idx;
+                    renderQuestion(currentIdx);
+                    if(window.innerWidth < 768) DOM.sidebar.classList.add('-translate-x-full');
+                };
+                DOM.grid.appendChild(btn);
+            });
+        }
+
+        function updateGridStatus(id) {
+            const btn = document.getElementById(`grid-btn-${id}`);
+            if(!btn) return;
+            
+            if (isSubmitted) {
+                const q = questions.find(q => q.id === id);
+                if (q.correct.includes('Delete')) {
+                    btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-purple-100 text-purple-700 border-purple-300`;
+                } else if (!userAnswers[id] || userAnswers[id].length === 0) {
+                    btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-gray-100 text-gray-500 border-gray-300`;
+                } else {
+                    const isCorrect = checkAnswer(q.correct, userAnswers[id]);
+                    if (isCorrect) {
+                        btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-green-500 text-white border-green-600`;
+                    } else {
+                        btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-red-500 text-white border-red-600`;
+                    }
+                }
+            } else {
+                if (userAnswers[id] && userAnswers[id].length > 0) {
+                    btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-blue-500 text-white border-blue-600`;
+                } else {
+                    btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-white text-gray-600 border-gray-300 hover:bg-gray-50`;
+                }
+            }
+            
+            Array.from(DOM.grid.children).forEach(b => b.classList.remove('ring-2', 'ring-offset-1', 'ring-gray-800'));
+            document.getElementById(`grid-btn-${questions[currentIdx].id}`).classList.add('ring-2', 'ring-offset-1', 'ring-gray-800');
+        }
+
+        function renderQuestion(idx) {
+            const q = questions[idx];
+            DOM.qNum.innerText = `Question ${q.id}`;
+            
+            // Build Question Text (English on top, Hindi below)
+            let qTextHTML = '';
+            if (q.textEn) {
+                qTextHTML += `<p class="text-[17px] text-gray-800 font-semibold leading-relaxed whitespace-pre-wrap">${q.textEn}</p>`;
+            }
+            if (q.textHi) {
+                qTextHTML += `<p class="text-[17px] text-gray-700 font-medium leading-relaxed whitespace-pre-wrap ${q.textEn ? 'mt-3 pt-3 border-t border-gray-100' : ''}">${q.textHi}</p>`;
+            }
+            DOM.qTextContainer.innerHTML = qTextHTML;
+            
+            const isDeleted = q.correct.includes('Delete');
+            const isRevealed = revealedAnswers[q.id];
+            const showResults = isSubmitted || isRevealed;
+            
+            if(isDeleted) {
+                DOM.qStatus.innerText = "Deleted / हटा दिया गया";
+                DOM.qStatus.className = "text-xs font-semibold px-2 py-1 rounded bg-purple-100 text-purple-700";
+            } else if (userAnswers[q.id]) {
+                DOM.qStatus.innerText = "Answered";
+                DOM.qStatus.className = "text-xs font-semibold px-2 py-1 rounded bg-blue-100 text-blue-700";
+            } else {
+                DOM.qStatus.innerText = "Unanswered";
+                DOM.qStatus.className = "text-xs font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600";
+            }
+
+            DOM.btnPrev.disabled = idx === 0;
+            DOM.btnNext.disabled = idx === questions.length - 1;
+
+            DOM.options.innerHTML = '';
+            
+            if (isDeleted && !isSubmitted) {
+                DOM.options.innerHTML = `<div class="p-4 bg-purple-50 text-purple-700 rounded-lg border border-purple-200 text-center"><p class="font-medium">This question was marked as 'Delete' in the answer key.</p><p class="text-sm mt-1">इस प्रश्न को उत्तर कुंजी में 'हटाएं' (Delete) के रूप में चिह्नित किया गया था।</p></div>`;
+            } else {
+                const multiCorrect = q.correct.length > 1 && !isDeleted;
+                
+                ['A', 'B', 'C', 'D'].forEach(letter => {
+                    // Skip if neither english nor hindi option exists
+                    if(!q.optionsEn[letter] && !q.optionsHi[letter]) return; 
+                    
+                    const isSelected = userAnswers[q.id]?.includes(letter);
+                    const isActualCorrect = q.correct.includes(letter);
+                    
+                    let modeClasses = "bg-white border-gray-300 text-gray-700 hover:border-blue-400 cursor-pointer";
+                    let iconHTML = `<div class="w-5 h-5 rounded${multiCorrect? '':' -full'} border border-gray-300 flex items-center justify-center mr-3 mt-0.5 shrink-0 bg-white"></div>`;
+                    
+                    if (isSelected && !showResults) {
+                        modeClasses = "selected-option";
+                        iconHTML = `<div class="w-5 h-5 rounded${multiCorrect? '':' -full'} border border-blue-600 flex items-center justify-center mr-3 mt-0.5 shrink-0 bg-blue-600 text-white text-xs"><i class="fa-solid fa-check"></i></div>`;
+                    }
+
+                    if (showResults) {
+                        modeClasses = "bg-white border-gray-200 text-gray-500 opacity-70 cursor-default";
+                        if (isActualCorrect) {
+                            modeClasses = "correct-option opacity-100 font-medium";
+                            iconHTML = `<div class="w-5 h-5 rounded${multiCorrect? '':' -full'} border border-green-600 flex items-center justify-center mr-3 mt-0.5 shrink-0 bg-green-600 text-white text-xs"><i class="fa-solid fa-check"></i></div>`;
+                        } else if (isSelected && !isActualCorrect) {
+                            modeClasses = "wrong-option opacity-100";
+                            iconHTML = `<div class="w-5 h-5 rounded${multiCorrect? '':' -full'} border border-red-600 flex items-center justify-center mr-3 mt-0.5 shrink-0 bg-red-600 text-white text-xs"><i class="fa-solid fa-times"></i></div>`;
+                        }
+                    }
+
+                    // Build bilingual option text
+                    let optTextHTML = '';
+                    if (q.optionsEn[letter]) {
+                        optTextHTML += `<span class="text-[15px] font-semibold block ${showResults && isActualCorrect ? 'text-green-800' : 'text-gray-800'}">${q.optionsEn[letter]}</span>`;
+                    }
+                    if (q.optionsHi[letter]) {
+                        optTextHTML += `<span class="text-[14px] block ${q.optionsEn[letter] ? 'mt-0.5' : ''} ${showResults && isActualCorrect ? 'text-green-700' : 'text-gray-600'}">${q.optionsHi[letter]}</span>`;
+                    }
+
+                    const optDiv = document.createElement('div');
+                    optDiv.className = `option-label p-4 rounded-xl border-2 transition flex items-start ${modeClasses}`;
+                    optDiv.innerHTML = `
+                        ${iconHTML}
+                        <div class="flex-1 flex">
+                            <span class="font-bold mr-3 text-sm shrink-0 mt-[1px]">${letter}.</span>
+                            <div class="flex flex-col">
+                                ${optTextHTML}
+                            </div>
+                        </div>
+                    `;
+
+                    if (!showResults && !isDeleted) {
+                        optDiv.onclick = () => handleOptionClick(q.id, letter, multiCorrect);
+                    }
+                    DOM.options.appendChild(optDiv);
+                });
+                
+                if(multiCorrect && !showResults) {
+                    const hint = document.createElement('div');
+                    hint.className = "text-xs text-gray-500 italic mt-2 text-center";
+                    hint.innerHTML = "*This question allows multiple selections. <br/> <span class='text-[10px]'>*इस प्रश्न में कई विकल्पों का चयन किया जा सकता है।</span>";
+                    DOM.options.appendChild(hint);
+                }
+            }
+
+            if (showResults || isDeleted) {
+                DOM.btnShowAnswer.classList.add('hidden');
+            } else {
+                DOM.btnShowAnswer.classList.remove('hidden');
+            }
+
+            // Handle Smart Solution Display
+            if (showResults && !isDeleted) {
+                DOM.solutionSection.classList.remove('hidden');
+                DOM.solutionText.innerHTML = solutionsRaw[q.id] || `The correct option is <strong>${q.correct.join(', ')}</strong> according to the official SET-A Answer Key.<br><span class="text-gray-600 mt-1 block">आधिकारिक SET-A उत्तर कुंजी के अनुसार सही विकल्प <strong>${q.correct.join(', ')}</strong> है।</span>`;
+            } else {
+                DOM.solutionSection.classList.add('hidden');
+            }
+
+            updateGridStatus(q.id);
+            updateProgress();
+        }
+
+        function handleOptionClick(qId, letter, multi) {
+            if (!userAnswers[qId]) userAnswers[qId] = [];
+            
+            if (multi) {
+                if (userAnswers[qId].includes(letter)) {
+                    userAnswers[qId] = userAnswers[qId].filter(l => l !== letter);
+                } else {
+                    userAnswers[qId].push(letter);
+                }
+            } else {
+                userAnswers[qId] = [letter];
+            }
+            
+            if (userAnswers[qId].length === 0) delete userAnswers[qId];
+            
+            renderQuestion(currentIdx);
+        }
+
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            DOM.progressText.innerText = `${answeredCount} / 50 Answered`;
+            
+            if(isSubmitted) {
+                DOM.progressText.innerText = "Review Mode";
+            }
+        }
+
+        function checkAnswer(correctArr, userArr) {
+            if(!userArr || userArr.length === 0) return false;
+            if(correctArr.includes('Delete')) return false; 
+            
+            const sortedCorrect = [...correctArr].sort().join(',');
+            const sortedUser = [...userArr].sort().join(',');
+            
+            return sortedCorrect === sortedUser;
+        }
+
+        function submitQuiz() {
+            if(!confirm("Are you sure you want to submit the exam?")) return;
+            
+            isSubmitted = true;
+            DOM.btnSubmit.classList.add('hidden');
+            DOM.quiz.classList.add('hidden');
+            DOM.results.classList.remove('hidden');
+
+            let score = 0;
+            let correct = 0;
+            let wrong = 0;
+            let skipped = 0;
+            let deleted = 0;
+
+            questions.forEach(q => {
+                if (q.correct.includes('Delete')) {
+                    deleted++;
+                } else {
+                    const uAns = userAnswers[q.id];
+                    if (!uAns || uAns.length === 0) {
+                        skipped++;
+                    } else {
+                        if (checkAnswer(q.correct, uAns)) {
+                            correct++;
+                            score++;
+                        } else {
+                            wrong++;
+                        }
+                    }
+                }
+                updateGridStatus(q.id); 
+            });
+
+            const gradableTotal = questions.length - deleted;
+            const percentage = gradableTotal > 0 ? Math.round((score / gradableTotal) * 100) : 0;
+
+            document.getElementById('score-text').innerText = score;
+            document.getElementById('total-score-text').innerText = gradableTotal;
+            document.getElementById('percent-text').innerText = `${percentage}%`;
+            
+            document.getElementById('res-correct').innerText = correct;
+            document.getElementById('res-wrong').innerText = wrong;
+            document.getElementById('res-skipped').innerText = skipped;
+            document.getElementById('res-deleted').innerText = deleted;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initApp, 100);
+        });
+
+    </script>
+</body>
+</html>

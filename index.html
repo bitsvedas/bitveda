@@ -406,6 +406,7 @@ Access comprehensive computer science notes in Hindi, solved programs, universit
             oldPapers: [
                 { title: 'Java - Dec 2023 Paper', subject: 'Java' },
                 { title: 'C++ - Dec 2023 Paper', subject: 'C++' },
+               
                 { title: 'Web Design - June 2023 Paper', subject: 'Web Designing' },
                  { title: 'MPPSC AP', subject: 'COMPUTER SCIENCE',file: 'mppsc_ap_2024_paper.html',type:'html' },
    
@@ -474,7 +475,7 @@ Access comprehensive computer science notes in Hindi, solved programs, universit
         }
 
         // Render Old Papers
-        function renderOldPapers() {
+        /*function renderOldPapers() {
             const grid = document.getElementById('papersGrid');
             db.oldPapers.forEach(item => {
                 grid.innerHTML += `
@@ -487,7 +488,28 @@ Access comprehensive computer science notes in Hindi, solved programs, universit
                     </div>
                 `;
             });
-        }
+        }*/
+        // Render Old Papers
+function renderOldPapers() {
+    const grid = document.getElementById('papersGrid');
+    grid.innerHTML = '';
+    db.oldPapers.forEach(item => {
+        const isHtml = item.type === 'html';
+        const iconClass = isHtml ? 'fa-brands fa-html5 text-orange-500' : 'fa-solid fa-file-pdf text-red-500';
+        const actionText = isHtml ? 'View Paper' : 'Download PDF';
+        const target = isHtml ? '_self' : '_blank';
+
+        grid.innerHTML += `
+            <div class="p-5 bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+                <div class="text-xs font-bold text-primary-600 bg-primary-50 inline-block px-2 py-1 rounded mb-2 uppercase tracking-wide">${item.subject}</div>
+                <h4 class="font-semibold text-gray-800 mb-3">${item.title}</h4>
+                <a href="${item.file}" target="${target}" class="text-sm font-medium text-primary-600 hover:text-primary-800 flex items-center">
+                    <i class="${iconClass} mr-2"></i> ${actionText}
+                </a>
+            </div>
+        `;
+    });
+}
 
         // View Navigation
         function navigate(viewName) {

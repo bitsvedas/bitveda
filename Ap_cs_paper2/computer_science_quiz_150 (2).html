@@ -1,0 +1,2088 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Aakash sen">
+    <title>mppsc assitant professor 2024 computer science paper 2</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- MathJax for rendering Mathematical Equations -->
+    <script>
+      MathJax = {
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']]
+        },
+        startup: {
+            typeset: false // We will manually typeset after rendering questions
+        }
+      };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .option-label:hover { border-color: #3b82f6; background-color: #eff6ff; }
+        .selected-option { border-color: #3b82f6; background-color: #eff6ff; ring: 2px; ring-color: #3b82f6; }
+        .correct-option { border-color: #10b981; background-color: #d1fae5; color: #065f46; }
+        .wrong-option { border-color: #ef4444; background-color: #fee2e2; color: #991b1b; }
+        
+        /* Custom scrollbar for grid */
+        .q-grid::-webkit-scrollbar { width: 6px; }
+        .q-grid::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px;}
+        .q-grid::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .q-grid::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* MathJax adjustments */
+        mjx-container { display: inline-block !important; }
+    </style>
+</head>
+<body class="text-gray-800 h-screen flex flex-col overflow-hidden">
+
+    <header class="bg-white shadow-sm z-10 p-4 flex justify-between items-center shrink-0">
+        <div class="flex items-center gap-3">
+            <a href="https://bitsvedas.github.io/bitveda/" title="Home" class="text-blue-600 hover:text-blue-800 transition">
+                <i class="fa-solid fa-house text-xl"></i>
+           
+            <h1 class="text-xl font-bold text-gray-800 hidden md:block">
+                BitVedas</a> <span class="text-sm font-medium text-gray-500 ml-2 border-l-2 pl-2">MPPSC Assistant Professor 2024 - CS Paper 2</span>
+            </h1> 
+            <h1 class="text-xl font-bold text-gray-800 md:hidden">BitVedas</h1>
+        </div>
+        <div class="flex items-center gap-4">
+            <div id="progress-text" class="text-sm font-medium text-gray-500">Loading...</div>
+            <button id="btn-submit-top" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition shadow-sm disabled:opacity-50">
+                Submit Exam
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- Sidebar: Question Grid -->
+        <aside id="sidebar" class="w-72 bg-white border-r border-gray-200 flex flex-col absolute md:relative z-20 h-full transition-transform transform -translate-x-full md:translate-x-0 shadow-xl md:shadow-none">
+            <div class="p-4 border-b flex justify-between items-center bg-gray-50">
+                <h2 class="font-semibold text-gray-700">Question Navigator</h2>
+                <button id="btn-close-sidebar" class="md:hidden text-gray-500 hover:text-gray-800">
+                    <i class="fa-solid fa-times"></i>
+                </button>
+            </div>
+            <div class="p-4 flex gap-2 text-xs mb-2 border-b">
+                <span class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-gray-200"></div> Unseen</span>
+                <span class="flex items-center gap-1"><div class="w-3 h-3 rounded-full bg-blue-500"></div> Answered</span>
+            </div>
+            <div id="question-grid" class="q-grid flex-1 overflow-y-auto p-4 grid grid-cols-5 gap-2 content-start">
+                <!-- Grid buttons injected here -->
+            </div>
+        </aside>
+
+        <!-- Main Question Area -->
+        <main class="flex-1 flex flex-col overflow-y-auto bg-gray-50 relative">
+            
+            <div class="md:hidden p-2 bg-white border-b flex items-center">
+                <button id="btn-open-sidebar" class="text-gray-600 hover:text-gray-900 px-3 py-1 border rounded bg-gray-100">
+                    <i class="fa-solid fa-bars mr-2"></i> Navigator
+                </button>
+            </div>
+
+            <div class="flex-1 max-w-4xl w-full mx-auto p-4 sm:p-8 flex flex-col">
+                
+                <div id="loading-state" class="flex-1 flex flex-col items-center justify-center">
+                    <i class="fa-solid fa-circle-notch fa-spin text-4xl text-blue-500 mb-4"></i>
+                    <p class="text-gray-500">Parsing 150 questions...</p>
+                </div>
+
+                <div id="quiz-container" class="hidden flex-1 flex flex-col">
+                    
+                    <!-- Navigation Controls at the TOP -->
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-3 shrink-0">
+                        <button id="btn-prev" class="px-5 py-2.5 rounded-lg border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 font-medium transition disabled:opacity-50">
+                            <i class="fa-solid fa-arrow-left sm:mr-2"></i> <span class="hidden sm:inline">Previous</span>
+                        </button>
+                        <button id="btn-show-answer" class="px-5 py-2.5 rounded-lg border border-yellow-400 bg-white text-yellow-700 hover:bg-yellow-50 font-medium transition flex-1 sm:flex-none text-center">
+                            <i class="fa-solid fa-eye mr-2"></i> Show Answer
+                        </button>
+                        <button id="btn-next" class="px-5 py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-medium transition shadow-sm disabled:opacity-50">
+                            <span class="hidden sm:inline">Next</span> <i class="fa-solid fa-arrow-right sm:ml-2"></i>
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 sm:p-8 mb-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <h3 id="q-number" class="text-sm font-bold text-blue-600 uppercase tracking-wider">Question 1</h3>
+                            <span id="q-status" class="text-xs font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600">Unanswered</span>
+                        </div>
+                        
+                        <!-- Question Text Container -->
+                        <!-- Using whitespace-pre-wrap to maintain lines, but allowing HTML injection for tables/images -->
+                        <div id="q-text" class="text-lg text-gray-800 font-medium mb-6 leading-relaxed whitespace-pre-wrap"></div>
+                        
+                        <!-- Options Container -->
+                        <div id="options-container" class="flex flex-col gap-3">
+                            <!-- Options injected here -->
+                        </div>
+                        
+                        <!-- Solution / Explanation Section -->
+                        <div id="solution-section" class="hidden mt-6 p-5 bg-blue-50 border border-blue-200 rounded-xl">
+                            <h4 class="font-bold text-blue-800 mb-2 flex items-center">
+                                <i class="fa-solid fa-lightbulb text-yellow-500 mr-2"></i> Answer Revealed
+                            </h4>
+                            <p id="solution-text" class="text-sm text-blue-900 leading-relaxed"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="results-container" class="hidden flex-1 flex flex-col items-center justify-center py-10">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 w-full text-center">
+                        <i class="fa-solid fa-trophy text-5xl text-yellow-400 mb-4"></i>
+                        <h2 class="text-3xl font-bold text-gray-800 mb-2">Exam Completed!</h2>
+                        <p class="text-gray-500 mb-6">Here is your final score based on the official Answer Key.</p>
+                        
+                        <div class="flex justify-center gap-6 mb-8">
+                            <div class="bg-blue-50 rounded-xl p-4 min-w-[120px]">
+                                <div id="score-text" class="text-4xl font-black text-blue-600">0</div>
+                                <div class="text-sm text-blue-800 font-medium mt-1">Out of <span id="total-score-text">150</span></div>
+                            </div>
+                            <div class="bg-gray-50 rounded-xl p-4 min-w-[120px] flex flex-col justify-center">
+                                <div id="percent-text" class="text-2xl font-bold text-gray-700">0%</div>
+                                <div class="text-xs text-gray-500 font-medium mt-1">Accuracy</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm mb-8 text-left">
+                            <div class="p-3 bg-green-50 text-green-700 rounded border border-green-100">
+                                <i class="fa-solid fa-check mr-1"></i> Correct: <strong id="res-correct">0</strong>
+                            </div>
+                            <div class="p-3 bg-red-50 text-red-700 rounded border border-red-100">
+                                <i class="fa-solid fa-times mr-1"></i> Incorrect: <strong id="res-wrong">0</strong>
+                            </div>
+                            <div class="p-3 bg-gray-50 text-gray-700 rounded border border-gray-200">
+                                <i class="fa-solid fa-minus mr-1"></i> Skipped: <strong id="res-skipped">0</strong>
+                            </div>
+                            <div class="p-3 bg-purple-50 text-purple-700 rounded border border-purple-100">
+                                <i class="fa-solid fa-trash-can mr-1"></i> Deleted: <strong id="res-deleted">0</strong>
+                            </div>
+                        </div>
+
+                        <button id="btn-review" class="bg-gray-800 hover:bg-gray-900 text-white px-6 py-3 rounded-lg font-semibold transition w-full sm:w-auto">
+                            Review Answers
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Official Answer Key from Prompt
+        const answerKeyRaw = {
+            1:"C", 2:"D", 3:"C", 4:"D", 5:"B", 6:"D", 7:"C", 8:"A", 9:"B", 10:"D",
+            11:"A", 12:"B", 13:"D", 14:"B", 15:"B", 16:"B", 17:"A", 18:"D", 19:"B", 20:"B",
+            21:"C", 22:"D", 23:"C", 24:"B", 25:"D", 26:"C", 27:"C", 28:"C", 29:"C", 30:"D",
+            31:"B", 32:"A", 33:"B", 34:"B", 35:"B", 36:"B", 37:"B", 38:"A", 39:"C", 40:"C",
+            41:"A", 42:"B", 43:"B", 44:"B", 45:"B", 46:"A", 47:"B", 48:"B", 49:"D", 50:"B",
+            51:"A", 52:"C", 53:"C", 54:"C", 55:"C, D", 56:"C", 57:"A", 58:"A", 59:"C", 60:"D",
+            61:"B", 62:"B", 63:"B", 64:"D", 65:"C", 66:"C", 67:"B, D", 68:"B", 69:"B", 70:"B",
+            71:"C", 72:"C", 73:"D", 74:"C", 75:"A", 76:"B", 77:"C", 78:"B", 79:"C", 80:"C, D",
+            81:"C", 82:"D", 83:"C", 84:"B", 85:"C", 86:"B", 87:"B", 88:"B", 89:"A", 90:"A",
+            91:"B", 92:"B", 93:"D", 94:"C", 95:"C", 96:"C", 97:"B", 98:"C", 99:"C", 100:"A, B",
+            101:"B", 102:"D", 103:"A", 104:"C", 105:"B", 106:"D", 107:"C", 108:"C", 109:"C", 110:"B",
+            111:"C", 112:"D", 113:"A", 114:"B", 115:"D", 116:"B", 117:"C", 118:"A", 119:"C", 120:"Delete",
+            121:"C, D", 122:"A", 123:"A", 124:"C", 125:"Delete", 126:"C", 127:"B", 128:"A", 129:"B", 130:"C",
+            131:"B", 132:"D", 133:"B", 134:"A", 135:"A", 136:"B", 137:"C", 138:"C", 139:"C", 140:"A",
+            141:"A", 142:"B", 143:"C", 144:"B", 145:"C", 146:"C", 147:"D", 148:"B", 149:"A", 150:"A"
+        };
+
+        const answerKey = {};
+        for(let key in answerKeyRaw) {
+            if(answerKeyRaw[key] === "Delete") {
+                answerKey[key] = ["Delete"];
+            } else {
+                answerKey[key] = answerKeyRaw[key].split(',').map(s => s.trim());
+            }
+        }
+
+        // Exact OCR Text to be safely parsed.
+        // Uses String.raw to protect mathematical symbols (like \alpha, \rightarrow).
+        const rawOcrText = String.raw`
+[Page 1]PAPER - II
+COMPUTER SCIENCE
+1. In which applications generator-
+based reuse approach is usually
+most effective?
+(A) General-purpose applications
+(B) Domain-agnostic applications
+(C) Domain-specific applications
+(D) All of the above
+2. Reuse-based software engineering
+is a strategy where the
+development process is geared to
+(A) Reusing obsolete software
+(B) Reusing extinct software
+(C) Reusing wasted software
+(D) Reusing existing software
+3. The objective of structural testing
+is to ensure that each independent
+program path is executed
+(A) at least twice
+(B) at least half
+(C) at least once
+(D) at most twice
+4. A classic system testing problem is
+(A) software-pointing
+(B) test-pointing
+(C) data-pointing
+(D) finger-pointing
+5. A black-box testing method that
+divides the input domain of a
+program into classes of data from
+which test cases can be derived is
+known as
+(A) Class Partitioning
+(B) Equivalence Partitioning
+(C) Data Partitioning
+(D) Text Partitioning
+6. Processors are built with the
+ability to execute a limited set of
+basic operations. The collection of
+these operations is known as
+(A) Instruction format
+(B) Operand
+(C) Instruction cycle
+(D) Instruction set
+7. Optimization of each instruction
+in the processor is done through a
+technique known as
+(A) RISC
+(B) CISC
+(C) Pipelining
+(D) Execute cycle
+8. In an instruction cycle, which
+cycle is responsible for reading the
+instruction from the memory?
+(A) Fetch cycle
+(B) Decode cycle
+(C) Execute cycle
+(D) Store cycle
+9. Many operating systems are
+designed to enable the CPU to
+process a number of independent
+programs concurrently. This
+concept is called as
+(A) Multicomputing
+(B) Multiprogramming
+(C) Multifunction system
+(D) Multioperating system
+10. The
+is a program
+whose function is to start the
+computer- software when power is
+turned on.
+(A) Dynamic RAM
+(B) Static RAM
+(C) Read Only Memory
+(D) Bootstrap Loader
+11. What does the Write-Ahead
+Logging (WAL) protocol ensure in
+terms of database recovery?
+(A) A transactions changes are
+written to the log before the
+changes are applied to the
+database
+(B) The database is always in a
+consistent state after a system
+crash
+(C) Changes are applied to
+the database and log
+simultaneously
+(D) All transaction logs are
+deleted once the transaction is
+committed
+12. If $\alpha\rightarrow\beta\gamma$ holds, then $\alpha\rightarrow\beta$ holds
+and
+$\alpha\rightarrow\gamma$ holds. Rule is known as
+(A) Union Rule
+(B) Decomposition Rule
+(C) Transitivity Rule
+(D) Reflexivity Rule
+13. Relational algebra and the relational
+calculus are fundamentally
+(A) Linear to each other
+(B) Restricted to each other
+(C) Opposite to each other
+(D) Equivalent to each other
+14. A database that is perceived by its
+users as a collection of relations or
+tables
+(A) Hierarchical database
+(B) Relational database
+(C) Network database
+(D) Distributed database
+15. A relation is in
+if
+and only if the non key attribute
+are mutually independent and
+irreducibly dependent on the
+primary key.
+(A) INF
+(B) 3NF
+(C) 2NF
+(D) BCNF
+16. The protocol used for the exchange
+of information between the host
+and the client is called
+(A) HTML
+(B) HTTP
+(C) SMTP
+(D) URL
+17. DNS is designed as a client-server
+application. A host, that needs to
+map an address to a name or a
+name to an address, calls a DNS
+client known as
+(A) Resolver
+(B) Query
+(C) Pointer
+(D) Root server
+18. Which one of the following is used
+to provide message authentication,
+message integrity and
+non-repudiation of message?
+(A) RSA
+(B) DES
+(C) Kerberos
+(D) Digital signature
+19. What is the primary purpose of
+tunneling in internetworking?
+(A) To encrypt data between two
+different networks
+(B) To connect two similar
+networks through a dissimilar
+intermediate network
+(C) To increase the bandwidth of a
+WAN connection
+(D) To prevent unauthorized access
+to the Ethernet frames
+20. What is the key difference between
+passive and active attacks?
+(A) Passive attacks modify data, while
+active attacks only monitor it
+(B) Passive attacks only monitor
+traffic, while active attacks can
+alter or disrupt it
+(C) Passive attacks require
+encryption, while active
+attacks do not
+(D) Active attacks are easier to
+prevent than passive attacks
+21. The machine requirements issues
+selected are performance, accessibility,
+availability and
+(A) performance maintainability
+(B) software maintainability
+(C) adaptive maintainability
+(D) corresponding maintainability
+22. The set of problems that amount
+to the descriptions of a sizeable
+variety of programming languages,
+as well as the implementation
+of individually prescribed
+requirements to interpreters and
+compilers for these programming
+languages is known as
+(A) Information repository frame
+(B) Client/server frame
+(C) Workpiece frame
+(D) Translator frame
+23. State transition diagrams show
+how the system reacts to internal
+and external events.
+(A) An architectural model
+(B) A composition model
+(C) A stimulus-response model
+(D) A data-processing model
+24. Techniques which model the
+system using mathematical
+constructs such as sets and
+functions are known as
+(A) Method-based techniques
+(B) Model-based techniques
+(C) Design-based techniques
+(D) Engineering-based techniques
+25. A model which is suited to
+applications where data is
+generated by one sub-system and
+used by another
+(A) Control models
+(B) Machine-model
+(C) Client-server model
+(D) Repository model
+26. The number of tokens in the
+following C code segment is
+switch (inputvalue)
+{
+case 1: $b=c*d$; break;
+default: $b=b^{++}$; break;
+}
+(A) 27
+(B) 29
+(C) 26
+(D) 24
+27. Consider the expression.
+$(a-b)+e*(c+d).$ Let X be the
+minimum number of registers
+required by an optimal code
+generation algorithm for a load/
+store architecture, in which
+i. Only load and store instruction
+can have memory operands and
+ii. Arithmetic instruction can
+have only register or immediate
+operands. The value of X
+is not.
+(A) 4
+(B) 3
+(C) 2
+(D) 12
+28. There exist a recursive enumerable
+language whose
+recursively enumerable.
+(A) Union
+(B) Intersection
+(C) Complementation
+(D) Concatenation
+29. Consider the following C program.
+$b=c*d$
+$e=c+1$;
+if $(e<10)$
+{
+$t_{1}=2*d$
+}
+else
+{
+$t_{1}=\frac{e}{2}$
+}
+Which of the following optimization
+methods can be used?
+(A) Constant folding
+(B) Constant propagation
+(C) Dead code elimination
+(D) None of the above
+30. Which of the following statements
+is true for the given Regular
+Expression?
+$(a+b)^{*}b(a+b)^{4}$
+(A) The set of strings containing ab
+as a substring
+(B) The set of strings whose length
+is divisible by 6
+(C) The set of strings having at most
+one pair of consecutive a's and at
+most one pair of consecutive b's
+(D) The set of strings whose 5th
+symbol from the end is b
+31. Suppose a graph G has n vertices and
+e edges using the BFS algorithm:
+Which of the following statements
+is correct regarding the time
+complexity of BFS with different
+graph representations?
+(A) BFS runs in $O(e^{2})$ time using
+an adjacency list and $O(n^{2})$
+using an adjacency matrix
+(B) BFS runs in $O(e)$ time using an
+adjacency list and $O(n^{2})$ time
+using an adjacency matrix
+(C) BFS runs in O(n) time regardless
+of the graph representation
+(D) BFS runs in $O(n.e)$ time using
+both adjacency list and matrix
+32. The function low [u] in DFS
+traversal is used to
+(A) Store the lowest sequence
+number reachable from u or its
+descendants
+(B) Store the highest sequence
+number of a vertex reachable
+from u
+(C) Keep track of the number of
+times u has been visited
+(D) Count the number of connected
+components in the graph
+33. If two events A and B are mutually
+exclusive, what is the value of
+$P(A\cap B)$?
+(A) 1
+(Β) Φ
+(C) $P(A)+P(B)$
+(D) $P(A)-P(B)$
+34. Which of the following statements
+about the expected value E of
+random variables is always true?
+(A) $\div(X+Y)=E(X)\cdot E(Y)$
+(B) $E(tX)=t~E(X),$ where t is a
+number
+(C) $G(X+Y)=E(X)+E(Y)$ only if
+X and Y are independent
+(D) $E(X_{1}+X_{2}+...+X_{n})=$
+$\frac{1}{n}\sum_{i=1}^{n}E(X_{i})$
+35. What is the main purpose of using
+Stirling's formula in probability
+theory?
+(A) To compute exact values of
+factorials
+(B) To estimate the approximate size
+of n factorials when n is large
+(C) To simplify integrals
+(D) To find the mean of a probability
+distribution
+36. Which of the following sorting
+algorithms is stable, non-
+comparison based and works
+best when input is uniformly
+distributed?
+(A) Selection sort
+(B) Bucket sort.
+(C) Shell sort
+(D) Quick sort
+37. Given the recurrence relation for
+the worst-case time complexity
+$T(n)=c$ when $n=1$
+$T(n)=T(n/2)+c$, otherwise
+Where c is a constant the
+recurrences solves to:
+$T(n)=c[1+log_{2}n]$
+What is the worst-case time
+complexity of this algorithm?
+(A) $\theta(n)$
+(B) $\theta(log~n)$
+(C) $\theta(n~log~n)$
+(D) 0(1)
+38. In the decision version of the
+minimum vertex cover problem in
+a bipartite graph, if the answer is
+"No" what serves as a valid No
+certificate?
+(A) A matching of size $K+1$
+(B) A vertex cover of size $K-1$
+(C) An edge not included in the
+cover
+(D) A subgraph with no matchings
+39. In the Greedy algorithm for the
+minimum set cover problem, how
+is the cost-effectiveness of a set S
+defined during an iteration?
+(A) Cost $(S)/|S|$
+(B) Cost $(S)/|C|$, where C is the set
+of already covered elements
+(C) Cost $(S)/|S-C|$, where C is the
+set of already covered elements
+(D) S-C/Cost (S)
+40. Which of the following
+represents the general form of a
+covering integer program, as a
+generalization of set cover?
+(A) Minimize C.x subject to $Ax\le b$,
+with all variables integral
+(B) Maximize Ax subject to $C.x\le b$,
+where x is binary
+(C) Minimize C.x subject to
+$Ax\ge b$, where x is integral and
+non-negative
+(D) Minimize x subject to $A^{T}x\le C$
+with $x\ge0$
+41. Coaxial cable is important guided
+transmission media. It has higher
+bandwidth as compared to that
+of twisted pair cable to connect
+coaxial cable to device, we need
+coaxial cable connector called
+(A) BNC connector
+(B) RJ 50 connector
+(C) RJ 45 connector
+(D) MT-RJ 45 connector
+42.
+is a service that assures
+not only that packets arrive in
+proper sequence, but also that all
+packets arrive correctly.
+(A) Datagram
+(B) Virtual circuit
+(C) Circuit switching
+(D) Error control
+43. What happens if a router can't find
+a route for a packet?
+(A) Router sends it to a default
+gateway
+(B) Router drops it and sends
+unreachable message
+(C) Router broadcast it to all
+networks
+(D) Router saves it for later
+44. What is the key feature of message
+switching?
+(A) Real Time Transmission
+(B) Store and forward
+(C) Dedicated circuits
+(D) No addressing needed
+45. Which protocol is used to discover
+an IP address from a known MAC
+address?
+(A) ARP
+(B) RARP
+(C) GARP
+(D) DNS
+46. Match List I with List - II.
+List - I
+P. LL(1)
+Q. Halting
+Problem
+R. $A\rightarrow aB|a$
+$a\in T$, A, $B\in V$
+S. $A\rightarrow BC|a,$
+$a\in T$
+List - II
+I. Turing
+Machine
+II. Finite
+Automata
+III. Chomsky
+Normal Form
+IV. Recursive
+Descent
+Parser
+A, B, $C\in V$
+(A) P-IV, $Q-I,$ R-II, S-III
+(B) $P-I$, QII, R-III, S-IV
+(C) P-III, QI, R-II, S-IV
+(D) P-II, Q IV, R III, S-I
+47. Which of the following statements
+are true about parsing in Compiler
+design?
+i. A parser converts tokens
+generated by the lexical
+analyser into a parse tree.
+ii. A top-down parser can handle
+left-recursive grammars without
+any modifications.
+iii. A shift-reduce parser can make
+decisions based on the current
+input symbol and the top of the
+stack.
+iv. LL(1) parsing is a type of
+bottom-up parsing technique.
+Choose the correct answer from the
+option given below.
+(A) Only i, ii
+(B) Only i, iii
+(C) Only ii, iv
+(D) Only i, iii, iv
+48. Find the highest type number,
+specified by following grammar.
+$S\rightarrow OSBA|01~A$
+$AB\rightarrow BA$
+$1B\rightarrow11$
+$1A\rightarrow10$
+$0A\rightarrow00$
+(A) Type3 (Regular)
+(B) Type 1 (Context sensitive)
+(C) Type 2 (Context free)
+(D) None of the above
+49. Match all items in Group - 1 with
+correct options from those given in
+Group - 2.
+Group - 1
+P. Intermediate representation
+Q. Top-down parsing
+R. Runtime environments
+S. Register allocation
+Group - 2
+1. Activation records
+2. Code generation
+3. Left most derivation
+4. Graph coloring
+(A) P-2, Q-3, R-4, S-1
+(B) $P-1,Q-2,R-3,S-4$
+(C) $P-4,Q-2,R-3,S-1$
+(D) $P-2,Q-3,R-1,S-4$
+50. The pumping lemma is often used
+to prove that a language is
+(A) Context free
+(B) Not context free
+(C) Regular
+(D) None of the above
+51. Which of the following options is the
+correct form of the implication law?
+(A) $p\rightarrow q\equiv p\vee q$
+(B) $p\rightarrow q\equiv\neg p\vee q$
+(C) $p\rightarrow q\equiv\neg p\wedge q$
+(D) $p\rightarrow q\equiv\neg(p\vee q)$
+52. Let R be a relation defined on a set A.
+Which of the following statements is
+true?
+(A) The reflexive closure of R is:
+$R\cup R^{-1}$
+(B) The symmetric closure of R is:
+$R\cup\Delta_{A},$ where $\Delta_{A}=\{(a,a)|a\in A\}$
+(C) The reflexive closure of R is:
+$R\cup\Delta_{A}$ and the symmetric
+closure is: $R\cup R^{-1}$
+(D) For any property P, the closure
+of a relation always exists
+53. Which of the following options is
+correct about logarithmic
+functions?
+(A) $log_{2}64=30$ because $2^{30}=64$
+(B) $log_{10}1=1$ because $10^{1}=1$
+(C) $log_{10}0.001=-3$ because $10^{-3}=0.001$
+(D) the logarithm of 0 is defined,
+but the logarithm of a negative
+number is not defined
+54. Which of the following correctly
+defines a linear $K^{th}$-order recurrence
+relation with constant coefficients?
+(A) $a_{n}=a_{n-1}+n$
+(B) $a_{n}=\Phi(a_{n-1},a_{n-2^{\prime}},...a_{n-k^{\prime}},;$)
+(C) $a_{n}=C_{1}a_{n-1}+C_{2}a_{n-2}+...+$
+$C_{k}a_{n-k}+f(n)$
+(D) $a_{n}=a_{n-1}^{2}+a_{n-2}$
+55. In BFS, what is the initial distance
+$(d[v])$ assigned to all vertices
+except the source?
+(A) 0
+(B) 1
+(C) -1
+(D) infinity
+56. In OOP, which of the following
+concepts provides the idea of
+reusability?
+(A) Data abstraction
+(B) Polymorphism
+(C) Inheritance
+(D) Dynamic binding
+57. In C++, using const keyword we
+can declare
+(A) "I promise not to change this
+value"
+(B) "I promise to change this
+value"
+(C) "I promise to double this value"
+(D) "I promise to exchange this value
+with other value"
+58. In C++, by declaring function as
+friend function
+(A) The function can use the private
+and protected members of the
+class
+(B) The function is in the scope of
+the class
+(C) The function must be invoked in
+an object
+(D) None of the above
+59. The most important concepts in
+Object-Oriented Programming are
+(A) Superclass and Subclass
+(B) UML
+(C) Object and Class
+(D) Argument and Method
+60. The order of Phases of Software
+Testing, design, operation,
+coding, analysis
+Life Cycle is
+(A) Design, analysis, operation, testing, coding
+(B) Operation, analysis, design, testing, coding
+(C) Analysis, design, coding, testing, operation
+(D) Requirements, Design, coding, testing, maintenance
+61. An interconnected set of networks,
+from a user's point of view, may
+appear simply as a larger network.
+However, if each of the constituent
+network retains its identity,
+and special mechanisms are
+needed for communicating across
+multiple networks, then the entire
+configuration is often referred to as
+an
+(A) Local Area Network (LAN)
+(B) Internet (i)
+(C) Intranet (I)
+(D) Extranet (E)
+62. Which type of network typically has
+higher speed but shorter distance?
+(A) WAN (Wide Area Network)
+(B) LAN (Local Area Network)
+(C) MAN (Metropolitan Area
+Network)
+(D) PAN (Personal Area Network)
+63. In a bus topology, what are the
+special connector located at the end
+of the bus called?
+(A) Routers
+(B) Terminators
+(C) Hubs
+(D) Switches
+64. The strength of a signal decreases
+with increase in distance travelled
+over a medium. This is known as
+(A) Noise
+(B) Delay
+(C) Modulation
+(D) Attenuation
+65. The Unshielded Twisted
+Pair (UTP) cable is the most
+commonly used cable in computer
+communication. The most common
+UTP connector is
+(A) RJ 46
+(B) RJ 99
+(C) RJ 45
+(D) RJ 50
+66. Consider the following Finite
+Automata.
+Which of the following is not a
+Regular Expression for it?
+(A) $(a+b)^{*}a$
+(B) $b^{*}a(a+bb^{*}a)^{*}$
+(C) $b^{*}ab^{*}(ab^{*}ab^{*})^{*}$
+(D) $(b+aa^{*}b)^{*}aa^{*}$
+67. Consider the following grammar.
+$S\rightarrow S\#cS|SS|S\epsilon|\langle S\rangle|a|b|c$
+The cardinality of Follow(s) is
+(A) 6
+(B) 8
+(C) 5
+(D) 7
+68. Assume that the SLR Parser for a
+grammar G has nl states and the
+LALR Parser for G has n2 states.
+(A) nl is necessarily less than n2
+(B) nl is necessarily equal to n2
+(C) nl is necessarily greater than n2
+(D) None of the above
+69. Which of the following problem is
+not NP complete but undecidable ?
+(A) Partition
+(B) Halting problem
+(C) Hamiltonian circuit
+(D) None of the above
+70. Which of the following is equal
+Regular Expression for the given
+Finite Automata?
+(A) $(aa+bb)a^{*}(ab+ba)$
+(B) $(aa+bb)(a+b)^{*}(aa+bb)$
+(C) $a^{*}(a+b)^{*}ab$
+(D) bb $(a+b)^{*}$ aa
+71. Every number system has a "base",
+base is also called as
+(A) Power
+(B) Exponent
+(C) Radix
+(D) Operand
+72. Some operations require the control
+unit to store data temporarily.
+are some temporary
+storage location in the CPU that
+are designed for this purpose.
+(A) RAMS
+(B) ROMs
+(C) Registers
+(D) Hard Drives
+73. What happens when a DMA
+transfer is completed?
+(A) CPU halts permanently
+(B) The disk stops spinning
+(C) The bus is permanently assigned
+to the I/O device
+(D) The controller causes an
+interrupt to notify the CPU
+74. What happens if the CPU and an
+I/O controller want to use the bus
+at the same time? Who decides
+who goes next?
+(A) DMA
+(B) Interrupt handler
+(C) Bus arbiter
+(D) CPU
+75. The
+cycle is responsible
+for recognising which operation
+the instruction represents and
+activating the correct circuitry to
+perform that operation.
+(A) Decode
+(B) Fetch
+(C) Execute
+(D) Store
+76. In the context of finding bridges in
+a connected undirected graph using
+Depth-First-Search (DFS), an edge
+(u, v) is identified as a bridge.
+Which of the following conditions
+hold true?
+(Here pre [] holds pre-order
+traversal numbering of the node.
+low[ holds the lowest pre-order of
+any vertex connected to node.)
+(A) low [v] < pre [u]
+(B) low [v] > pre [u]
+(C) low [v] < low [u]
+(D) pre $[v]=$ pre [u]
+77. Which method of Hashing involves
+dividing the key into parts and
+adding them?
+(A) Division method
+(B) Mid-square method
+(C) Folding method
+(D) Multiplication method
+78. Which of the following is a major
+drawback of linear probing?
+(A) Secondary clustering
+(B) Primary clustering
+(C) Requires a second hash
+function
+(D) Uses extra memory for links
+79. What is the formula for calculating
+load factor (a) in Hash table?
+(Where n is number of elements
+and tsize is table size.)
+(A) $\alpha=tsize/n$
+(B) $\alpha=n\times tsize$
+(C) $\alpha=n/tsize$
+(D) $\alpha=n+tsize$
+80. During the shift up processes,
+which scenario will cause the
+maximum number of element
+interchanges for a newly inserted
+node?
+(A) The node is inserted at the root
+(B) The node is inserted in middle
+of heap
+(C) The node is the smallest in the
+heap
+(D) The node is the largest among
+all inserted so far
+81. In Al systems that interact with
+people (e.g. expert systems), why is
+behaving like a human important?
+(A) To deceive the user into thinking
+the system is a person
+(B) To ensure the system can
+perform physical tasks
+(C) To make the systems reasoning
+processes transparent and
+understandable
+(D) To allow the system to pass the
+turing test automatically
+82. According to the rational agent
+approach, what is the relationship
+between inference and rationality?
+(A) Inference is irrelevant to
+rationality
+(B) Rationality is entirely dependent
+on correct inference
+(C) Correct inference is the only way
+to act rationally
+(D) Making correct inference is
+sometimes part of being a
+rational agent
+83. Which of the following statement
+best summarizes the impact of
+Noam Chomsky's review of
+B. F. Skinner's book Verbal
+Behaviour on the development of
+natural language processing?
+(A) It supported Skinner's
+behaviorist theory, laying the
+ground work for modern NLP
+(B) It introduced computational
+linguistics as a purely
+philosophical discipline
+(C) It challenged the behaviorist
+approach by highlighting the
+creative nature of language,
+influencing formal and
+programmable models of
+language understanding
+(D) It emphasized that sentence
+structure alone is sufficient for
+full language comprehension
+84. What is a key feature of Hopfield
+networks?
+(A) They use unidirectional links
+and multiple hidden layers
+(B) They function as associative
+memory with bidirectional
+symmetric weights
+(C) They include stochastic units
+and random outputs
+(D) They are incapable of learning
+patterns
+85. Who introduced Fuzzy set theory
+and in which year?
+(A) William Kahan, 1978
+(B) Peter Cheeseman, 1985
+(C) Lotfi Zadeh, 1965
+(D) Dubois and Prade, 1994
+86. Boolean Expression
+$[(x\times y)+(x^{\prime}\times z)]+(y\times z^{\prime})$
+Which of the following options is
+the correct simplified form?
+(A) $xyz^{\prime}+xz^{\prime}y$
+(B) $(x^{\prime}\times z)+y$
+(C) $(x\times y)+(x+z^{\prime})$
+(D) $(x\times z^{\prime}\times y)\times(x^{\prime}+z)$
+87. De Morgan's second law states that
+the complement of the intersection
+of a collection of sets is equal to
+(A) The intersection of the
+complements of the sets
+(B) The union of the complements
+of the sets
+(C) The union of the original sets
+(D) None of the above
+88. Which of the following statements
+helps to prove the principle of
+mathematical induction?
+(A) A statement is true for some
+values of n.
+(B) A statement is true for all
+positive integers n.
+(C) A statement is false for all
+positive integers.
+(D) A statement is true for only
+even numbers.
+89. Which of the following options
+correctly represents the symbolic
+form of the given statement?
+"For all x, $x<5$ or $x\ge5^{\prime\prime}$
+(Where:
+ P(x) represents $x<5$
+ Q(x) represents $x\ge5$)
+(A) $\forall x[P(x)\vee Q(x)]$
+(B) $\exists x[P(x)\vee Q(x)]$
+(C) $\forall x[P(x)\wedge Q(x)]$
+(D) $\exists x[P(x)\wedge Q(x)]$
+90. Which of the following options
+correctly represents the symbolic
+form of the given proposition?
+"Either my program runs and it
+contains no bugs, or my program
+contains bugs".
+Let:
+p = My program runs.
+ q = My program contains bugs.
+(A) $(p\wedge\neg q)\vee q$
+(B) $p\wedge(\neg q\vee q)$
+(C) $(p\vee\neg q)\wedge q$
+(D) $\neg(p\wedge q)\vee q$
+91. Who used genetic algorithms to
+address the problem of finding a
+good structure for a multilayer
+neural network?
+(A) Lecun et al. (1989)
+(B) Harp et al. (1990) and Miller
+et al. (1989)
+(C) Mezard and Nadal (1989)
+(D) Frean (1990)
+92. What is the purpose of the function
+$\phi:(X\times Y)\wedge K\rightarrow Y$ in the general
+form of the K-NN rule ?
+(A) To define the similarity
+function
+(B) To compute the final prediction
+based on the K nearest
+neighbors
+(C) To measure the variance in the
+data
+(D) To reorder the training set
+93. Which of the following is not a
+most commonly used method for
+defining distance between clusters
+in linkage based clustering?
+(A) Single linkage
+(B) Average linkage
+(C) Max linkage
+(D) Centroid linkage
+94. What is the primary role of a policy
+in a reinforcement learning system?
+(A) To define the long term goals of
+the agent
+(B) To predict future rewards
+based on the current state
+(C) To map from perceived states
+of the environment to actions
+(D) To model the environments
+behaviour
+95. Which of the following is not
+considered a part of data
+preprocessing in the knowledge
+discovery process?
+(A) Data selection
+(B) Data transformation
+(C) Pattern evaluation
+(D) Data cleaning
+96. Which RAID level uses block-level
+striping with distributed parity
+across multiple disks but requires
+atleast three disks?
+(A) RAID 0
+(B) RAID 1
+(C) RAID 5
+(D) RAID 10
+97. Which of the following is a
+characteristic of the NTFS file
+system used in Windows Operating
+Systems?
+(A) It uses a File Allocation Table
+(FAT) to track file locations
+(B) It supports file compression and
+encryption natively
+(C) It does not support file
+permissions or Access Control
+Lists (ACL)
+(D) It is limited to maximum
+partition size of 32 GB
+98. Whenever the operating system
+gains control of the computer, it
+is in which mode ?
+(A) CPU mode
+(B) Pointer mode
+(C) Kernel mode
+(D) Process mode
+99. Which directory implementation
+reduces search time for large
+directories by organising entries in
+a sorted structure?
+(A) Linear list
+(B) Hash table
+(C) B-tree
+(D) Linked list
+100. A direct-access file system uses
+blocks of size 4 KB. Each logical
+record is 512 bytes. What is the
+block number for the logical record
+numbered 235?
+(A) 29
+(B) 30
+(C) 31
+(D) 32
+101. 'C' Language is a
+Language
+(A) Object-Oriented Programming
+(B) Procedural Language
+(C) Machine Language
+(D) Common Business-Oriented
+Language
+102. What will be the output of the
+following program?
+Void main ()
+{
+int i;
+for $(i=0;i<3;i+++)$;
+printf ("%d",  );
+}
+(A) 3
+(B) 012
+(C) 0123
+(D) Errors
+103. A new Object-Oriented Language
+JAVA was developed by
+(A) James Gosling
+(B) Johan Atanasoff
+(C) Charles Babbage
+(D) Ada Lovelace
+104. In the JAVA.awt.package, the
+coloring scheme ranges from
+0 to 255 are called
+(A) GBR
+(B) BRG
+(C) RGB
+(D) BGR
+105. In JAVA, symbols of Boolean
+operators &&, || and! are
+respectively represented as
+(A) NAND, NOR and XOR
+(B) AND, OR and NOT
+(C) NOT, OR and AND
+(D) OR, AND and NOT
+106. The ISO 9000 quality assurance
+models treat an enterprise as a
+(A) Software of inter connected
+process
+(B) Server of inter connected
+process
+(C) Client of inter connected
+process
+(D) Network of inter connected
+process
+107. The SQA plan provides a road map
+for instituting
+(A) Server quality assurance
+(B) System quality assurance
+(C) Software quality assurance
+(D) Standard quality assurance
+108. A description of the problem and
+the essence of its solution so that
+the solution may be reused in
+different settings is known as
+(A) Software
+(B) Component
+(C) Pattern
+(D) Image
+109. System requirement are more
+detailed descriptions of the
+(A) Text requirements
+(B) Data requirements
+(C) User requirements
+(D) Model requirements
+110. One overriding objective to find
+and correct the cause of a software
+error, is known as
+(A) testing
+(B) debugging
+(C) maintenance
+(D) design
+111. The database must not contain
+any unmatched foreign key values
+is known as
+(A) Referential path
+(B) Referential cycle
+(C) Referential integrity
+(D) Referential diagram
+112. A SQL consists of a set of embedded
+SQL facilities that are provided
+specifically to allow the construction
+of generalized, online and possibly
+interactive applications is known as
+(A) Standard SQL
+(B) Embedded SQL
+(C) Static SQL
+(D) Dynamic SQL
+113. What is phantom read in the
+context of transaction isolation
+levels?
+(A) A transaction reads a set of rows
+that were inserted by another
+transaction after it started
+(B) A transaction reads data that
+was committed by another
+transaction
+(C) A transaction reads data that was
+changed by another transaction
+but not yet committed
+(D) None of the above
+114. A relation in which, if and only if
+every non-trivial, left-irreducible
+FD has a candidate key as its
+determinant is known as
+(A) 3NF
+(B) BCNF
+(C) Trivial FD
+(D) 2NF
+115. A file is the collection of all
+occurrences of one type of stored
+record, is known as
+(A) Stored system
+(B) Stored field
+(C) Stored record
+(D) Stored file
+116. 1.
+Repeat for $K=1$ to N :
+ Set $A[K]:=K$
+2. Repeat for $K=2$ to $\sqrt{N}$:
+ Call CROSSOUT (A, N, Κ).
+3. Repeat for $K=2$ to N:
+If $A[K]\ne1$, then: Write
+A[K].
+4. Exit.
+This algorithm:
+(A) To sort a list of numbers in
+ascending order
+(B) To find and write all prime
+numbers less than N
+(C) To compute the factorial of a
+number
+(D) To generate Fibonacci numbers
+up to N
+117. How is element access different in
+arrays and linked lists?
+(A) Arrays required traversal
+while linked lists allow direct
+access
+(B) Both require traversal
+(C) Arrays allow direct access while
+linked lists require traversal
+(D) Both allows direct access
+118. What are the time complexities for
+a priority queue implemented with
+a heap?
+(A) Insert: 0(log n), Remove :
+0(log n)
+(B) Insert: 0(n), Remove: 0(1)
+(C) Insert: 0(1), Remove: 0(log n)
+(D) Insert: 0(log n), Remove: 0(1)
+119. A binary tree is called a height
+balanced binary tree (OR AVL
+tree), if
+(A) It is a binary tree where the
+left and right subtrees are both
+binary search trees
+(B) It is a binary search tree in which
+the balance factor of every node
+is 0
+(C) It is a binary search tree in which
+for every node, the heights of the
+left and right subtrees differ by
+at most 1
+(D) It is a binary search tree in
+which every node has exactly
+two children
+120. If n is the total number of nodes
+in a complete binary tree, what is
+the correct formula to calculate its
+height h?
+(A) $h=[log_{2}(n)]$
+(B) $h=[log_{2}(n+1)]$
+(C) $h=[log_{2}(n)]+1$
+(D) $h=[log_{2}(n-1)]+1$
+121. A system has 5 processes $[P_{0}-P_{4}]$
+and 3 resource types (A, B, C). The
+current allocation and maximum
+need matrices are:
+Allocation $=[[0,1,0]$, [2, 0, 0],
+[3, 0, 2], [2, 1, 1], [0, 0, 2]
+]
+$Max=[[7,5,3]$, [3, 2, 2], [9, 0, 2],
+[2, 2, 2], [4, 3, 3]]
+Available [3, 3, 2]
+Which of the following sequence is
+not a safe sequence according to
+the Banker's algorithm?
+(A) $P_{1}\rightarrow P_{3}\rightarrow P_{4}\rightarrow P_{0}\rightarrow P_{2}$
+(B) $P_{3}\rightarrow P_{1}\rightarrow P_{4}\rightarrow P_{0}\rightarrow P_{2}$
+(C) $P_{4}\rightarrow P_{3}\rightarrow P_{1}\rightarrow P_{0}\rightarrow P_{2}$
+(D) $P_{1}\rightarrow P_{4}\rightarrow P_{3}\rightarrow P_{2}\rightarrow P_{0}$
+122. Inverted page tables are primarily
+used to
+(A) Reduce the overhead of
+maintaining multiple page
+tables
+(B) Simplify the Translation
+Lookaside Buffer (TLB)
+(C) Minimize internal
+fragmentation
+(D) Support segmentation
+123. Internal fragmentation occurs in
+paging because
+(A) Pages are not fully utilized
+(B) Processes are allocated
+inconsistent memory
+(C) The page table size is too large
+(D) The TLB is overloaded
+124. In the context of disk scheduling
+algorithms, which of the following
+is not a characteristic of SCAN
+algorithm?
+(A) Also known as elevator
+algorithm
+(B) Moves the disk arm towards
+an end, servicing requests
+until it reaches the end then
+reverse direction
+(C) May cause starvation of requests
+at the end of the disk
+(D) Provides more uniform wait
+times compared to FCFS
+125. Given a disk queue with requests
+for tracks: 98, 183, 37, 122, 14,
+124, 65, 67. If the disk head starts
+at track 53 and uses the SCAN
+algorithm moving toward higher
+tracks first, what is the total head
+movement?
+(A) 236
+(B) 299
+(C) 331
+(D) 208
+126. Python Programming Language
+was developed by
+(A) Charles Babbage
+(B) Dennis Ritchie
+(C) Guido Van Rossum
+(D) Larry Wall
+127. Basic data types of Python are
+(A) Numbers, Boolean, Float,
+Strings
+(B) Numbers, Boolean, Strings,
+None
+(C) Numbers, Boolean, Pointer,
+Strings
+(D) Numbers, Strings, Const, None
+128. Loop Control Flow Statements are
+called
+(A) Iteration statement
+(B) Conditional statement
+(C) Break statement
+(D) Continue statement
+129. The command line arguments in
+Python can be printed as a list of
+string by executing
+(A) OS.argv
+(B) Sys.argv
+(C) .argv
+(D) None of these
+130. In Python, the
+method
+removes and returns the item at
+the given index.
+(A) append ()
+(B) Extend ()
+(C) POP ()
+(D) remove ()
+131. What is the purpose of RISC
+(Reduced Instruction Set
+Computer)?
+(A) To Fetch the instruction from
+memory
+(B) To establish regularity of
+execution and ease of decoding
+(C) To store the results in memory
+(D) To execute the instructions
+132. A floating point number is said to
+be normalized, if the left most digit
+of the mantissa is
+(A) Zero
+(B) Fraction
+(C) Exponent
+(D) Nonzero
+133. Which of the following is the 2's
+complement representation of the
+decimal value 15?
+(A) 10111
+(B) 10001
+(C) 11111
+(D) 1111
+134. What is the primary function of
+data interlocks in a pipelined
+processor?
+(A) To detect and resolve
+dependencies between
+instructions to ensure correct
+execution
+(B) To increase clock speed by
+reducing pipeline stages
+(C) To eliminate the need for
+register
+(D) To disable the pipeline during
+cache-misses
+135. Under the direction of a program,
+which four basic operations are
+managed by the control unit?
+(A) Fetch, Decode, Execute,
+Write-Back
+(B) Initialize, Process, Decode,
+Execute
+(C) Fetch, Decode, Process,
+Write-Back
+(D) Process, Decode, Fetch,
+Execute
+136. What is data warehouse?
+(A) A database that stores only
+current transactional data
+(B) A centralized repository of
+integrated data collected from
+multiple sources
+(C) A temporary cache used for
+Quick access to web pages
+(D) A cloud storage system for raw
+data
+137. Which database design is
+commonly used in OLAP systems?
+(A) ER-based
+(B) Relational model
+(C) Star/snowflake schema
+(D) Hierarchical model
+138. Which part of the web is not
+indexed by typical search engines?
+(A) Surface web
+(B) Static web
+(C) Deep web
+(D) Hyperlinked web
+139. What is the main advantage of
+creating a framework instead of
+a complete e-commerce system,
+according to passage?
+(A) It allows for faster online
+purchases
+(B) It eliminates the need for coding
+in e-commerce projects
+(C) It simplifies extending and
+customizing e-commerce
+projects
+(D) It ensures compatibility with all
+third-party platforms
+140. Which of the following is not the
+payment gateways?
+(A) AmazonGo
+(B) SafePal
+(C) Nochex
+(D) WorldPay
+141. Hybrid Operating System
+structures combine elements
+of microkernel and monolithic
+designs. Which statement best
+explains why hybrid system retain
+some services in kernel space ?
+(A) To minimize context-switching
+over head of critical operations
+(B) To enforce strict security
+policies
+(C) To simplify application
+development
+(D) To eliminate the need of system
+calls
+142. Which operating system structure
+allows for the operating system to
+be broken into a number of layers,
+each built on top of lower layers,
+with the bottom layer being the
+hardware?
+(A) Monolithic structure
+(B) Layered approach
+(C) Security layer
+(D) Microkernel
+143. In a virtual machine architecture,
+what is the key benefit of using a
+hypervisor (Type 1 VMM) ?
+(A) It allows guest OS to run
+unmodified on host hardware
+(B) It reduces the need of hardware
+virtualization support
+(C) It enables dynamic allocation of
+system resources across multiple
+VMs
+(D) It eliminates the risk of security
+breaches in guest OS
+144. In a system employing the
+Banker's algorithm for deadlock
+avoidance, which of the following
+scenarios would cause the system
+to be in unsafe state?
+(A) The system has enough
+resources to satisfy the
+maximum possible demands of
+all process simultaneously
+(B) A process requests resources
+that, if allocated, leave the
+system without enough resources
+to satisfy the maximum possible
+demands of other resources
+(C) All processes are currently
+resources less than their
+maximum needs
+(D) The system has more resources
+than the total maximum needs
+of all processes combined
+145. Which of the following process
+state transitions is not possible in
+a typical operating system?
+(A) Running -> Ready
+(B) Waiting -> Ready
+(C) Ready -> Waiting
+(D) Running -> Waiting
+146. A collection of conceptual tools for
+describing data, data relationships,
+data semantics and consistency
+constraints, is known as
+(A) Design model
+(B) Developed model
+(C) Data model
+(D) ER model
+147. The same entity may belong to
+more than one lower-level entity
+set within a single generalization is
+known as
+(A) Constraints
+(B) Disjoint
+(C) User-defined
+(D) Overlapping
+148. The SQL analog of what is more
+conventionally known as the
+catalog is called the
+(A) Data manipulation
+(B) Information schema
+(C) Data definition language
+(D) Dynamic SQL
+149. What is the primary goal of
+concurrency control in DBMS?
+(A) To ensure that multiple
+transactions can execute
+concurrently without violating
+database consistency
+(B) To speed up database queries
+by allowing transactions to
+overlap
+(C) To allow only one transaction to
+be executed at a time
+(D) To guarantee that all
+transactions will complete any
+how
+150. What is dirty read in the context of
+transaction processing?
+(A) A transaction reads data that was
+modified by another transaction
+but not yet committed
+(B) A transaction reads data that
+is in a buffer but not written to
+disk
+(C) A transaction reads data after it
+has been committed
+(D) A transaction write data that
+other transaction can read
+immediately
+`;
+
+        let questions = [];
+
+        function parseQuestions() {
+            // Clean noise like page headers
+            let cleanedText = rawOcrText
+                .replace(/\[Page \d+\].*/g, '')
+                .replace(/PAPER - II/g, '')
+                .replace(/COMPUTER SCIENCE/g, '')
+                .replace(/CS\/2025-D/g, '')
+                .replace(/\[P\.T\.O\.\]/g, '')
+                .replace(/\n\s*\d+\s*\n/g, '\n') // Removes stray single page numbers
+                .trim();
+
+            const qBlocks = cleanedText.split(/(?=\n\d+\.\s+)|(?=^\d+\.\s+)/m);
+
+            qBlocks.forEach(block => {
+                block = block.trim();
+                if(!block) return;
+
+                const numMatch = block.match(/^(\d+)\.\s+([\s\S]*)/);
+                if (numMatch) {
+                    const id = parseInt(numMatch[1], 10);
+                    let content = numMatch[2];
+
+                    const optionRegex = /\(([A-D])\)\s*([\s\S]*?)(?=\([A-D]\)|$)/g;
+                    
+                    let options = {};
+                    let match;
+                    let firstOptionIndex = -1;
+
+                    while ((match = optionRegex.exec(content)) !== null) {
+                        if (firstOptionIndex === -1) {
+                            firstOptionIndex = match.index;
+                        }
+                        options[match[1]] = match[2].trim().replace(/\n/g, ' ');
+                    }
+
+                    let questionText = "";
+                    if (firstOptionIndex !== -1) {
+                        questionText = content.substring(0, firstOptionIndex).trim();
+                    } else {
+                        questionText = content.trim();
+                    }
+
+                    questionText = questionText.replace(/([a-z,])\n([a-z])/ig, '$1 $2');
+
+                    if (id >= 1 && id <= 150) {
+                        questions.push({
+                            id: id,
+                            text: questionText,
+                            options: options,
+                            correct: answerKey[id] || []
+                        });
+                    }
+                }
+            });
+
+            questions.sort((a, b) => a.id - b.id);
+
+            // Applying highly specific overrides with Tables and HTML and MathJax
+            const overrides = {
+                10: { text: "The ___________ is a program whose function is to start the computer-software when power is turned on." },
+                15: { text: "A relation is in ___________ if and only if the non key attribute are mutually independent and irreducibly dependent on the primary key." },
+                34: { 
+                    text: "Which of the following statements about the expected value E of random variables is always true?",
+                    options: {
+                        "A": "$E(X+Y) = E(X) \\cdot E(Y)$",
+                        "B": "$E(tX) = t \\cdot E(X)$, where t is a constant number",
+                        "C": "$E(X+Y) = E(X) + E(Y)$ only if X and Y are independent",
+                        "D": "$E(X_1 + X_2 + ... + X_n) = \\frac{1}{n} \\sum_{i=1}^{n} E(X_i)$"
+                    }
+                },
+                42: { text: "___________ is a service that assures not only that packets arrive in proper sequence, but also that all packets arrive correctly." },
+                46: { 
+                    text: `Match List I with List - II.<br><br><table class="w-full text-sm text-left border-collapse border border-gray-300 shadow-sm"><tr class="bg-gray-100"><th class="border border-gray-300 p-2.5 w-1/2">List - I</th><th class="border border-gray-300 p-2.5 w-1/2">List - II</th></tr><tr><td class="border border-gray-300 p-2.5 font-medium text-gray-800">P. LL(1)</td><td class="border border-gray-300 p-2.5">I. Turing Machine</td></tr><tr><td class="border border-gray-300 p-2.5 font-medium text-gray-800">Q. Halting Problem</td><td class="border border-gray-300 p-2.5">II. Finite Automata</td></tr><tr><td class="border border-gray-300 p-2.5 font-medium text-gray-800">R. $A\\rightarrow aB|a$, &nbsp; $a\\in T$, $A, B\\in V$</td><td class="border border-gray-300 p-2.5">III. Chomsky Normal Form</td></tr><tr><td class="border border-gray-300 p-2.5 font-medium text-gray-800">S. $A\\rightarrow BC|a$, &nbsp; $a\\in T$, $A, B, C\\in V$</td><td class="border border-gray-300 p-2.5">IV. Recursive Descent Parser</td></tr></table>`
+                },
+                49: { 
+                    text: `Match all items in Group - 1 with correct options from those given in Group - 2.<br><br><table class="w-full text-sm text-left border-collapse border border-gray-300 shadow-sm"><tr class="bg-gray-100"><th class="border border-gray-300 p-2.5 w-1/2">Group - 1</th><th class="border border-gray-300 p-2.5 w-1/2">Group - 2</th></tr><tr><td class="border border-gray-300 p-2.5 font-medium text-gray-800">P. Intermediate representation</td><td class="border border-gray-300 p-2.5">1. Activation records</td></tr><tr><td class="border border-gray-300 p-2.5 font-medium text-gray-800">Q. Top-down parsing</td><td class="border border-gray-300 p-2.5">2. Code generation</td></tr><tr><td class="border border-gray-300 p-2.5 font-medium text-gray-800">R. Runtime environments</td><td class="border border-gray-300 p-2.5">3. Left most derivation</td></tr><tr><td class="border border-gray-300 p-2.5 font-medium text-gray-800">S. Register allocation</td><td class="border border-gray-300 p-2.5">4. Graph coloring</td></tr></table>`
+                },
+                52: { 
+                    text: "Let R be a relation defined on a set A. Which of the following statements is true?",
+                    options: {
+                        "A": "The reflexive closure of R is: $R \\cup R^{-1}$",
+                        "B": "The symmetric closure of R is: $R \\cup \\Delta_A$, where $\\Delta_A = \\{(a,a) \\mid a \\in A\\}$",
+                        "C": "The reflexive closure of R is: $R \\cup \\Delta_A$ and the symmetric closure is: $R \\cup R^{-1}$",
+                        "D": "For any property P, the closure of a relation always exists"
+                    }
+                },
+                72: { text: "Some operations require the control unit to store data temporarily. ___________ are some temporary storage location in the CPU that are designed for this purpose." },
+                75: { text: "The ___________ cycle is responsible for recognising which operation the instruction represents and activating the correct circuitry to perform that operation." },
+                101: { text: "'C' Language is a ___________ Language." },
+                130: { text: "In Python, the ___________ method removes and returns the item at the given index." }
+            };
+
+            questions = questions.map(q => {
+                if (overrides[q.id]) {
+                    return {
+                        ...q,
+                        text: overrides[q.id].text || q.text,
+                        options: overrides[q.id].options || q.options
+                    };
+                }
+                return q;
+            });
+            
+            let completeQuestions = [];
+            for (let i = 1; i <= 150; i++) {
+                let found = questions.find(q => q.id === i);
+                if (found) {
+                    completeQuestions.push(found);
+                } else {
+                    completeQuestions.push({
+                        id: i,
+                        text: "Question text could not be extracted perfectly. Please refer to original document.",
+                        options: { A: "Option A", B: "Option B", C: "Option C", D: "Option D" },
+                        correct: answerKey[i] || []
+                    });
+                }
+            }
+            questions = completeQuestions;
+        }
+
+        let currentIdx = 0;
+        let userAnswers = {}; 
+        let isSubmitted = false;
+        let revealedAnswers = {}; 
+
+        const DOM = {
+            loading: document.getElementById('loading-state'),
+            quiz: document.getElementById('quiz-container'),
+            results: document.getElementById('results-container'),
+            grid: document.getElementById('question-grid'),
+            qNum: document.getElementById('q-number'),
+            qStatus: document.getElementById('q-status'),
+            qText: document.getElementById('q-text'),
+            options: document.getElementById('options-container'),
+            solutionSection: document.getElementById('solution-section'),
+            solutionText: document.getElementById('solution-text'),
+            btnPrev: document.getElementById('btn-prev'),
+            btnNext: document.getElementById('btn-next'),
+            btnShowAnswer: document.getElementById('btn-show-answer'),
+            btnSubmit: document.getElementById('btn-submit-top'),
+            progressText: document.getElementById('progress-text'),
+            sidebar: document.getElementById('sidebar'),
+            btnOpenSidebar: document.getElementById('btn-open-sidebar'),
+            btnCloseSidebar: document.getElementById('btn-close-sidebar'),
+        };
+
+        function initApp() {
+            parseQuestions();
+            DOM.loading.classList.add('hidden');
+            DOM.quiz.classList.remove('hidden');
+            
+            buildGrid();
+            renderQuestion(currentIdx);
+            updateProgress();
+
+            DOM.btnNext.addEventListener('click', () => {
+                if (currentIdx < questions.length - 1) {
+                    currentIdx++;
+                    renderQuestion(currentIdx);
+                }
+            });
+
+            DOM.btnPrev.addEventListener('click', () => {
+                if (currentIdx > 0) {
+                    currentIdx--;
+                    renderQuestion(currentIdx);
+                }
+            });
+
+            DOM.btnShowAnswer.addEventListener('click', () => {
+                const q = questions[currentIdx];
+                revealedAnswers[q.id] = true;
+                renderQuestion(currentIdx);
+            });
+
+            DOM.btnSubmit.addEventListener('click', submitQuiz);
+            document.getElementById('btn-review').addEventListener('click', () => {
+                DOM.results.classList.add('hidden');
+                DOM.quiz.classList.remove('hidden');
+                renderQuestion(currentIdx);
+            });
+
+            DOM.btnOpenSidebar.addEventListener('click', () => DOM.sidebar.classList.remove('-translate-x-full'));
+            DOM.btnCloseSidebar.addEventListener('click', () => DOM.sidebar.classList.add('-translate-x-full'));
+        }
+
+        function buildGrid() {
+            DOM.grid.innerHTML = '';
+            questions.forEach((q, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `grid-btn-${q.id}`;
+                btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center transition
+                                ${userAnswers[q.id] ? 'bg-blue-500 text-white border-blue-600' : 'bg-white text-gray-600 border-gray-300 hover:bg-gray-50'}`;
+                btn.innerText = q.id;
+                btn.onclick = () => {
+                    currentIdx = idx;
+                    renderQuestion(currentIdx);
+                    if(window.innerWidth < 768) DOM.sidebar.classList.add('-translate-x-full');
+                };
+                DOM.grid.appendChild(btn);
+            });
+        }
+
+        function updateGridStatus(id) {
+            const btn = document.getElementById(`grid-btn-${id}`);
+            if(!btn) return;
+            
+            if (isSubmitted) {
+                const q = questions.find(q => q.id === id);
+                if (q.correct.includes('Delete')) {
+                    btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-purple-100 text-purple-700 border-purple-300`;
+                } else if (!userAnswers[id] || userAnswers[id].length === 0) {
+                    btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-gray-100 text-gray-500 border-gray-300`;
+                } else {
+                    const isCorrect = checkAnswer(q.correct, userAnswers[id]);
+                    if (isCorrect) {
+                        btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-green-500 text-white border-green-600`;
+                    } else {
+                        btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-red-500 text-white border-red-600`;
+                    }
+                }
+            } else {
+                if (userAnswers[id] && userAnswers[id].length > 0) {
+                    btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-blue-500 text-white border-blue-600`;
+                } else {
+                    btn.className = `w-10 h-10 rounded text-sm font-medium border flex items-center justify-center bg-white text-gray-600 border-gray-300 hover:bg-gray-50`;
+                }
+            }
+            
+            Array.from(DOM.grid.children).forEach(b => b.classList.remove('ring-2', 'ring-offset-1', 'ring-gray-800'));
+            document.getElementById(`grid-btn-${questions[currentIdx].id}`).classList.add('ring-2', 'ring-offset-1', 'ring-gray-800');
+        }
+
+        function renderQuestion(idx) {
+            const q = questions[idx];
+            DOM.qNum.innerText = `Question ${q.id}`;
+            
+            // Inject blank image tags for Q66 & Q70
+            let imageTagHtml = '';
+            if(q.id === 66 ) {
+                imageTagHtml = `<div class="mt-4"><img src="66.jpg" alt="Image for Question ${q.id}" class="max-w-full border shadow-sm rounded"/></div>`;
+            }
+             if( q.id === 70) {
+                imageTagHtml = `<div class="mt-4"><img src="70.jpeg" alt="Image for Question ${q.id}" class="max-w-full border shadow-sm rounded"/></div>`;
+            }
+
+            // Using innerHTML instead of innerText so tables render properly!
+            DOM.qText.innerHTML = q.text.replace(/\n/g, '<br>') + imageTagHtml;
+            
+            const isDeleted = q.correct.includes('Delete');
+            const isRevealed = revealedAnswers[q.id];
+            const showResults = isSubmitted || isRevealed;
+            
+            if(isDeleted) {
+                DOM.qStatus.innerText = "Deleted Question";
+                DOM.qStatus.className = "text-xs font-semibold px-2 py-1 rounded bg-purple-100 text-purple-700";
+            } else if (userAnswers[q.id]) {
+                DOM.qStatus.innerText = "Answered";
+                DOM.qStatus.className = "text-xs font-semibold px-2 py-1 rounded bg-blue-100 text-blue-700";
+            } else {
+                DOM.qStatus.innerText = "Unanswered";
+                DOM.qStatus.className = "text-xs font-semibold px-2 py-1 rounded bg-gray-100 text-gray-600";
+            }
+
+            DOM.btnPrev.disabled = idx === 0;
+            DOM.btnNext.disabled = idx === questions.length - 1;
+
+            DOM.options.innerHTML = '';
+            
+            if (isDeleted && !isSubmitted) {
+                DOM.options.innerHTML = `<div class="p-4 bg-purple-50 text-purple-700 rounded-lg border border-purple-200">This question was marked as 'Delete' in the answer key. It will not be graded.</div>`;
+            } else {
+                const multiCorrect = q.correct.length > 1 && !isDeleted;
+                
+                ['A', 'B', 'C', 'D'].forEach(letter => {
+                    if(!q.options[letter]) return; 
+                    
+                    const isSelected = userAnswers[q.id]?.includes(letter);
+                    const isActualCorrect = q.correct.includes(letter);
+                    
+                    let modeClasses = "bg-white border-gray-300 text-gray-700 hover:border-blue-400 cursor-pointer";
+                    let iconHTML = `<div class="w-5 h-5 rounded${multiCorrect? '':' -full'} border border-gray-300 flex items-center justify-center mr-3 mt-0.5 shrink-0 bg-white"></div>`;
+                    
+                    if (isSelected && !showResults) {
+                        modeClasses = "selected-option";
+                        iconHTML = `<div class="w-5 h-5 rounded${multiCorrect? '':' -full'} border border-blue-600 flex items-center justify-center mr-3 mt-0.5 shrink-0 bg-blue-600 text-white text-xs"><i class="fa-solid fa-check"></i></div>`;
+                    }
+
+                    if (showResults) {
+                        modeClasses = "bg-white border-gray-200 text-gray-500 opacity-70 cursor-default";
+                        if (isActualCorrect) {
+                            modeClasses = "correct-option opacity-100 font-medium";
+                            iconHTML = `<div class="w-5 h-5 rounded${multiCorrect? '':' -full'} border border-green-600 flex items-center justify-center mr-3 mt-0.5 shrink-0 bg-green-600 text-white text-xs"><i class="fa-solid fa-check"></i></div>`;
+                        } else if (isSelected && !isActualCorrect) {
+                            modeClasses = "wrong-option opacity-100";
+                            iconHTML = `<div class="w-5 h-5 rounded${multiCorrect? '':' -full'} border border-red-600 flex items-center justify-center mr-3 mt-0.5 shrink-0 bg-red-600 text-white text-xs"><i class="fa-solid fa-times"></i></div>`;
+                        }
+                    }
+
+                    const optDiv = document.createElement('div');
+                    optDiv.className = `option-label p-4 rounded-xl border-2 transition flex items-start ${modeClasses}`;
+                    optDiv.innerHTML = `
+                        ${iconHTML}
+                        <div>
+                            <span class="font-bold mr-2 text-sm">${letter}.</span>
+                            <span class="text-[15px]">${q.options[letter]}</span>
+                        </div>
+                    `;
+
+                    if (!showResults && !isDeleted) {
+                        optDiv.onclick = () => handleOptionClick(q.id, letter, multiCorrect);
+                    }
+                    DOM.options.appendChild(optDiv);
+                });
+                
+                if(multiCorrect && !showResults) {
+                    const hint = document.createElement('div');
+                    hint.className = "text-xs text-gray-500 italic mt-2";
+                    hint.innerText = "*This question allows multiple selections.";
+                    DOM.options.appendChild(hint);
+                }
+            }
+
+            if (showResults || isDeleted) {
+                DOM.btnShowAnswer.classList.add('hidden');
+            } else {
+                DOM.btnShowAnswer.classList.remove('hidden');
+            }
+
+            if (showResults && !isDeleted) {
+                DOM.solutionSection.classList.remove('hidden');
+                DOM.solutionText.innerHTML = `The correct option is <strong>${q.correct.join(', ')}</strong> according to the official Answer Key.`;
+            } else {
+                DOM.solutionSection.classList.add('hidden');
+            }
+
+            updateGridStatus(q.id);
+            updateProgress();
+
+            // Run MathJax typeset to render LaTeX
+            if (window.MathJax) {
+                MathJax.typesetPromise([DOM.qText, DOM.options]).catch((err) => console.log(err));
+            }
+        }
+
+        function handleOptionClick(qId, letter, multi) {
+            if (!userAnswers[qId]) userAnswers[qId] = [];
+            
+            if (multi) {
+                if (userAnswers[qId].includes(letter)) {
+                    userAnswers[qId] = userAnswers[qId].filter(l => l !== letter);
+                } else {
+                    userAnswers[qId].push(letter);
+                }
+            } else {
+                userAnswers[qId] = [letter];
+            }
+            
+            if (userAnswers[qId].length === 0) delete userAnswers[qId];
+            
+            renderQuestion(currentIdx);
+        }
+
+        function updateProgress() {
+            const answeredCount = Object.keys(userAnswers).length;
+            DOM.progressText.innerText = `${answeredCount} / 150 Answered`;
+            
+            if(isSubmitted) {
+                DOM.progressText.innerText = "Review Mode";
+            }
+        }
+
+        function checkAnswer(correctArr, userArr) {
+            if(!userArr || userArr.length === 0) return false;
+            if(correctArr.includes('Delete')) return false; 
+            
+            const sortedCorrect = [...correctArr].sort().join(',');
+            const sortedUser = [...userArr].sort().join(',');
+            
+            return sortedCorrect === sortedUser;
+        }
+
+        function submitQuiz() {
+            if(!confirm("Are you sure you want to submit the exam?")) return;
+            
+            isSubmitted = true;
+            DOM.btnSubmit.classList.add('hidden');
+            DOM.quiz.classList.add('hidden');
+            DOM.results.classList.remove('hidden');
+
+            let score = 0;
+            let correct = 0;
+            let wrong = 0;
+            let skipped = 0;
+            let deleted = 0;
+
+            questions.forEach(q => {
+                if (q.correct.includes('Delete')) {
+                    deleted++;
+                } else {
+                    const uAns = userAnswers[q.id];
+                    if (!uAns || uAns.length === 0) {
+                        skipped++;
+                    } else {
+                        if (checkAnswer(q.correct, uAns)) {
+                            correct++;
+                            score++;
+                        } else {
+                            wrong++;
+                        }
+                    }
+                }
+                updateGridStatus(q.id); 
+            });
+
+            const gradableTotal = questions.length - deleted;
+            const percentage = gradableTotal > 0 ? Math.round((score / gradableTotal) * 100) : 0;
+
+            document.getElementById('score-text').innerText = score;
+            document.getElementById('total-score-text').innerText = gradableTotal;
+            document.getElementById('percent-text').innerText = `${percentage}%`;
+            
+            document.getElementById('res-correct').innerText = correct;
+            document.getElementById('res-wrong').innerText = wrong;
+            document.getElementById('res-skipped').innerText = skipped;
+            document.getElementById('res-deleted').innerText = deleted;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(initApp, 100);
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML & JS Practical Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:wght@400;600&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 600: '#1976d2', 700: '#1565c0' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1976d2;
+            --secondary-color: #d32f2f;
+            --bg-color: #f5f7fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --highlight: #fff9c4;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0; /* Updated for full-width header */
+            font-family: 'Inter', system-ui, sans-serif;
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+
+        /* Dropdown (Accordion) Styles */
+        details {
+            background-color: var(--card-bg);
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        details[open] {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            border-color: #b3e5fc;
+        }
+
+        summary {
+            padding: 20px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            cursor: pointer;
+            background-color: #fafbfc;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #2c3e50;
+        }
+
+        summary::-webkit-details-marker {
+            display: none; /* Hide default arrow */
+        }
+
+        summary::after {
+            content: "▼";
+            font-size: 0.9rem;
+            color: #888;
+            transition: transform 0.3s;
+        }
+
+        details[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        details[open] summary {
+            border-bottom: 1px solid #eee;
+            background-color: #f0f7ff;
+            color: var(--primary-color);
+        }
+
+        .details-content {
+            padding: 25px 20px;
+            line-height: 1.6;
+        }
+
+        /* Typography & Elements */
+        p { margin-top: 0; margin-bottom: 15px; }
+        b { color: var(--secondary-color); }
+        
+        .highlight {
+            background-color: var(--highlight);
+            padding: 2px 5px;
+            border-radius: 4px;
+        }
+
+        /* Code Block Styles */
+        .code-block {
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 1rem;
+            color: #d4d4d4;
+            background-color: #1e1e1e;
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin: 15px 0;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            overflow-x: auto;
+        }
+
+        /* Highlight specific lines in code */
+        .code-block span.hi-code {
+            background-color: rgba(255, 255, 255, 0.15);
+            display: inline-block;
+            width: 100%;
+        }
+
+        /* Web Alert (Tip box) */
+        .web-alert {
+            background-color: #e8f5e9;
+            border-left: 4px solid #4caf50;
+            padding: 12px 15px;
+            border-radius: 4px;
+            margin: 15px 0;
+            color: #2e7d32;
+            font-size: 0.95rem;
+        }
+
+        /* Output Simulation Box */
+        .output-box {
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 20px 0 10px 0;
+            box-shadow: 0 4px 0px #e0e0e0;
+            overflow: hidden;
+        }
+        
+        .output-header {
+            background-color: #f1f3f4;
+            border-bottom: 1px solid #ddd;
+            padding: 8px 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #5f6368;
+            display: flex;
+            align-items: center;
+        }
+        
+        .output-header::before {
+            content: '🔴 🟡 🟢';
+            font-size: 0.7rem;
+            margin-right: 12px;
+            letter-spacing: 2px;
+        }
+
+        .output-content {
+            padding: 20px;
+            background-color: white;
+            font-size: 16px;
+        }
+
+        /* Buttons in output */
+        .run-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+            transition: background 0.2s;
+        }
+        .run-btn:hover { background-color: #1565c0; }
+
+        .console-output {
+            background: #1e1e1e;
+            color: #4af626;
+            font-family: 'Cascadia Code', monospace;
+            padding: 12px;
+            border-radius: 6px;
+            min-height: 25px;
+            margin-top: 15px;
+            white-space: pre-wrap;
+            font-size: 0.9rem;
+        }
+
+        /* Custom Modal UI for simulated alerts */
+        .custom-modal {
+            display: none;
+            background: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 8px;
+            width: 85%;
+            max-width: 350px;
+            margin: 20px auto;
+            text-align: center;
+        }
+        .modal-text { margin-bottom: 20px; font-weight: 500; }
+        .modal-input { width: 90%; padding: 8px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 4px; display: none; }
+        .modal-btns button { padding: 8px 20px; margin: 0 5px; cursor: pointer; border: none; border-radius: 4px; font-weight: 600; }
+        .btn-ok { background: var(--primary-color); color: white; }
+        .btn-cancel { background: #f5f5f5; color: #333; display: none; border: 1px solid #ccc !important; }
+    </style>
+</head>
+<body>
+    <header class="bg-white shadow-sm w-full sticky top-0 z-50 px-4 sm:px-6 lg:px-8 border-b" style="align-self: stretch;">
+        <div class="max-w-7xl mx-auto flex justify-between h-16">
+            <a href="https://bitsvedas.github.io/bitveda/" target="_blank" class="flex items-center cursor-pointer hover:opacity-80 transition" style="text-decoration: none;">
+                <i class="fa-solid fa-book-open-reader text-primary-600 text-3xl mr-3"></i>
+                <span class="font-bold text-2xl text-gray-900 tracking-tight">BitVedas</span>
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="https://bitsvedas.github.io/bitveda/" target="_blank" class="text-gray-600 hover:text-primary-600 font-medium transition" style="text-decoration: none;">Home</a>
+            </div>
+
+            <!-- Mobile menu button -->
+            <div class="md:hidden flex items-center">
+                <button class="text-gray-600 hover:text-gray-900 focus:outline-none bg-transparent border-none cursor-pointer">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <div style="padding: 40px 20px; width: 100%; display: flex; flex-direction: column; align-items: center;">
+        <div class="w-full max-w-4xl text-center mb-10 pb-6 border-b border-gray-300">
+            <h1 style="font-size: 2.8rem; font-weight: 800; margin: 0; color: #1976d2; letter-spacing: -1px; text-shadow: 1px 1px 2px rgba(0,0,0,0.1);">HTML & JS Practical Lab</h1>
+            <p style="color: #6b7280; margin-top: 10px; font-size: 1.1rem; font-weight: 500; margin-bottom: 0;">Interactive Coding Questions & Answers</p>
+        </div>
+        <div class="container">
+
+            <!-- Q1 -->
+
+        <!-- Q2 -->
+        <details>
+            <summary>Q2. Write an HTML program for both an ordered list and an unordered list.</summary>
+            <div class="details-content">
+                <p><b>उत्तर (Answer):</b> बुलेट्स वाली सूची के लिए <span class="highlight">Unordered List &lt;ul&gt;</span> और नंबर वाली सूची के लिए <span class="highlight">Ordered List &lt;ol&gt;</span> का उपयोग किया जाता है। दोनों के अंदर items लिखने के लिए <code>&lt;li&gt;</code> (List Item) टैग का उपयोग होता है।</p>
+
+<div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;h3&gt;Unordered List (Bullets):&lt;/h3&gt;
+    &lt;ul&gt;
+        &lt;li&gt;Apple&lt;/li&gt;
+        &lt;li&gt;Mango&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;h3&gt;Ordered List (Numbers):&lt;/h3&gt;
+    &lt;ol&gt;
+        &lt;li&gt;India&lt;/li&gt;
+        &lt;li&gt;Japan&lt;/li&gt;
+    &lt;/ol&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</div>
+                <div class="output-box">
+                    <div class="output-header">Live Preview</div>
+                    <div class="output-content">
+                        <h3 style="margin-top:0; font-family:serif; color:black;">Unordered List (Bullets):</h3>
+                        <ul style="font-family:serif; list-style-type:disc; padding-left:20px; color:black;">
+                            <li>Apple</li>
+                            <li>Mango</li>
+                        </ul>
+                        <h3 style="font-family:serif; color:black; margin-top:20px;">Ordered List (Numbers):</h3>
+                        <ol style="font-family:serif; padding-left:20px; color:black;">
+                            <li>India</li>
+                            <li>Japan</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Q3 -->
+        <details>
+            <summary>Q3. Write an HTML program to display an image that links to another website.</summary>
+            <div class="details-content">
+                <p><b>उत्तर (Answer):</b> इसे बनाने के लिए हमें <code>&lt;img&gt;</code> (Image) टैग को <code>&lt;a&gt;</code> (Anchor/Link) टैग के अंदर रखना होता है। जब कोई इमेज पर क्लिक करेगा, तो वह <code>href</code> वाली वेबसाइट पर पहुँच जाएगा।</p>
+
+<div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;p&gt;Click the Google logo to visit Google:&lt;/p&gt;
+    &lt;a href="https://www.google.com" target="_blank"&gt;
+        &lt;img src="https://www.google.com/favicon.ico" alt="Google Logo" width="50"&gt;
+    &lt;/a&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</div>
+                <div class="output-box">
+                    <div class="output-header">Live Preview</div>
+                    <div class="output-content">
+                        <p style="font-family:serif; margin-top:0;">Click the Google logo to visit Google:</p>
+                        <a href="https://www.google.com" target="_blank" title="Click me!">
+                            <img src="https://www.google.com/favicon.ico" alt="Google Logo" width="50" style="border:1px solid #eee; padding:5px; border-radius:5px;">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Q4 -->
+        <details>
+            <summary>Q4. Write an HTML program to create a table with 2 rows and 2 columns.</summary>
+            <div class="details-content">
+                <p><b>उत्तर (Answer):</b> Table बनाने के लिए मुख्य रूप से 3 टैग्स चाहिए: <code>&lt;table&gt;</code>, <code>&lt;tr&gt;</code> (Table Row), और <code>&lt;td&gt;</code> या <code>&lt;th&gt;</code> (Table Data/Header)।</p>
+
+<div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
+    &lt;table border="1" style="border-collapse: collapse; text-align: center;"&gt;
+        &lt;tr&gt;
+            &lt;th&gt;Name&lt;/th&gt;
+            &lt;th&gt;Marks&lt;/th&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Ram&lt;/td&gt;
+            &lt;td&gt;57&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</div>
+                <div class="output-box">
+                    <div class="output-header">Live Preview</div>
+                    <div class="output-content">
+                        <table border="1" style="border-collapse: collapse; font-family:sans-serif; width:100%; max-width:250px; text-align:center;">
+                            <tr style="background-color: #f5f5f5;">
+                                <th style="padding:10px;">Name</th>
+                                <th style="padding:10px;">Marks</th>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px;">Ram</td>
+                                <td style="padding:10px;">57</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Q5 -->
+        <details>
+            <summary>Q5. Change a paragraph's text color using Inline CSS and Internal CSS.</summary>
+            <div class="details-content">
+                <p><b>उत्तर (Answer):</b> <span class="highlight">Inline CSS</span> टैग के अंदर <code>style=""</code> के रूप में लिखी जाती है, जबकि <span class="highlight">Internal CSS</span> <code>&lt;head&gt;</code> में <code>&lt;style&gt;</code> टैग के अंदर लिखी जाती है।</p>
+
+<div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;!-- Internal CSS --&gt;
+    &lt;style&gt;
+        .internal-text { color: blue; }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;!-- Inline CSS --&gt;
+    &lt;p style="color: red;"&gt;This text is Red (Inline CSS).&lt;/p&gt;
+    
+    &lt;!-- Using Internal CSS --&gt;
+    &lt;p class="internal-text"&gt;This text is Blue (Internal CSS).&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</div>
+                <div class="output-box">
+                    <div class="output-header">Live Preview</div>
+                    <div class="output-content">
+                        <p style="color: red; font-family:serif; margin-top:0;">This text is Red (Inline CSS).</p>
+                        <p style="color: blue; font-family:serif; margin-bottom:0;">This text is Blue (Internal CSS).</p>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Q6 -->
+        <details>
+            <summary>Q6. Write a JavaScript program to show a simple welcome alert box.</summary>
+            <div class="details-content">
+                <p><b>उत्तर (Answer):</b> User की स्क्रीन पर एक popup message दिखाने के लिए JavaScript के <b>alert()</b> function का उपयोग किया जाता है।</p>
+                <div class="web-alert">
+                    💡 <b>Note:</b> alert() function कोड के निष्पादन (execution) को तब तक रोक देता है जब तक user 'OK' पर क्लिक नहीं करता।
+                </div>
+
+<div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Alert Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h2&gt;Alert Example&lt;/h2&gt;
+    &lt;button onclick="alert('Welcome to my Website!');"&gt;
+        Click Me!
+    &lt;/button&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</div>
+                <div class="output-box">
+                    <div class="output-header">Interactive Output</div>
+                    <div class="output-content">
+                        <h2 style="margin-top:0;">Alert Example</h2>
+                        <button class="run-btn" onclick="showCustomModal('alert', 'Welcome to my Website!')">Click Me!</button>
+                        
+                        <div id="modal-q6" class="custom-modal">
+                            <div class="modal-text">Welcome to my Website!</div>
+                            <div class="modal-btns">
+                                <button class="btn-ok" onclick="document.getElementById('modal-q6').style.display='none'">OK</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Q7 -->
+        <details>
+            <summary>Q7. Write a JS program that uses a confirm box to ask "Yes or No" and saves their choice.</summary>
+            <div class="details-content">
+                <p><b>उत्तर (Answer):</b> <b>confirm()</b> function एक डायलॉग बॉक्स दिखाता है जिसमें 'OK' और 'Cancel' बटन होते हैं। यह <code>true</code> या <code>false</code> return करता है।</p>
+
+<div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Confirm Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script&gt;
+    function askUser() {
+        let choice = confirm("Do you like programming?");
+        
+        if (choice == true) {
+            document.write("You clicked Yes!");
+        } else {
+            document.write("You clicked No!");
+        }
+    }
+    &lt;/script&gt;
+
+    &lt;button onclick="askUser()"&gt;Ask Question&lt;/button&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</div>
+                
+                <div class="output-box">
+                    <div class="output-header">Interactive Output</div>
+                    <div class="output-content">
+                        <button class="run-btn" onclick="showCustomModal('confirm', 'Do you like programming?', 'q7-result')">Ask Question</button>
+                        <div id="q7-result" class="console-output">Result will appear here...</div>
+                        
+                        <div id="modal-q7" class="custom-modal">
+                            <div class="modal-text">Do you like programming?</div>
+                            <div class="modal-btns">
+                                <button class="btn-ok" onclick="handleConfirmModal(true, 'q7-result', 'modal-q7')">OK</button>
+                                <button class="btn-cancel" style="display:inline-block;" onclick="handleConfirmModal(false, 'q7-result', 'modal-q7')">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Q8 -->
+        <details>
+            <summary>Q8. Write a JS program that prompts the user for their name and greets them.</summary>
+            <div class="details-content">
+                <p><b>उत्तर (Answer):</b> User से input (टेक्स्ट) लेने के लिए <b>prompt()</b> function का उपयोग होता है।</p>
+
+<div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;Prompt Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script&gt;
+    function greetUser() {
+        let userName = prompt("Please enter your name:");
+        
+        if (userName != null && userName != "") {
+            document.getElementById("msg").innerText = "Hello, " + userName + "!";
+        }
+    }
+    &lt;/script&gt;
+
+    &lt;button onclick="greetUser()"&gt;Enter Name&lt;/button&gt;
+    &lt;p id="msg"&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</div>
+
+                <div class="output-box">
+                    <div class="output-header">Interactive Output</div>
+                    <div class="output-content">
+                        <button class="run-btn" onclick="showCustomModal('prompt', 'Please enter your name:', 'q8-result')">Enter Name</button>
+                        <div id="q8-result" class="console-output">Greeting will appear here...</div>
+
+                        <div id="modal-q8" class="custom-modal">
+                            <div class="modal-text">Please enter your name:</div>
+                            <input type="text" id="q8-input" class="modal-input" style="display:inline-block;" placeholder="Type your name...">
+                            <div class="modal-btns">
+                                <button class="btn-ok" onclick="handlePromptModal('q8-input', 'q8-result', 'modal-q8')">OK</button>
+                                <button class="btn-cancel" style="display:inline-block;" onclick="document.getElementById('modal-q8').style.display='none'">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Q9 -->
+        <details>
+            <summary>Q9. Write a JS program using an if/else statement to check if a number is positive or negative.</summary>
+            <div class="details-content">
+                <p><b>उत्तर (Answer):</b> शर्ते (Conditions) चेक करने के लिए <b>if/else</b> स्टेटमेंट का इस्तेमाल होता है।</p>
+
+<div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;If-Else Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script&gt;
+    function checkNumber() {
+        let num = document.getElementById("numInput").value;
+        
+        if (num >= 0) {
+            document.getElementById("res").innerHTML = num + " is Positive.";
+        } else {
+            document.getElementById("res").innerHTML = num + " is Negative.";
+        }
+    }
+    &lt;/script&gt;
+
+    &lt;input type="number" id="numInput"&gt;
+    &lt;button onclick="checkNumber()"&gt;Check&lt;/button&gt;
+    &lt;p id="res"&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</div>
+
+                <div class="output-box">
+                    <div class="output-header">Interactive Output</div>
+                    <div class="output-content">
+                        <input type="number" id="realNumInput" placeholder="Enter a number" style="padding:10px; font-size:1rem; border:1px solid #ccc; border-radius:4px; margin-right: 10px; margin-bottom:10px;">
+                        <button class="run-btn" onclick="realCheckNumber()">Check Number</button>
+                        <div id="q9-result" class="console-output">Result...</div>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+        <!-- Q10 -->
+        <details>
+            <summary>Q10. Write a JS program using a loop to print numbers from 1 to 5.</summary>
+            <div class="details-content">
+                <p><b>उत्तर (Answer):</b> जब हमें एक ही काम को बार-बार दोहराना हो, तो हम <b>Loops</b> का उपयोग करते हैं। <code>for</code> loop गिनती प्रिंट करने के लिए बेहतरीन है।</p>
+
+<div class="code-block">
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;title&gt;For Loop Example&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;script&gt;
+    function printNumbers() {
+        let output = "";
+        for (let i = 1; i <= 5; i++) {
+            output = output + i + " ";
+        }
+        document.getElementById("loopRes").innerText = output;
+    }
+    &lt;/script&gt;
+
+    &lt;button onclick="printNumbers()"&gt;Print 1 to 5&lt;/button&gt;
+    &lt;p id="loopRes"&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</div>
+
+                <div class="output-box">
+                    <div class="output-header">Interactive Output</div>
+                    <div class="output-content">
+                        <button class="run-btn" onclick="realPrintNumbers()">Print 1 to 5</button>
+                        <div id="q10-result" class="console-output">Numbers will appear here...</div>
+                    </div>
+                </div>
+            </div>
+        </details>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-4xl mt-12 pt-6 border-t border-gray-200 text-center pb-8">
+        <p class="text-gray-600 font-semibold text-lg m-0 flex items-center justify-center">
+            <i class="fa-solid fa-laptop-code text-primary-600 mr-2"></i> Author: Aakash Sen
+        </p>
+    </footer>
+
+    </div>
+
+    <!-- Scripts for making the outputs interactive safely -->
+    <script>
+        // Dialog Modal Handlers
+        function showCustomModal(type, msg, targetId) {
+            if (type === 'alert') {
+                document.getElementById('modal-q6').style.display = 'block';
+            } 
+            else if (type === 'confirm') {
+                document.getElementById('modal-q7').style.display = 'block';
+            }
+            else if (type === 'prompt') {
+                document.getElementById('modal-q8').style.display = 'block';
+                document.getElementById('q8-input').value = ""; // clear old
+            }
+        }
+
+        function handleConfirmModal(result, targetId, modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            const outputElement = document.getElementById(targetId);
+            if(result === true) {
+                outputElement.innerText = "You clicked Yes!";
+            } else {
+                outputElement.innerText = "You clicked No!";
+            }
+        }
+
+        function handlePromptModal(inputId, targetId, modalId) {
+            document.getElementById(modalId).style.display = 'none';
+            const userName = document.getElementById(inputId).value;
+            const outputElement = document.getElementById(targetId);
+            
+            if (userName != null && userName.trim() != "") {
+                outputElement.innerText = "Hello, " + userName + "!";
+            } else {
+                outputElement.innerText = "You didn't enter a name.";
+            }
+        }
+
+        // Q9 Logic
+        function realCheckNumber() {
+            let numStr = document.getElementById("realNumInput").value;
+            if(numStr === "") {
+                document.getElementById("q9-result").innerText = "Please enter a valid number.";
+                return;
+            }
+            let num = parseFloat(numStr);
+            if (num >= 0) {
+                document.getElementById("q9-result").innerText = num + " is Positive.";
+            } else {
+                document.getElementById("q9-result").innerText = num + " is Negative.";
+            }
+        }
+
+        // Q10 Logic
+        function realPrintNumbers() {
+            let output = "";
+            for (let i = 1; i <= 5; i++) {
+                output = output + i + " ";
+            }
+            document.getElementById("q10-result").innerText = "Output: " + output;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tally Prime Notes Unit 3 - By Aakash Sen 📓</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Cascadia+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global & Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #2c3e50;
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            font-family: 'Kalam', cursive;
+            color: #0000a0; /* Blue gel pen */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        /* Notebook Page Style - Plain White Paper, No Lines, No Red Margin */
+        .notebook-page {
+            background-color: #fdfdfd;
+            width: 100%;
+            max-width: 900px;
+            min-height: 1100px;
+            margin-bottom: 40px;
+            padding: 50px;
+            position: relative;
+            box-shadow: 5px 10px 25px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            overflow-wrap: break-word;
+        }
+
+        /* Typography & Ink Colors */
+        h1, h2, h3 {
+            color: #d32f2f; /* Red Marker */
+            font-weight: 700;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        
+        h1 { font-size: 2.5rem; text-align: center; }
+        h2 { font-size: 2rem; border-bottom: 2px dashed #d32f2f; display: inline-block;}
+        h3 { font-size: 1.5rem; color: #b71c1c; }
+        
+        p, ul, ol { margin-bottom: 16px; }
+        ul, ol { padding-left: 30px; }
+        li { margin-bottom: 8px; }
+
+        .highlight {
+            background: linear-gradient(104deg, rgba(255,255,0,0) 0.9%, rgba(255,255,0,1) 2.4%, rgba(255,255,0,0.5) 5.8%, rgba(255,255,0,0.9) 93%, rgba(255,255,0,0) 96%);
+            border-radius: 3px;
+            padding: 0 4px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .rough-circle {
+            border: 2px solid #d32f2f;
+            border-radius: 50% 40% 50% 60% / 60% 50% 40% 50%;
+            padding: 2px 8px;
+            display: inline-block;
+        }
+
+        .underline-red {
+            text-decoration: underline;
+            text-decoration-color: #d32f2f;
+            text-decoration-style: solid;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        /* Sticky Notes / Margin Notes */
+        .margin-note {
+            float: right;
+            clear: right;
+            width: 200px;
+            padding: 15px;
+            margin: 5px -20px 15px 20px;
+            background-color: #fff740;
+            box-shadow: 2px 4px 6px rgba(0,0,0,0.2);
+            font-size: 0.95rem;
+            line-height: 1.3;
+            color: #333;
+            transform: rotate(-3deg);
+            z-index: 10;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .margin-note:hover { transform: rotate(0deg) scale(1.05); z-index: 100; }
+        .margin-note.pink { background-color: #ff9ee5; transform: rotate(2deg); }
+        .margin-note.green { background-color: #a8ff9e; transform: rotate(-1deg); }
+
+        .note-title {
+            font-weight: bold;
+            color: #d32f2f;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #d32f2f;
+            font-size: 1rem;
+        }
+
+        /* Table Styles for Notes */
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255,255,255,0.8);
+            border: 2px solid #0000a0;
+            line-height: 1.4;
+        }
+        .notes-table th, .notes-table td {
+            border: 1px solid #0000a0;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .notes-table th { background-color: #e3f2fd; color: #d32f2f; font-weight: bold; font-size: 1.1rem; }
+
+        /* Keyboard Shortcut Style */
+        .key {
+            display: inline-block;
+            background: #eee;
+            border: 1px solid #ccc;
+            border-bottom: 3px solid #bbb;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: sans-serif;
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        /* Diagram Block */
+        .diagram-box {
+            border: 2px dashed #0000a0;
+            padding: 20px;
+            margin: 20px 0;
+            background-color: #f9f9f9;
+            text-align: center;
+        }
+
+        .page-footer {
+            text-align: right;
+            margin-top: 50px;
+            font-size: 1rem;
+            color: #555;
+            font-style: italic;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 950px) {
+            .margin-note { float: none; width: 100%; margin: 20px 0; transform: rotate(0deg); }
+            .notebook-page { padding: 30px; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: TDS -->
+    <div class="notebook-page">
+        <h1>📊 Tally Prime: Unit 3</h1>
+        <p style="text-align: center; color: #555;"><i>Taxation: TDS, TCS & GST (B.Com Detailed Syllabus)</i></p>
+
+        <div class="margin-note pink">
+            <div class="note-title">🧠 B.Com Concept</div>
+            TDS सरकार की एक चाल (strategy) है ताकि लोग टैक्स की चोरी न कर सकें। पैसे देने से पहले ही टैक्स काट लो! इसे "Pay as you earn" भी कहते हैं।
+        </div>
+
+        <h2>1. Tax Deducted at Source (TDS)</h2>
+        <p><span class="highlight">TDS (स्रोत पर कर कटौती)</span> इनकम टैक्स का एक महत्वपूर्ण हिस्सा है। इसका सीधा सा नियम है: जब भी कोई व्यक्ति या संस्था किसी दूसरे व्यक्ति को एक निर्धारित सीमा (Exemption Limit) से अधिक पेमेंट करती है (जैसे Salary, Rent, Commission, Professional Fees), तो पेमेंट करने वाला व्यक्ति पेमेंट में से एक निश्चित प्रतिशत (%) टैक्स के रूप में काट लेता है और बची हुई रकम का भुगतान करता है।</p>
+        
+        <p>जो टैक्स काटा गया है, उसे वह सरकार (Income Tax Department) के खाते में जमा करवा देता है।</p>
+
+        <h3>Important Terms:</h3>
+        <ul>
+            <li><span class="underline-red">Deductor (कटौती करने वाला):</span> वह व्यक्ति/कंपनी जो पेमेंट दे रही है और टैक्स काट रही है।</li>
+            <li><span class="underline-red">Deductee (जिसका टैक्स कटा):</span> वह व्यक्ति जिसे पेमेंट मिल रहा है।</li>
+        </ul>
+
+        <div class="diagram-box">
+            <b>Example:</b><br>
+            ABC Pvt Ltd को CA Rahul को ₹50,000 की Professional Fee देनी है।<br>
+            (Professional Fee पर TDS Rate 10% है)<br><br>
+            ABC Pvt Ltd (Deductor) ₹5,000 (10%) काटेगा।<br>
+            CA Rahul (Deductee) को ₹45,000 मिलेंगे।<br>
+            ₹5,000 ABC Pvt Ltd द्वारा सरकार को जमा कराये जायेंगे।
+        </div>
+
+        <h3>Accounting of TDS in Tally Prime</h3>
+        <p>Tally Prime में TDS की एंट्री करने के लिए 3 मुख्य स्टेप्स होते हैं:</p>
+        
+        <p><b>Step 1: Enable TDS (TDS चालू करना)</b></p>
+        <p>Gateway of Tally &rarr; <span class="key">F11</span> (Features) &rarr; "Enable Tax Deducted at Source (TDS)" को <span class="key">Yes</span> करें। इसके बाद अपनी कंपनी का TAN (Tax Deduction and Collection Account Number) दर्ज करें।</p>
+
+        <p><b>Step 2: Create Nature of Payment (पेमेंट की प्रकृति बनाना)</b></p>
+        <p>Gateway of Tally &rarr; <span class="key">Create</span> &rarr; TDS Nature of Payment. <br>
+        (यहाँ हम बताएंगे कि किस चीज़ पर टैक्स कट रहा है। जैसे: <i>Section 194J - Professional Fees</i>, Rate: 10%)</p>
+
+        <p><b>Step 3: Creating Required Ledgers (खाते बनाना)</b></p>
+        <ol>
+            <li><b>Expense Ledger (उदा: Audit Fee A/c):</b> Under 'Indirect Expenses' &rarr; Is TDS Applicable? Yes &rarr; Nature of Payment चुनें।</li>
+            <li><b>Party Ledger (उदा: CA Rahul):</b> Under 'Sundry Creditors' &rarr; Is TDS Deductible? Yes &rarr; Deductee Type (Company/Individual) चुनें।</li>
+            <li><b>TDS Duty Ledger (उदा: TDS on Prof. Fee):</b> Under 'Duties & Taxes' &rarr; Type of Duty: TDS &rarr; Nature of payment चुनें।</li>
+        </ol>
+
+        <p><b>Step 4: Voucher Entry (लेनदेन रिकॉर्ड करना)</b></p>
+        <p><span class="key">F7</span> (Journal Voucher) में जाकर खर्च बुक करें। Tally अपने आप CA Rahul के खाते से 10% काटकर TDS खाते में डाल देगा। बाद में <span class="key">F5</span> (Payment) वाउचर से TDS की रकम सरकार को चुका दें।</p>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 1)</div>
+    </div>
+
+
+    <!-- PAGE 2: TCS -->
+    <div class="notebook-page">
+        <h2>2. Tax Collected at Source (TCS)</h2>
+        <p><span class="highlight">TCS (स्रोत पर कर संग्रह)</span> TDS का उल्टा है। इसमें <b>भुगतान करने वाला (Payer) टैक्स नहीं काटता, बल्कि सामान बेचने वाला (Seller) माल की कीमत के साथ टैक्स भी वसूल करता है (Collects)।</b></p>
+        
+        <p>यह हर सामान पर लागू नहीं होता। Income Tax Act के तहत कुछ <span class="rough-circle">विशिष्ट वस्तुओं (Specified Goods)</span> की खरीद-बिक्री पर ही TCS लगता है। जैसे: शराब (Alcohol), लकड़ी (Timber), स्क्रैप (Scrap), तेंदू पत्ते (Tendu leaves), मोटर कार (₹10 लाख से ऊपर) आदि।</p>
+
+        <div class="margin-note green">
+            <div class="note-title">🎯 Exam Tip!</div>
+            <b>TDS</b> खर्चे (Expenses) पर कटता है。<br>
+            <b>TCS</b> विशिष्ट माल की बिक्री (Sales) पर कलेक्ट होता है।
+        </div>
+
+        <h3>Important Terms:</h3>
+        <ul>
+            <li><span class="underline-red">Seller/Collector:</span> जो माल बेच रहा है और पैसे के साथ TCS भी वसूल कर रहा है।</li>
+            <li><span class="underline-red">Buyer/Collectee:</span> जो माल खरीद रहा है और माल की कीमत + TCS चुका रहा है।</li>
+        </ul>
+
+        <div class="diagram-box">
+            <b>Example:</b><br>
+            XYZ Timber Mart ने Mr. X को ₹1,00,000 की लकड़ी (Timber) बेची।<br>
+            (Timber पर TCS Rate 2.5% है)<br><br>
+            XYZ Timber Mart (Seller) बिल में ₹1,00,000 (माल) + ₹2,500 (TCS) = ₹1,02,500 जोड़ेगा।<br>
+            Mr. X (Buyer) कुल ₹1,02,500 चुकाएगा।<br>
+            XYZ Timber Mart वह ₹2,500 सरकार को जमा करेगा।
+        </div>
+
+        <h3>Accounting of TCS in Tally Prime</h3>
+        
+        <p><b>Step 1: Enable TCS</b></p>
+        <p>Gateway of Tally &rarr; <span class="key">F11</span> (Features) &rarr; "Enable Tax Collected at Source (TCS)" को <span class="key">Yes</span> करें और TAN दर्ज करें।</p>
+
+        <p><b>Step 2: Create Nature of Goods</b></p>
+        <p>Gateway of Tally &rarr; <span class="key">Create</span> &rarr; TCS Nature of Goods. <br>
+        (नाम: <i>Timber obtained under forest lease</i>, Section: 206C, Rate: 2.5%)</p>
+
+        <p><b>Step 3: Creating Ledgers</b></p>
+        <ol>
+            <li><b>Sales Ledger (उदा: Sales A/c):</b> Under 'Sales Accounts' &rarr; Is TCS Applicable? Yes &rarr; Nature of Goods चुनें।</li>
+            <li><b>Party Ledger (उदा: Mr. X):</b> Under 'Sundry Debtors' &rarr; Is TCS Collectable? Yes &rarr; Collectee Type चुनें।</li>
+            <li><b>TCS Duty Ledger (उदा: TCS on Timber):</b> Under 'Duties & Taxes' &rarr; Type of Duty: TCS.</li>
+        </ol>
+
+        <p><b>Step 4: Voucher Entry</b></p>
+        <p><span class="key">F8</span> (Sales Voucher) में जाकर जब आप माल की बिक्री की एंट्री करेंगे और अंत में TCS Ledger चुनेंगे, तो Tally अपने आप टोटल अमाउंट पर 2.5% कैलकुलेट कर लेगा। इसके बाद <span class="key">F5</span> (Payment) से इसे सरकार को चुका दें।</p>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 2)</div>
+    </div>
+
+
+    <!-- PAGE 3: GST -->
+    <div class="notebook-page">
+        <h2>3. Goods and Services Tax (GST)</h2>
+        <p><span class="highlight">GST (माल और सेवा कर)</span> भारत में 1 जुलाई 2017 से लागू किया गया एक Indirect Tax (अप्रत्यक्ष कर) है। इसने पुराने कई टैक्सेस (जैसे VAT, Excise Duty, Service Tax) को खत्म करके पूरे देश में <b>"One Nation, One Tax"</b> का सिस्टम बनाया।</p>
+
+        <p>GST एक <span class="underline-red">Destination-based tax</span> है, यानी टैक्स उस राज्य को मिलता है जहाँ सामान या सेवा का उपभोग (consume) किया जाता है।</p>
+
+        <div class="margin-note pink">
+            <div class="note-title">💡 Input Tax Credit (ITC)</div>
+            खरीदते समय जो GST चुकाया, उसे बेचते समय मिलने वाले GST से Adjust करने को ही ITC कहते हैं।
+        </div>
+
+        <h3>Components of GST (GST के प्रकार):</h3>
+        <table class="notes-table">
+            <tr>
+                <th>Tax Type</th>
+                <th>Full Form</th>
+                <th>कब लगता है? (Condition)</th>
+            </tr>
+            <tr>
+                <td><b>CGST</b></td>
+                <td>Central GST</td>
+                <td>जब माल एक ही राज्य के भीतर (Intra-state) बेचा जाता है। (केंद्र का हिस्सा)</td>
+            </tr>
+            <tr>
+                <td><b>SGST</b></td>
+                <td>State GST</td>
+                <td>जब माल एक ही राज्य के भीतर (Intra-state) बेचा जाता है। (राज्य का हिस्सा)</td>
+            </tr>
+            <tr>
+                <td><b>IGST</b></td>
+                <td>Integrated GST</td>
+                <td>जब माल एक राज्य से दूसरे राज्य (Inter-state) में बेचा जाता है।</td>
+            </tr>
+        </table>
+        <p><i>उदाहरण:</i> यदि MP का व्यापारी MP में ही 18% GST वाला माल बेचता है, तो बिल में 9% CGST और 9% SGST लगेगा। यदि वह UP में बेचता है, तो बिल में सीधे 18% IGST लगेगा।</p>
+
+        <h3>Accounting of GST in Tally Prime</h3>
+        
+        <p><b>Step 1: Enable GST</b></p>
+        <p>Gateway of Tally &rarr; <span class="key">F11</span> (Features) &rarr; "Enable Goods and Services Tax (GST)" को <span class="key">Yes</span> करें। अपना 15 अंकों का GSTIN (GST Identification Number) दर्ज करें।</p>
+
+        <p><b>Step 2: Setting up GST Rates</b></p>
+        <p>आप GST की रेट्स को 3 जगह सेट कर सकते हैं: Company level पर, Stock Group level पर, या Stock Item level पर। सबसे सही तरीका <b>Stock Item</b> बनाते समय (HSN Code और Rate) देना है।</p>
+
+        <p><b>Step 3: Creating Tax Ledgers</b></p>
+        <p>Gateway of Tally &rarr; Create &rarr; Ledger.</p>
+        <ul>
+            <li><b>CGST A/c:</b> Under 'Duties & Taxes' &rarr; Type of Duty: GST &rarr; Tax Type: Central Tax.</li>
+            <li><b>SGST A/c:</b> Under 'Duties & Taxes' &rarr; Type of Duty: GST &rarr; Tax Type: State Tax.</li>
+            <li><b>IGST A/c:</b> Under 'Duties & Taxes' &rarr; Type of Duty: GST &rarr; Tax Type: Integrated Tax.</li>
+        </ul>
+
+        <p><b>Step 4: Voucher Entries (खरीद/बिक्री की एंट्री)</b></p>
+        <p>Tally बहुत स्मार्ट है! जब आप <span class="key">F9</span> (Purchase) या <span class="key">F8</span> (Sales) वाउचर में सप्लायर/ग्राहक चुनेंगे, तो Tally उसके 'State' (राज्य) को चेक करेगा।</p>
+        <ol>
+            <li>अगर आपकी कंपनी और ग्राहक का राज्य <span class="rough-circle">Same</span> है: आपको नीचे <b>CGST</b> और <b>SGST</b> लेजर चुनने होंगे। Tally टैक्स आटोमेटिक कैलकुलेट कर लेगा।</li>
+            <li>अगर राज्य <span class="rough-circle">Different</span> हैं: आपको <b>IGST</b> लेजर चुनना होगा। (अगर आप गलती से यहाँ CGST/SGST चुनेंगे, तो Tally टैक्स अमाउंट 0 (Zero) दिखाएगा, जिससे आपको अपनी गलती पता चल जाएगी!)</li>
+        </ol>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 3 - अंतिम)</div>
+    </div>
+
+</body>
+</html>

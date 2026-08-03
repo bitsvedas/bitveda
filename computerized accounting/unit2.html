@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tally Prime Notes Unit 2 - By Aakash Sen 📓</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Cascadia+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global & Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #2c3e50;
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            font-family: 'Kalam', cursive;
+            color: #0000a0; /* Blue gel pen */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        /* Notebook Page Style - NO BLUE LINES & NO RED MARGIN */
+        .notebook-page {
+            background-color: #fdfdfd;
+            width: 100%;
+            max-width: 900px;
+            min-height: 1100px;
+            margin-bottom: 40px;
+            padding: 40px;
+            position: relative;
+            box-shadow: 5px 10px 25px rgba(0,0,0,0.5);
+            border-radius: 5px 15px 15px 5px;
+            overflow-wrap: break-word;
+        }
+
+        /* Page Binding Effect */
+        .notebook-page::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to right, #e0e0e0, #fdfdfd);
+            border-right: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            z-index: 1;
+        }
+
+        /* Typography & Ink Colors */
+        h1, h2, h3 {
+            color: #d32f2f; /* Red Marker */
+            font-weight: 700;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        
+        h1 { font-size: 2.5rem; text-align: center; }
+        h2 { font-size: 2rem; border-bottom: 2px dashed #d32f2f; display: inline-block;}
+        h3 { font-size: 1.5rem; color: #b71c1c; }
+        
+        p, ul, ol { margin-bottom: 16px; }
+        ul, ol { padding-left: 30px; }
+        li { margin-bottom: 8px; }
+
+        .highlight {
+            background: linear-gradient(104deg, rgba(255,255,0,0) 0.9%, rgba(255,255,0,1) 2.4%, rgba(255,255,0,0.5) 5.8%, rgba(255,255,0,0.9) 93%, rgba(255,255,0,0) 96%);
+            border-radius: 3px;
+            padding: 0 4px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .rough-circle {
+            border: 2px solid #d32f2f;
+            border-radius: 50% 40% 50% 60% / 60% 50% 40% 50%;
+            padding: 2px 8px;
+            display: inline-block;
+        }
+
+        .underline-red {
+            text-decoration: underline;
+            text-decoration-color: #d32f2f;
+            text-decoration-style: solid;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        /* Sticky Notes / Margin Notes */
+        .margin-note {
+            float: right;
+            clear: right;
+            width: 170px;
+            padding: 12px;
+            margin: 5px -20px 15px 20px;
+            background-color: #fff740;
+            box-shadow: 2px 4px 6px rgba(0,0,0,0.2);
+            font-size: 0.95rem;
+            line-height: 1.3;
+            color: #333;
+            transform: rotate(-3deg);
+            z-index: 10;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .margin-note:hover { transform: rotate(0deg) scale(1.05); z-index: 100; }
+        .margin-note.pink { background-color: #ff9ee5; transform: rotate(2deg); }
+        .margin-note.green { background-color: #a8ff9e; transform: rotate(-1deg); }
+
+        .note-title {
+            font-weight: bold;
+            color: #d32f2f;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #d32f2f;
+            font-size: 1rem;
+        }
+
+        /* Table Styles for Notes */
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255,255,255,0.8);
+            border: 2px solid #0000a0;
+            line-height: 1.4;
+        }
+        .notes-table th, .notes-table td {
+            border: 1px solid #0000a0;
+            padding: 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .notes-table th { background-color: #e3f2fd; color: #d32f2f; font-weight: bold; font-size: 1.2rem; }
+
+        /* Keyboard Shortcut Style */
+        .key {
+            display: inline-block;
+            background: #eee;
+            border: 1px solid #ccc;
+            border-bottom: 3px solid #bbb;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-family: sans-serif;
+            font-size: 0.9rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .page-footer {
+            text-align: right;
+            margin-top: 50px;
+            font-size: 1rem;
+            color: #555;
+            font-style: italic;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 950px) {
+            .margin-note { float: none; width: 100%; margin: 20px 0; transform: rotate(0deg); }
+            .notebook-page { padding: 30px 20px; }
+            h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="notebook-page">
+        <h1>📊 Tally Prime: Unit 2</h1>
+        <p style="text-align: center; color: #555;"><i>Ledgers, Groups, Inventory & Vouchers</i></p>
+
+        <div class="margin-note pink">
+            <div class="note-title">🧠 Analogy</div>
+            <b>Group</b> = फोल्डर (Folder) 📁<br>
+            <b>Ledger</b> = फाइल (File) 📄<br>
+            एक ग्रुप के अंदर कई लेजर हो सकते हैं!
+        </div>
+
+        <h2>1. Accounting Groups in Tally</h2>
+        <p>Tally में <span class="highlight">Group</span> का मतलब है समान प्रकृति (same nature) वाले खातों (Ledgers) का एक संग्रह। उदाहरण के लिए, आपके व्यापार के सभी ग्राहकों (customers) को <b>"Sundry Debtors"</b> नामक ग्रुप में रखा जाता है।</p>
+        
+        <p>💡 <b>Note:</b> Tally Prime में पहले से बने हुए (Pre-defined) <b>28 Groups</b> होते हैं (15 Primary और 13 Sub-groups)।</p>
+
+        <h3>A. Creating a Single Group</h3>
+        <p>अगर आपको Tally के 28 ग्रुप्स के अलावा अपना कोई नया ग्रुप बनाना है (जैसे "North India Debtors"), तो:</p>
+        <ul>
+            <li><b>Path:</b> Gateway of Tally &rarr; <span class="key">Create</span> &rarr; Group</li>
+            <li>नाम दर्ज करें और <i>"Under"</i> फील्ड में प्राइमरी ग्रुप चुनें।</li>
+        </ul>
+
+        <h3>B. Multiple Group Creation</h3>
+        <p>Tally Prime में एक साथ कई ग्रुप बनाने के लिए हम Chart of Accounts का उपयोग करते हैं।</p>
+        <ul>
+            <li><b>Path:</b> Gateway of Tally &rarr; Chart of Accounts &rarr; Groups &rarr; <span class="key">Alt</span> + <span class="key">H</span> (Multi Masters) &rarr; Multi Create.</li>
+        </ul>
+
+        <h2>2. Creating Accounting Ledgers</h2>
+        <p><span class="rough-circle">Ledger</span> (खाता-बही) Tally की सबसे महत्वपूर्ण इकाई है। <b>बिना Ledger बनाए आप कोई भी Voucher Entry (लेनदेन) पास नहीं कर सकते।</b> उदाहरण: Purchase A/c, Sales A/c, Ram A/c, Rent A/c.</p>
+
+        <div class="margin-note green">
+            <div class="note-title">🎯 Exam Tip!</div>
+            Tally में 2 लेजर पहले से बने होते हैं:<br>
+            1. <b>Cash</b> A/c<br>
+            2. <b>Profit & Loss</b> A/c
+        </div>
+
+        <h3>A. Single Ledger Creation (with Opening Balance)</h3>
+        <p>एक नया खाता बनाने और उसमें पिछला बैलेंस (Opening Balance) डालने की प्रक्रिया:</p>
+        <ol>
+            <li><b>Path:</b> Gateway of Tally &rarr; <span class="key">Create</span> &rarr; Ledger</li>
+            <li><b>Name:</b> लेजर का नाम लिखें (जैसे, SBI Bank Account)।</li>
+            <li><b>Under:</b> सही ग्रुप चुनें (जैसे, Bank Accounts)।</li>
+            <li><b>Opening Balance:</b> स्क्रीन के बिल्कुल नीचे आपको Opening Balance का कॉलम दिखेगा। यदि पिछले साल का कोई बैलेंस है, तो वह यहाँ डालकर `Dr` या `Cr` सेट करें और <span class="key">Ctrl</span> + <span class="key">A</span> दबाकर सेव करें।</li>
+        </ol>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 1)</div>
+    </div>
+
+
+    <div class="notebook-page">
+        <h3>B. Multiple Ledger Creation</h3>
+        <p>यदि आपको एक ही ग्रुप के अंदर बहुत सारे लेजर एक साथ बनाने हैं (जैसे आपके 50 सप्लायर्स के खाते), तो बार-बार Single Create करने के बजाय Multi-Create का इस्तेमाल करें:</p>
+        <ul>
+            <li><b>Path:</b> Gateway of Tally &rarr; Chart of Accounts &rarr; Ledgers</li>
+            <li>फिर राइट साइड पैनल से <b>Multi Masters</b> (<span class="key">Alt</span> + <span class="key">H</span>) पर क्लिक करें और <b>Multi Create</b> चुनें।</li>
+            <li>ऊपर "Under Group" में ग्रुप चुनें (जैसे Sundry Creditors) और नीचे एक लिस्ट में धड़ाधड़ सबके नाम और Opening Balances भरते जाएँ।</li>
+        </ul>
+
+        <h2>3. Creating Stock Items & Groups (Inventory)</h2>
+        <p>जब भी कोई व्यापार माल (Goods) खरीदता या बेचता है, तो उसका हिसाब रखने के लिए Inventory Master बनाना पड़ता है। Tally में इसे दो भागों में बांटा जाता है: <b>Stock Group</b> और <b>Stock Item</b>.</p>
+
+        <table class="notes-table">
+            <tr>
+                <th>Stock Group (कैटेगरी)</th>
+                <th>Stock Item (असली प्रोडक्ट)</th>
+            </tr>
+            <tr>
+                <td>यह प्रोडक्ट्स की मुख्य श्रेणी (Category) होती है।<br><b>उदा:</b> Television, Mobile Phones.</td>
+                <td>यह वह असली सामान है जिसे खरीदा या बेचा जाता है।<br><b>उदा:</b> Samsung 32" TV, iPhone 14.</td>
+            </tr>
+        </table>
+
+        <div class="margin-note">
+            <div class="note-title">🛠️ Unit of Measure</div>
+            स्टॉक आइटम बनाने से पहले <b>Unit (UoM)</b> बनाना बहुत ज़रूरी है (जैसे Pcs, Kgs, Box)। इसके बिना माल की गिनती नहीं हो सकती!
+        </div>
+
+        <h3>प्रक्रिया (Process to Create):</h3>
+        <p><span class="underline-red">1. Stock Group बनाना:</span></p>
+        <p>Gateway of Tally &rarr; Create &rarr; Stock Group (नाम डालें जैसे 'Electronics' और सेव करें)।</p>
+
+        <p><span class="underline-red">2. Unit (UoM) बनाना:</span></p>
+        <p>Gateway of Tally &rarr; Create &rarr; Unit (Symbol में 'Nos' या 'Pcs' डालें)।</p>
+
+        <p><span class="underline-red">3. Stock Item बनाना:</span></p>
+        <ul>
+            <li>Gateway of Tally &rarr; Create &rarr; <b>Stock Item</b></li>
+            <li><b>Name:</b> Samsung M53 Mobile</li>
+            <li><b>Under:</b> (ग्रुप चुनें - Electronics)</li>
+            <li><b>Units:</b> (यूनिट चुनें - Nos)</li>
+            <li>अंत में <span class="key">Ctrl</span> + <span class="key">A</span> दबाकर सेव कर लें।</li>
+        </ul>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 2)</div>
+    </div>
+
+
+    <div class="notebook-page">
+        <h2>4. Vouchers: Creation, Editing, and Deleting</h2>
+        <p><span class="highlight">Voucher</span> वह मूल डॉक्यूमेंट (Source Document) है जिसमें किसी भी वित्तीय लेनदेन (Financial Transaction) को रिकॉर्ड किया जाता है। जैसे अगर आपने माल बेचा, तो Sales Voucher बनेगा; अगर पैसे दिए, तो Payment Voucher बनेगा।</p>
+
+        <h3>Important Voucher Shortcuts (याद रखें!):</h3>
+        <ul style="list-style-type: none; padding-left: 0;">
+            <li>👉 <span class="key">F4</span> : Contra Voucher (बैंक में कैश जमा/निकालना)</li>
+            <li>👉 <span class="key">F5</span> : Payment Voucher (पैसा देना)</li>
+            <li>👉 <span class="key">F6</span> : Receipt Voucher (पैसा मिलना)</li>
+            <li>👉 <span class="key">F7</span> : Journal Voucher (Adjustment entries)</li>
+            <li>👉 <span class="key">F8</span> : Sales Voucher (माल बेचना)</li>
+            <li>👉 <span class="key">F9</span> : Purchase Voucher (माल खरीदना)</li>
+        </ul>
+
+        <div class="margin-note pink">
+            <div class="note-title">🚀 Pro Tip</div>
+            Tally में <b>Ctrl + A</b> शॉर्टकट का मतलब है "Accept" या सेव करना। हर स्क्रीन को सेव करने के लिए इसका उपयोग करें।
+        </div>
+
+        <h3>A. Creation of a Voucher (वाउचर एंट्री करना)</h3>
+        <ol>
+            <li><b>Path:</b> Gateway of Tally में जाएँ और <b>Vouchers (V)</b> पर क्लिक करें।</li>
+            <li>राइट साइड की बटन बार (Button Bar) से सही वाउचर टाइप चुनें (जैसे पेमेंट के लिए F5)।</li>
+            <li><span class="key">F2</span> दबाकर लेनदेन की <b>Date (तारीख)</b> बदलें।</li>
+            <li>Debit (Dr) और Credit (Cr) में सही लेजर चुनें और Amount भरें।</li>
+            <li>नीचे Narration (विवरण) लिखें (उदा: <i>"Being cash paid to Ram"</i>)।</li>
+            <li><span class="key">Enter</span> दबाकर या <span class="key">Ctrl</span> + <span class="key">A</span> दबाकर वाउचर को सेव (Accept) करें।</li>
+        </ol>
+
+        <h3>B. Editing a Voucher (वाउचर को सुधारना)</h3>
+        <p>अगर आपने वाउचर एंट्री में कोई गलती कर दी है (जैसे अमाउंट गलत लिख दिया), तो आप उसे आसानी से एडिट कर सकते हैं:</p>
+        <ul>
+            <li>अगर आपने वाउचर अभी-अभी सेव किया है, तो उसी वाउचर स्क्रीन पर कीबोर्ड से <span class="key">Page Up</span> (PgUp) बटन दबाएं। पिछला वाउचर खुल जाएगा।</li>
+            <li>या फिर, Gateway of Tally &rarr; <b>Day Book</b> में जाएँ।</li>
+            <li>उस दिन की सारी एंट्रीज़ दिखेंगी। जिस वाउचर को एडिट करना है, उस पर <span class="key">Enter</span> दबाएं, बदलाव करें और वापस सेव कर लें।</li>
+        </ul>
+
+        <h3>C. Deleting a Voucher (वाउचर डिलीट करना)</h3>
+        <p>यदि कोई वाउचर गलती से बन गया है और आप उसे पूरी तरह से मिटाना (Delete) चाहते हैं:</p>
+        <ol>
+            <li>सबसे पहले उस वाउचर को स्क्रीन पर खोलें (Day Book या Ledger Report के ज़रिए)।</li>
+            <li>वाउचर खुलने के बाद कीबोर्ड पर <span class="key">Alt</span> + <span class="key">D</span> एक साथ दबाएं।</li>
+            <li>Tally आपसे कन्फर्मेशन मांगेगा <i>"Delete? Yes or No"</i>। <span class="key">Y</span> दबाएं और वाउचर हमेशा के लिए डिलीट हो जाएगा।</li>
+        </ol>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 3 - अंतिम)</div>
+    </div>
+
+</body>
+</html>

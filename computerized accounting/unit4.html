@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Accounting Notes Unit 4 - By Aakash Sen 📓</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Cascadia+Code:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Global & Reset */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #2c3e50;
+            background-image: url('https://www.transparenttextures.com/patterns/wood-pattern.png');
+            font-family: 'Kalam', cursive;
+            color: #0000a0; /* Blue gel pen */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            font-size: 1.25rem;
+            line-height: 1.6;
+        }
+
+        /* Notebook Page Style - Plain White Paper, No Lines, No Red Margin */
+        .notebook-page {
+            background-color: #fdfdfd;
+            width: 100%;
+            max-width: 900px;
+            min-height: 1100px;
+            margin-bottom: 40px;
+            padding: 50px;
+            position: relative;
+            box-shadow: 5px 10px 25px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            overflow-wrap: break-word;
+        }
+
+        /* Typography & Ink Colors */
+        h1, h2, h3 {
+            color: #d32f2f; /* Red Marker */
+            font-weight: 700;
+            margin-top: 32px;
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        
+        h1 { font-size: 2.5rem; text-align: center; }
+        h2 { font-size: 2rem; border-bottom: 2px dashed #d32f2f; display: inline-block;}
+        h3 { font-size: 1.5rem; color: #b71c1c; }
+        
+        p, ul, ol { margin-bottom: 16px; }
+        ul, ol { padding-left: 30px; }
+        li { margin-bottom: 8px; }
+
+        .highlight {
+            background: linear-gradient(104deg, rgba(255,255,0,0) 0.9%, rgba(255,255,0,1) 2.4%, rgba(255,255,0,0.5) 5.8%, rgba(255,255,0,0.9) 93%, rgba(255,255,0,0) 96%);
+            border-radius: 3px;
+            padding: 0 4px;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .rough-circle {
+            border: 2px solid #d32f2f;
+            border-radius: 50% 40% 50% 60% / 60% 50% 40% 50%;
+            padding: 2px 8px;
+            display: inline-block;
+        }
+
+        .underline-red {
+            text-decoration: underline;
+            text-decoration-color: #d32f2f;
+            text-decoration-style: solid;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 4px;
+        }
+
+        /* Sticky Notes / Margin Notes */
+        .margin-note {
+            float: right;
+            clear: right;
+            width: 200px;
+            padding: 15px;
+            margin: 5px -20px 15px 20px;
+            background-color: #fff740;
+            box-shadow: 2px 4px 6px rgba(0,0,0,0.2);
+            font-size: 0.95rem;
+            line-height: 1.3;
+            color: #333;
+            transform: rotate(-3deg);
+            z-index: 10;
+            transition: transform 0.3s ease;
+            position: relative;
+        }
+        
+        .margin-note:hover { transform: rotate(0deg) scale(1.05); z-index: 100; }
+        .margin-note.pink { background-color: #ff9ee5; transform: rotate(2deg); }
+        .margin-note.green { background-color: #a8ff9e; transform: rotate(-1deg); }
+
+        .note-title {
+            font-weight: bold;
+            color: #d32f2f;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #d32f2f;
+            font-size: 1rem;
+        }
+
+        /* Table Styles for Notes */
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: rgba(255,255,255,0.8);
+            border: 2px solid #0000a0;
+            line-height: 1.4;
+        }
+        .notes-table th, .notes-table td {
+            border: 1px solid #0000a0;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .notes-table th { background-color: #e3f2fd; color: #d32f2f; font-weight: bold; font-size: 1.1rem; }
+
+        /* Diagram Block */
+        .diagram-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 30px 0;
+            padding: 20px;
+            background: #fdfdfd;
+            border: 2px dashed #add8e6;
+            border-radius: 10px;
+            font-family: 'Cascadia Code', monospace;
+            font-size: 1rem;
+        }
+        
+        .box-node {
+            border: 2px solid #0000a0;
+            padding: 15px;
+            border-radius: 8px;
+            background: #fff;
+            text-align: center;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .arrow-node {
+            font-size: 2rem;
+            color: #d32f2f;
+        }
+
+        .page-footer {
+            text-align: right;
+            margin-top: 50px;
+            font-size: 1rem;
+            color: #555;
+            font-style: italic;
+            border-top: 1px dashed #ccc;
+            padding-top: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 950px) {
+            .margin-note { float: none; width: 100%; margin: 20px 0; transform: rotate(0deg); }
+            .notebook-page { padding: 30px; }
+            h1 { font-size: 2rem; }
+            .diagram-container { flex-direction: column; gap: 15px; }
+            .arrow-node { transform: rotate(90deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- PAGE 1: E-Accounting & Cloud Basics -->
+    <div class="notebook-page">
+        <h1>☁️ E-Accounting & Cloud Software</h1>
+        <p style="text-align: center; color: #555;"><i>Unit 4: Modern Computerized Accounting (B.Com)</i></p>
+
+        <div class="margin-note pink">
+            <div class="note-title">🧠 Concept</div>
+            SaaS (Software as a Service) - आज कल सॉफ़्टवेयर खरीदा नहीं जाता, बल्कि Netflix की तरह मंथली सब्सक्रिप्शन पर इस्तेमाल किया जाता है!
+        </div>
+
+        <h2>1. What is E-Accounting?</h2>
+        <p><span class="highlight">E-Accounting (Electronic Accounting)</span> का अर्थ है इंटरनेट, कंप्यूटर और ऑनलाइन सॉफ़्टवेयर की मदद से एकाउंटिंग (लेखांकन) करना। इसमें सारा वित्तीय डेटा कागज़ (paper) या लोकल हार्ड-डिस्क के बजाय डिजिटल फॉर्मेट में रिकॉर्ड, स्टोर और प्रोसेस किया जाता है।</p>
+        
+        <h3>Cloud-Based Accounting Software</h3>
+        <p>क्लाउड आधारित एकाउंटिंग सॉफ़्टवेयर वह सिस्टम है जहाँ आपका अकाउंटिंग सॉफ़्टवेयर और सारा बिज़नेस डेटा आपके ऑफिस के कंप्यूटर में सेव नहीं होता, बल्कि <b>Remote Servers (इंटरनेट/क्लाउड)</b> पर सेव होता है। आप इसे दुनिया के किसी भी कोने से सिर्फ वेब-ब्राउज़र (जैसे Chrome) और इंटरनेट की मदद से चला सकते हैं। (उदाहरण: Zoho Books, QuickBooks, Tally on AWS)।</p>
+
+        <div class="diagram-container">
+            <div class="box-node" style="border-color: #27c93f; background: #e8f5e9;">
+                <b>👨‍💼 Accountant</b><br>
+                <small>Using Laptop/Mobile</small>
+            </div>
+            <div class="arrow-node">🌐</div>
+            <div class="box-node" style="background: #fff3e0; border-color: #ff9800;">
+                <b>☁️ Cloud Server</b><br>
+                <small>Data Processing & Storage</small>
+            </div>
+            <div class="arrow-node">➡</div>
+            <div class="box-node" style="border-color: #0000a0; background: #e3f2fd;">
+                <b>📊 Real-time Reports</b><br>
+                <small>Balance Sheet, P&L</small>
+            </div>
+        </div>
+
+        <h2>2. Types of Accounting Software</h2>
+        <p>किसी भी व्यवसाय के लिए एकाउंटिंग सॉफ्टवेयर मुख्य रूप से 3 प्रकार के होते हैं:</p>
+
+        <ol>
+            <li>
+                <span class="underline-red">Ready-to-Use (Off-the-shelf) Software:</span><br>
+                यह मार्केट में पहले से बने हुए (readymade) मिलते हैं। इन्हें छोटे और मध्यम व्यवसायों (SMEs) के लिए डिज़ाइन किया जाता है।<br>
+                <b>फायदा:</b> सस्ते होते हैं और इन्हें सीखना आसान होता है।<br>
+                <b>उदाहरण:</b> Tally Prime, Busy.
+            </li>
+            <br>
+            <li>
+                <span class="underline-red">Customized Software:</span><br>
+                जब कोई बिज़नेस एक बने-बनाए सॉफ़्टवेयर को खरीदकर उसमें अपनी <i>विशिष्ट ज़रूरतों</i> के अनुसार थोड़े बदलाव (modifications/add-ons) करवाता है, तो उसे कस्टमाइज्ड सॉफ़्टवेयर कहते हैं।<br>
+                <b>फायदा:</b> यह व्यवसाय की कार्यप्रणाली के ज़्यादा अनुकूल होता है।
+            </li>
+            <br>
+            <li>
+                <span class="underline-red">Tailor-Made (ERP) Software:</span><br>
+                यह सॉफ़्टवेयर बड़ी मल्टीनेशनल कंपनियों (MNCs) के लिए बिल्कुल <i>शुरुआत (scratch) से (zero)</i> बनाया जाता है। इसमें एकाउंटिंग के साथ-साथ HR, प्रोडक्शन, और सेल्स सब कुछ जुड़ा होता है।<br>
+                <b>फायदा:</b> अत्यधिक सुरक्षित और बड़े डेटा के लिए बेस्ट।<br>
+                <b>उदाहरण:</b> SAP, Oracle ERP.
+            </li>
+        </ol>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 1)</div>
+    </div>
+
+
+    <!-- PAGE 2: Security Features -->
+    <div class="notebook-page">
+        <h2>3. Security Features of CAS Software</h2>
+        <p>जब हमारा वित्तीय (financial) डेटा कंप्यूटर या क्लाउड पर होता है, तो उसकी सुरक्षा (Security) सबसे बड़ी चिंता होती है। आधुनिक कंप्यूटरकृत एकाउंटिंग सिस्टम (CAS) में निम्नलिखित <span class="highlight">सुरक्षा विशेषताएँ (Security Features)</span> होती हैं:</p>
+
+        <div class="margin-note green">
+            <div class="note-title">🛡️ Exam Tip!</div>
+            सुरक्षा के इन 4 पॉइंट्स को अच्छे से याद कर लें, ये परीक्षा में लॉन्ग आंसर (Long Answer) में बहुत काम आएंगे।
+        </div>
+
+        <ul>
+            <li>
+                <b>1. Password & Access Control (पासवर्ड और एक्सेस नियंत्रण):</b><br>
+                सॉफ़्टवेयर को खोलने के लिए एक मज़बूत पासवर्ड की आवश्यकता होती है। इसके अलावा इसमें <i>'Role-Based Access'</i> होता है।<br>
+                <b>उदाहरण:</b> एक Data Entry Clerk सिर्फ वाउचर पास कर सकता है, वह बैलेंस शीट नहीं देख सकता या किसी एंट्री को डिलीट नहीं कर सकता। यह अधिकार (rights) सिर्फ एडमिन (Admin) के पास होते हैं।
+            </li>
+            <br>
+            <li>
+                <b>2. Data Encryption (डेटा एन्क्रिप्शन):</b><br>
+                इंटरनेट पर डेटा भेजते समय या स्टोर करते समय डेटा को कोड (Ciphertext) में बदल दिया जाता है। अगर कोई हैकर डेटा चुरा भी ले, तो वह उसे पढ़ नहीं पाएगा (जैसे WhatsApp में End-to-end encryption होता है)।
+            </li>
+            <br>
+            <li>
+                <b>3. Audit Trail (ऑडिट ट्रेल / लॉग):</b><br>
+                यह सबसे महत्वपूर्ण फीचर है! सॉफ़्टवेयर एक 'लॉग बुक' बनाता है जिसमें रिकॉर्ड होता है कि <span class="rough-circle">किस यूज़र ने, किस तारीख और समय पर, कौन सी एंट्री बनाई, बदली (edit) या डिलीट की।</span> इससे फ्रॉड (Fraud) पकड़ना बहुत आसान हो जाता है। (Tally Prime में इसे Edit Log कहते हैं)।
+            </li>
+            <br>
+            <li>
+                <b>4. Automated Backup & Recovery (स्वचालित बैकअप):</b><br>
+                क्लाउड सॉफ़्टवेयर रोज़ाना खुद-ब-खुद (automatically) आपके डेटा की कॉपी अलग-अलग सर्वर्स पर सेव कर लेते हैं। अगर आपके ऑफिस के कंप्यूटर खराब भी हो जाएँ या आग लग जाए, तो आपका डेटा सुरक्षित रहता है और तुरंत रिकवर किया जा सकता है।
+            </li>
+            <br>
+            <li>
+                <b>5. Two-Factor Authentication (2FA):</b><br>
+                लॉगिन करते समय सिर्फ पासवर्ड ही नहीं, बल्कि मोबाइल पर आने वाला OTP (One Time Password) भी डालना पड़ता है।
+            </li>
+        </ul>
+
+        <div class="diagram-container" style="background-color: #fff9c4; border-color: #fbc02d; padding: 15px;">
+            <div style="font-weight: bold; color: #d32f2f;">Level 1: ID & Password</div>
+            <div class="arrow-node">➕</div>
+            <div style="font-weight: bold; color: #0000a0;">Level 2: Mobile OTP</div>
+            <div class="arrow-node">➡</div>
+            <div style="font-weight: bold; color: #2e7d32;">Secure Login 🔓</div>
+        </div>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 2)</div>
+    </div>
+
+
+    <!-- PAGE 3: Advantages & Risks -->
+    <div class="notebook-page">
+        <h2>4. Advantages and Risks of Cloud Based E-Accounting</h2>
+        <p>क्लाउड एकाउंटिंग के जहाँ बहुत सारे फायदे हैं, वहीं इसके कुछ जोखिम (Risks) भी हैं। परीक्षा में यह तुलना (Comparison) अक्सर पूछी जाती है:</p>
+
+        <h3>Advantages (फायदे / लाभ) 🟢</h3>
+        <table class="notes-table">
+            <tr>
+                <th>फायदा (Advantage)</th>
+                <th>विवरण (Description)</th>
+            </tr>
+            <tr>
+                <td><b>1. Anytime, Anywhere Access</b></td>
+                <td>आप दुनिया में कहीं भी बैठकर अपने मोबाइल या लैपटॉप से कंपनी के खाते (Accounts) चेक कर सकते हैं। बस इंटरनेट चाहिए।</td>
+            </tr>
+            <tr>
+                <td><b>2. Cost-Effective (लागत में कमी)</b></td>
+                <td>आपको महंगे सर्वर या IT टीम की ज़रूरत नहीं है। आप सिर्फ मंथली/ईयरली फीस (Subscription fee) देते हैं।</td>
+            </tr>
+            <tr>
+                <td><b>3. Real-Time Collaboration</b></td>
+                <td>एक ही समय में एक व्यक्ति ऑफिस में सेल्स बिल बना सकता है, और सीए (CA) अपने ऑफिस से उसी डेटा का ऑडिट कर सकता है।</td>
+            </tr>
+            <tr>
+                <td><b>4. Automatic Updates</b></td>
+                <td>सॉफ़्टवेयर को मैन्युअली अपडेट करने का झंझट नहीं होता। GST रेट्स या नए फीचर्स क्लाउड पर आटोमेटिक अपडेट हो जाते हैं।</td>
+            </tr>
+        </table>
+
+        <h3>Risks & Disadvantages (जोखिम / नुकसान) 🔴</h3>
+        <table class="notes-table">
+            <tr>
+                <th>जोखिम (Risk)</th>
+                <th>विवरण (Description)</th>
+            </tr>
+            <tr>
+                <td><b>1. Internet Dependency</b></td>
+                <td><span class="underline-red">No Internet = No Accounting.</span> अगर इंटरनेट डाउन है, तो आप सॉफ्टवेयर नहीं खोल सकते और काम पूरी तरह रुक जाता है।</td>
+            </tr>
+            <tr>
+                <td><b>2. Data Privacy & Security</b></td>
+                <td>आपका सारा सीक्रेट फाइनेंसियल डेटा किसी थर्ड-पार्टी सर्वर (Google/Amazon) पर सेव होता है। हमेशा हैकिंग या डेटा लीक होने का एक छोटा डर बना रहता है।</td>
+            </tr>
+            <tr>
+                <td><b>3. Long-term Cost</b></td>
+                <td>भले ही यह शुरू में सस्ता लगता हो, लेकिन सालों-साल सब्सक्रिप्शन फीस (Subscription fee) भरते रहने से लंबी अवधि में यह महँगा पड़ सकता है।</td>
+            </tr>
+            <tr>
+                <td><b>4. Vendor Lock-in</b></td>
+                <td>अगर आप भविष्य में सॉफ़्टवेयर बदलना चाहें (जैसे Zoho से QuickBooks में जाना), तो डेटा ट्रांसफर करना बहुत मुश्किल और तकनीकी रूप से जटिल होता है।</td>
+            </tr>
+        </table>
+
+        <div class="margin-note pink" style="width: 250px; bottom: 50px;">
+            <div class="note-title">🎯 Conclusion</div>
+            <b>निष्कर्ष:</b> जोखिमों के बावजूद, आज के आधुनिक बिज़नेस के लिए क्लाउड एकाउंटिंग (E-Accounting) एक ज़रूरत बन चुका है।
+        </div>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 3 - अंतिम)</div>
+    </div>
+
+</body>
+</html>

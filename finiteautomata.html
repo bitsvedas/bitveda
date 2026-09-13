@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BitVedas: FA ↔ RE Converter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.9/standalone/umd/vis-network.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        #network-canvas {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        /* Hide vis.js default manipulation UI as we use custom controls */
+        .vis-manipulation {
+            display: none !important;
+        }
+        
+        /* Custom scrollbar for sidebar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col">
+
+    <header class="bg-indigo-600 text-white shadow-md z-10 px-6 py-4 flex justify-between items-center shrink-0">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-project-diagram text-2xl"></i>
+            <a href="https://bitsvedas.github.io/bitveda/" target="_blank" class="text-xl font-bold tracking-wide hover:text-indigo-200 transition-colors">BitVedas</a>
+        </div>
+        <div class="flex gap-4">
+            <button onclick="loadExample1()" class="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                <i class="fas fa-image"></i> Ex 1 (Q.66)
+            </button>
+            <button onclick="loadExample2()" class="bg-indigo-500 hover:bg-indigo-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                <i class="fas fa-image"></i> Ex 2 (Q.70)
+            </button>
+            <button onclick="clearCanvas()" class="bg-rose-500 hover:bg-rose-400 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                <i class="fas fa-trash"></i> Clear All
+            </button>
+            <button onclick="network.fit()" class="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
+                <i class="fas fa-expand"></i> Fit Canvas
+            </button>
+        </div>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden">
+        
+        <!-- Sidebar Controls -->
+        <aside class="w-80 bg-white border-r border-slate-200 flex flex-col shrink-0 overflow-y-auto shadow-inner">
+            
+            <!-- Generate RE Section -->
+            <div class="p-5 border-b border-slate-100">
+                <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Analysis</h2>
+                <button onclick="generateRE()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2.5 rounded-lg font-semibold transition-colors flex justify-center items-center gap-2 shadow-sm">
+                    <i class="fas fa-cogs"></i> Get Regular Expression
+                </button>
+                <div class="mt-3">
+                    <textarea id="re-output" readonly class="w-full h-24 p-3 bg-slate-50 border border-slate-200 rounded-lg text-slate-700 text-sm font-mono resize-none focus:outline-none" placeholder="Generated RE will appear here..."></textarea>
+                </div>
+            </div>
+
+            <!-- Generate FA Section -->
+            <div class="p-5 border-b border-slate-100">
+                <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Synthesis</h2>
+                <div class="mb-3">
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Enter Regular Expression:</label>
+                    <input type="text" id="re-input" class="w-full p-2.5 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all font-mono" placeholder="e.g., (a+b)*a">
+                    <p class="text-[10px] text-slate-400 mt-1">Use '+ ' for union, '*' for star, standard concat.</p>
+                </div>
+                <div class="mb-4">
+                    <label class="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                        <input type="checkbox" id="gen-nfa-only" class="rounded text-indigo-600 focus:ring-indigo-500">
+                        Generate NFA (Skip Minimization)
+                    </label>
+                </div>
+                <button onclick="generateFA()" class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2.5 rounded-lg font-semibold transition-colors flex justify-center items-center gap-2 shadow-sm">
+                    <i class="fas fa-magic"></i> Draw Automaton from RE
+                </button>
+            </div>
+
+            <!-- String Simulator Section -->
+            <div class="p-5 border-b border-slate-100 bg-yellow-50">
+                <h2 class="text-sm font-bold text-yellow-600 uppercase tracking-wider mb-3">Simulator</h2>
+                <div class="mb-3">
+                    <label class="block text-xs font-medium text-slate-600 mb-1">Test String:</label>
+                    <input type="text" id="sim-input" class="w-full p-2.5 border border-yellow-300 rounded-lg text-sm focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 outline-none transition-all font-mono" placeholder="e.g., aaa">
+                </div>
+                <button id="sim-btn" onclick="simulateString()" class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2.5 rounded-lg font-semibold transition-colors flex justify-center items-center gap-2 shadow-sm">
+                    <i class="fas fa-play"></i> Animate & Test
+                </button>
+            </div>
+
+            <!-- Drawing Tools & Editor -->
+            <div class="p-5 flex-1 flex flex-col">
+                <h2 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">Drawing Tools</h2>
+                
+                <div class="grid grid-cols-2 gap-2 mb-4">
+                    <button onclick="addNode()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg text-sm font-medium transition-colors border border-slate-200 flex flex-col items-center justify-center gap-1">
+                        <i class="fas fa-circle-plus"></i> Add State
+                    </button>
+                    <button onclick="network.addEdgeMode()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg text-sm font-medium transition-colors border border-slate-200 flex flex-col items-center justify-center gap-1">
+                        <i class="fas fa-project-diagram"></i> Draw Edge
+                    </button>
+                    <button onclick="addSelfLoop()" class="col-span-2 bg-slate-100 hover:bg-slate-200 text-slate-700 py-2 rounded-lg text-sm font-medium transition-colors border border-slate-200 flex items-center justify-center gap-2">
+                        <i class="fas fa-undo"></i> Add Self-Loop to Selected State
+                    </button>
+                </div>
+
+                <div id="editor-panel" class="hidden bg-indigo-50 p-4 rounded-xl border border-indigo-100 mt-2">
+                    <h3 id="editor-title" class="font-semibold text-indigo-900 mb-3 text-sm">Edit Properties</h3>
+                    
+                    <!-- Node Properties -->
+                    <div id="node-props" class="hidden space-y-3">
+                        <label class="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                            <input type="checkbox" id="prop-is-start" class="rounded text-indigo-600 focus:ring-indigo-500" onchange="updateNodeProps()">
+                            Start State
+                        </label>
+                        <label class="flex items-center gap-2 text-sm text-slate-700 cursor-pointer">
+                            <input type="checkbox" id="prop-is-accept" class="rounded text-indigo-600 focus:ring-indigo-500" onchange="updateNodeProps()">
+                            Final State (Accept)
+                        </label>
+                    </div>
+
+                    <!-- Edge Properties -->
+                    <div id="edge-props" class="hidden">
+                        <label class="block text-xs font-medium text-slate-600 mb-1">Transition Label:</label>
+                        <input type="text" id="prop-edge-label" class="w-full p-2 border border-slate-300 rounded text-sm focus:ring-2 focus:ring-indigo-500 outline-none" placeholder="e.g. a, b" oninput="updateEdgeProps()">
+                    </div>
+
+                    <button onclick="deleteSelected()" class="mt-4 w-full bg-red-100 hover:bg-red-200 text-red-700 py-2 rounded-lg text-sm font-medium transition-colors border border-red-200">
+                        Delete Selected
+                    </button>
+                </div>
+                
+                <div id="selection-hint" class="mt-4 text-center text-slate-400 text-sm italic">
+                    Click a state or transition to edit its properties.
+                </div>
+            </div>
+        </aside>
+
+        <!-- Canvas Area -->
+        <div class="flex-1 p-6 relative bg-slate-100">
+            <!-- Custom Message Box for alerts -->
+            <div id="message-box" class="absolute top-8 left-1/2 transform -translate-x-1/2 z-50 hidden opacity-0 transition-opacity duration-300">
+                <div class="bg-gray-800 text-white px-6 py-3 rounded-full shadow-lg font-medium text-sm flex items-center gap-2">
+                    <i id="message-icon" class="fas fa-info-circle"></i>
+                    <span id="message-text">Message</span>
+                </div>
+            </div>
+            
+            <div id="network-canvas"></div>
+        </div>
+    </main>
+
+    <script>
+        // --- Core State & Configuration ---
+        let nodes, edges, network;
+        let nodeIdCounter = 1;
+        let selectedElement = { type: null, id: null };
+
+        const EPSILON = 'ε';
+
+        // Vis.js Styling Configuration
+        const styleConfig = {
+            node: {
+                default: { background: '#ffffff', border: '#6366f1', borderWidth: 2, fontColor: '#1e293b' },
+                start: { background: '#e0e7ff', border: '#4f46e5', borderWidth: 3, fontColor: '#1e293b' },
+                accept: { background: '#ffffff', border: '#10b981', borderWidth: 4, borderDashes: [1, 0] }, // Fake double circle via thick border
+                both: { background: '#e0e7ff', border: '#10b981', borderWidth: 4 }
+            },
+            edge: {
+                color: '#64748b',
+                highlight: '#4f46e5'
+            }
+        };
+
+        // --- Initialization ---
+        function initNetwork() {
+            nodes = new vis.DataSet([]);
+            edges = new vis.DataSet([]);
+            
+            const container = document.getElementById('network-canvas');
+            const data = { nodes: nodes, edges: edges };
+            
+            const options = {
+                physics: {
+                    enabled: true,
+                    barnesHut: { gravitationalConstant: -2000, centralGravity: 0.3, springLength: 150 },
+                    stabilization: { iterations: 150 }
+                },
+                nodes: {
+                    shape: 'circle',
+                    size: 25,
+                    font: { face: 'Inter', size: 16, color: '#1e293b' },
+                    borderWidth: 2,
+                    color: { background: '#ffffff', border: '#6366f1', highlight: { background: '#f8fafc', border: '#4338ca' } }
+                },
+                edges: {
+                    arrows: 'to',
+                    font: { align: 'horizontal', size: 14, background: '#ffffff', strokeWidth: 0 },
+                    color: { color: styleConfig.edge.color, highlight: styleConfig.edge.highlight },
+                    smooth: { type: 'dynamic' }
+                },
+                interaction: {
+                    hover: true,
+                    selectConnectedEdges: false
+                },
+                manipulation: {
+                    enabled: false, // We use custom controls
+                    addEdge: function (edgeData, callback) {
+                        if (edgeData.from === edgeData.to) {
+                            // Self loop styling handled automatically by smooth: dynamic
+                        }
+                        edgeData.label = 'a'; // Default label
+                        edges.add(edgeData);
+                        callback(null); // Don't use vis.js default add
+                        network.disableEditMode();
+                        selectElement('edge', edgeData.id);
+                    }
+                }
+            };
+
+            network = new vis.Network(container, data, options);
+
+            // Event Listeners for UI interaction
+            network.on("selectNode", function (params) { selectElement('node', params.nodes[0]); });
+            network.on("selectEdge", function (params) { 
+                if (params.nodes.length === 0) selectElement('edge', params.edges[0]); 
+            });
+            network.on("deselectNode", function () { clearSelection(); });
+            network.on("deselectEdge", function (params) { 
+                if (params.nodes.length === 0) clearSelection(); 
+            });
+        }
+
+        // --- Utility UI Functions ---
+        function showMessage(text, isError = false) {
+            const box = document.getElementById('message-box');
+            const msgText = document.getElementById('message-text');
+            const icon = document.getElementById('message-icon');
+            
+            msgText.textContent = text;
+            box.classList.remove('hidden');
+            
+            if (isError) {
+                box.firstElementChild.classList.replace('bg-gray-800', 'bg-red-600');
+                icon.className = 'fas fa-exclamation-triangle';
+            } else {
+                box.firstElementChild.classList.replace('bg-red-600', 'bg-gray-800');
+                icon.className = 'fas fa-info-circle';
+            }
+
+            // Trigger reflow for animation
+            void box.offsetWidth; 
+            box.classList.remove('opacity-0');
+
+            setTimeout(() => {
+                box.classList.add('opacity-0');
+                setTimeout(() => box.classList.add('hidden'), 300);
+            }, 3000);
+        }
+
+        function clearCanvas(spawnInitial = true) {
+            nodes.clear();
+            edges.clear();
+            nodeIdCounter = 1;
+            clearSelection();
+            document.getElementById('re-output').value = '';
+            document.getElementById('re-input').value = '';
+            
+            if (spawnInitial) {
+                // First state always be there
+                addNode(); 
+            }
+            
+            showMessage("Canvas cleared");
+        }
+
+        // --- Editor Panel Logic ---
+        function selectElement(type, id) {
+            selectedElement = { type, id };
+            document.getElementById('selection-hint').classList.add('hidden');
+            document.getElementById('editor-panel').classList.remove('hidden');
+            
+            if (type === 'node') {
+                const node = nodes.get(id);
+                document.getElementById('editor-title').textContent = `State: ${node.label}`;
+                document.getElementById('node-props').classList.remove('hidden');
+                document.getElementById('edge-props').classList.add('hidden');
+                
+                document.getElementById('prop-is-start').checked = !!node.isStart;
+                document.getElementById('prop-is-accept').checked = !!node.isAccept;
+            } else if (type === 'edge') {
+                const edge = edges.get(id);
+                document.getElementById('editor-title').textContent = `Transition`;
+                document.getElementById('node-props').classList.add('hidden');
+                document.getElementById('edge-props').classList.remove('hidden');
+                
+                document.getElementById('prop-edge-label').value = edge.label || '';
+            }
+        }
+
+        function clearSelection() {
+            selectedElement = { type: null, id: null };
+            document.getElementById('selection-hint').classList.remove('hidden');
+            document.getElementById('editor-panel').classList.add('hidden');
+        }
+
+        function updateNodeStyle(node) {
+            let n = { ...node };
+            if (n.isStart && n.isAccept) {
+                n.color = styleConfig.node.both;
+                n.label = "Start\n" + (n.originalLabel || n.id);
+                n.shape = 'circle';
+            } else if (n.isStart) {
+                n.color = styleConfig.node.start;
+                n.label = "Start\n" + (n.originalLabel || n.id);
+            } else if (n.isAccept) {
+                n.color = styleConfig.node.accept;
+                n.label = n.originalLabel || n.id.toString();
+                // To simulate double circle visually in vis.js easily, we use a dashed thick border
+                n.shapeProperties = { borderDashes: [3, 3] }; 
+            } else {
+                n.color = styleConfig.node.default;
+                n.label = n.originalLabel || n.id.toString();
+                n.shapeProperties = { borderDashes: false };
+            }
+            return n;
+        }
+
+        function updateNodeProps() {
+            if (selectedElement.type !== 'node') return;
+            const id = selectedElement.id;
+            let node = nodes.get(id);
+            if (!node.originalLabel) node.originalLabel = node.label.replace("Start\n", "");
+            
+            node.isStart = document.getElementById('prop-is-start').checked;
+            node.isAccept = document.getElementById('prop-is-accept').checked;
+            
+            nodes.update(updateNodeStyle(node));
+        }
+
+        function updateEdgeProps() {
+            if (selectedElement.type !== 'edge') return;
+            const id = selectedElement.id;
+            const label = document.getElementById('prop-edge-label').value;
+            edges.update({ id: id, label: label });
+        }
+
+        function addNode() {
+            const id = nodeIdCounter++;
+            let newNode = { id: id, label: `q${id-1}`, originalLabel: `q${id-1}`, isStart: false, isAccept: false };
+            
+            // If it's the first node, make it start by default
+            if (nodes.length === 0) {
+                newNode.isStart = true;
+            }
+            
+            newNode = updateNodeStyle(newNode);
+            nodes.add(newNode);
+        }
+
+        function addSelfLoop() {
+            if (selectedElement.type !== 'node') {
+                showMessage("Please select a state first to add a self-loop.", true);
+                return;
+            }
+            const nodeId = selectedElement.id;
+            const newEdgeId = `e_${new Date().getTime()}`;
+            edges.add({ id: newEdgeId, from: nodeId, to: nodeId, label: 'a' });
+            
+            // Select the newly created edge so the user can easily change the label
+            selectElement('edge', newEdgeId);
+            showMessage("Self-loop added.");
+        }
+
+        function deleteSelected() {
+            if (selectedElement.type === 'node') {
+                nodes.remove(selectedElement.id);
+            } else if (selectedElement.type === 'edge') {
+                edges.remove(selectedElement.id);
+            }
+            clearSelection();
+        }
+
+        // --- Examples Loader ---
+        function loadExample1() {
+            clearCanvas(false);
+            const exNodes = [
+                updateNodeStyle({ id: 1, label: '-', originalLabel: '-', isStart: true, isAccept: false, x: -100, y: 0 }),
+                updateNodeStyle({ id: 2, label: '+', originalLabel: '+', isStart: false, isAccept: true, x: 100, y: 0 })
+            ];
+            const exEdges = [
+                { id: 'e1', from: 1, to: 1, label: 'b' },
+                { id: 'e2', from: 1, to: 2, label: 'a' },
+                { id: 'e3', from: 2, to: 2, label: 'a' },
+                { id: 'e4', from: 2, to: 1, label: 'b' }
+            ];
+            nodes.add(exNodes);
+            edges.add(exEdges);
+            nodeIdCounter = 3;
+            network.fit();
+            showMessage("Loaded Example 1: Q.66");
+        }
+
+        function loadExample2() {
+            clearCanvas(false);
+            const exNodes = [
+                updateNodeStyle({ id: 1, label: 'S1', originalLabel: 'S1', isStart: true, x: -200, y: 0 }),
+                updateNodeStyle({ id: 2, label: 'S2', originalLabel: 'S2', x: -100, y: -50 }),
+                updateNodeStyle({ id: 3, label: 'S3', originalLabel: 'S3', x: -100, y: 50 }),
+                updateNodeStyle({ id: 4, label: 'S4', originalLabel: 'S4', x: 0, y: 0 }),
+                updateNodeStyle({ id: 5, label: 'S5', originalLabel: 'S5', x: 100, y: -50 }),
+                updateNodeStyle({ id: 6, label: 'S6', originalLabel: 'S6', isAccept: true, x: 200, y: -100 }),
+                updateNodeStyle({ id: 7, label: 'S7', originalLabel: 'S7', x: 100, y: 50 }),
+                updateNodeStyle({ id: 8, label: 'S8', originalLabel: 'S8', isAccept: true, x: 200, y: 100 })
+            ];
+            // Split "a, b" into "a+b" for mathematical correctness in evaluation
+            const exEdges = [
+                { from: 1, to: 2, label: 'a' }, { from: 1, to: 3, label: 'b' },
+                { from: 2, to: 4, label: 'a' }, { from: 3, to: 4, label: 'b' },
+                { from: 4, to: 4, label: 'a+b' },
+                { from: 4, to: 5, label: 'a' }, { from: 4, to: 7, label: 'b' },
+                { from: 5, to: 6, label: 'a' }, { from: 7, to: 8, label: 'b' }
+            ];
+            nodes.add(exNodes);
+            edges.add(exEdges);
+            nodeIdCounter = 9;
+            network.fit();
+            showMessage("Loaded Example 2: Q.70");
+        }
+
+        // --- ALGORITHM 1: FA to RE (Generalized NFA State Elimination) ---
+        function formatRegex(r) {
+            if (!r || r === '∅') return '';
+            if (r === EPSILON) return '';
+            return r;
+        }
+
+        function combineUnion(r1, r2) {
+            if (!r1) return r2 || '';
+            if (!r2) return r1 || '';
+            if (r1 === r2) return r1;
+            return `${r1}+${r2}`;
+        }
+
+        function combineConcat(r1, r2) {
+            if (!r1) return r2 || '';
+            if (!r2) return r1 || '';
+            
+            // Basic parenthesis wrap if expression contains top-level union
+            let wr1 = (r1.includes('+') && !r1.startsWith('(')) ? `(${r1})` : r1;
+            let wr2 = (r2.includes('+') && !r2.startsWith('(')) ? `(${r2})` : r2;
+            
+            return `${wr1}${wr2}`;
+        }
+
+        function combineStar(r) {
+            if (!r) return '';
+            if (r.length === 1) return `${r}*`;
+            if (r.endsWith('*') && (r.startsWith('(') || !r.includes('+'))) return r; // prevent **
+            return `(${r})*`;
+        }
+
+        function generateRE() {
+            const allNodes = nodes.get();
+            const allEdges = edges.get();
+            
+            const startNodes = allNodes.filter(n => n.isStart);
+            const acceptNodes = allNodes.filter(n => n.isAccept);
+
+            if (startNodes.length === 0) {
+                showMessage("Automaton must have at least one Start state.", true);
+                return;
+            }
+            if (acceptNodes.length === 0) {
+                showMessage("Automaton must have at least one Accept state.", true);
+                return;
+            }
+
+            // Create GNFA Transition Matrix Map
+            // Map structure: M[from][to] = regex string
+            let gnfa = new Map();
+            let stateIds = allNodes.map(n => n.id);
+            
+            // Special states
+            const START = 'Q_START';
+            const ACCEPT = 'Q_ACCEPT';
+            stateIds.push(START, ACCEPT);
+
+            stateIds.forEach(id => gnfa.set(id, new Map()));
+
+            // Populate initial edges
+            allEdges.forEach(e => {
+                const f = e.from;
+                const t = e.to;
+                let lbl = e.label || EPSILON;
+                // Handle comma separated labels as union visually
+                lbl = lbl.replace(/\s*,\s*/g, '+'); 
+                
+                let current = gnfa.get(f).get(t);
+                gnfa.get(f).set(t, combineUnion(current, lbl));
+            });
+
+            // Connect artificial Start to real starts
+            startNodes.forEach(sn => {
+                gnfa.get(START).set(sn.id, EPSILON);
+            });
+
+            // Connect real accepts to artificial Accept
+            acceptNodes.forEach(an => {
+                gnfa.get(an.id).set(ACCEPT, EPSILON);
+            });
+
+            // Eliminate all nodes except START and ACCEPT
+            let nodesToEliminate = allNodes.map(n => n.id);
+
+            nodesToEliminate.forEach(rip => {
+                let inNodes = [];
+                let outNodes = [];
+                
+                // Find incoming and outgoing edges for 'rip' node
+                stateIds.forEach(id => {
+                    if (id !== rip) {
+                        if (gnfa.get(id).has(rip)) inNodes.push(id);
+                        if (gnfa.get(rip).has(id)) outNodes.push(id);
+                    }
+                });
+
+                let loopRegex = gnfa.get(rip).get(rip);
+                let starLoop = loopRegex ? combineStar(loopRegex) : '';
+
+                // Calculate new paths bypassing 'rip'
+                inNodes.forEach(inId => {
+                    outNodes.forEach(outId => {
+                        let R_in_rip = gnfa.get(inId).get(rip);
+                        let R_rip_out = gnfa.get(rip).get(outId);
+                        
+                        let newPath = combineConcat(R_in_rip, combineConcat(starLoop, R_rip_out));
+                        if (newPath) {
+                            let existingPath = gnfa.get(inId).get(outId);
+                            gnfa.get(inId).set(outId, combineUnion(existingPath, newPath));
+                        }
+                    });
+                });
+
+                // Remove rip state from matrix mapping
+                stateIds = stateIds.filter(id => id !== rip);
+                gnfa.delete(rip);
+                stateIds.forEach(id => gnfa.get(id).delete(rip));
+            });
+
+            // Final Result
+            let finalRe = gnfa.get(START).get(ACCEPT);
+            
+            // Minor visual cleanup for empty strings resulting from epsilon transitions
+            if (finalRe) {
+                finalRe = finalRe.replace(/ε/g, ''); 
+                if (finalRe === '') finalRe = 'ε'; // if entirely empty, it matches epsilon
+            } else {
+                finalRe = '∅ (Empty Language)';
+            }
+
+            document.getElementById('re-output').value = finalRe;
+            showMessage("Regular Expression generated successfully.");
+        }
+
+
+        // --- ALGORITHM 2: RE to FA (Thompson's Construction) ---
+        class NFA {
+            constructor(start, accept) {
+                this.start = start;
+                this.accept = accept;
+            }
+        }
+
+        let genId = 1;
+        function getNewStateId() { return genId++; }
+
+        function formatREInput(re) {
+            // Insert explicit concat operator '.'
+            let res = "";
+            for (let i = 0; i < re.length; i++) {
+                let c1 = re[i];
+                res += c1;
+                if (i + 1 < re.length) {
+                    let c2 = re[i+1];
+                    let isC1Char = /[a-zA-Z0-9]/.test(c1) || c1 === '*' || c1 === ')';
+                    let isC2Char = /[a-zA-Z0-9]/.test(c2) || c2 === '(';
+                    if (isC1Char && isC2Char) {
+                        res += '.';
+                    }
+                }
+            }
+            return res;
+        }
+
+        function toPostfix(exp) {
+            let postfix = "";
+            let stack = [];
+            const precedence = { '*': 3, '.': 2, '+': 1 };
+
+            for (let c of exp) {
+                if (/[a-zA-Z0-9ε]/.test(c)) {
+                    postfix += c;
+                } else if (c === '(') {
+                    stack.push(c);
+                } else if (c === ')') {
+                    while (stack.length > 0 && stack[stack.length - 1] !== '(') {
+                        postfix += stack.pop();
+                    }
+                    stack.pop();
+                } else {
+                    while (stack.length > 0 && precedence[stack[stack.length - 1]] >= precedence[c]) {
+                        postfix += stack.pop();
+                    }
+                    stack.push(c);
+                }
+            }
+            while (stack.length > 0) {
+                postfix += stack.pop();
+            }
+            return postfix;
+        }
+
+        let tempEdges = [];
+
+        function buildThompson(postfix) {
+            let stack = [];
+            genId = 1;
+            tempEdges = [];
+
+            for (let c of postfix) {
+                if (/[a-zA-Z0-9ε]/.test(c)) {
+                    let s0 = getNewStateId();
+                    let s1 = getNewStateId();
+                    tempEdges.push({ from: s0, to: s1, label: c });
+                    stack.push(new NFA(s0, s1));
+                } else if (c === '.') {
+                    let n2 = stack.pop();
+                    let n1 = stack.pop();
+                    if (!n1 || !n2) throw "Invalid RE";
+                    tempEdges.push({ from: n1.accept, to: n2.start, label: EPSILON });
+                    stack.push(new NFA(n1.start, n2.accept));
+                } else if (c === '+') {
+                    let n2 = stack.pop();
+                    let n1 = stack.pop();
+                    if (!n1 || !n2) throw "Invalid RE";
+                    let s0 = getNewStateId();
+                    let s3 = getNewStateId();
+                    tempEdges.push({ from: s0, to: n1.start, label: EPSILON });
+                    tempEdges.push({ from: s0, to: n2.start, label: EPSILON });
+                    tempEdges.push({ from: n1.accept, to: s3, label: EPSILON });
+                    tempEdges.push({ from: n2.accept, to: s3, label: EPSILON });
+                    stack.push(new NFA(s0, s3));
+                } else if (c === '*') {
+                    let n = stack.pop();
+                    if (!n) throw "Invalid RE";
+                    let s0 = getNewStateId();
+                    let s1 = getNewStateId();
+                    tempEdges.push({ from: s0, to: n.start, label: EPSILON });
+                    tempEdges.push({ from: s0, to: s1, label: EPSILON });
+                    tempEdges.push({ from: n.accept, to: n.start, label: EPSILON });
+                    tempEdges.push({ from: n.accept, to: s1, label: EPSILON });
+                    stack.push(new NFA(s0, s1));
+                }
+            }
+            return stack.pop();
+        }
+
+        function generateFA() {
+            const reInput = document.getElementById('re-input').value.replace(/\s+/g, '');
+            if (!reInput) {
+                showMessage("Please enter a regular expression.", true);
+                return;
+            }
+
+            try {
+                const formatted = formatREInput(reInput);
+                const postfix = toPostfix(formatted);
+                const finalNFA = buildThompson(postfix);
+
+                if (!finalNFA) throw "Parser failed";
+
+                // Clear current canvas safely
+                nodes.clear();
+                edges.clear();
+                
+                // Track states that actually exist in the constructed NFA
+                let usedStates = new Set();
+                tempEdges.forEach(e => {
+                    usedStates.add(e.from);
+                    usedStates.add(e.to);
+                });
+
+                // Add Nodes
+                let newNodes = [];
+                usedStates.forEach(id => {
+                    let n = { 
+                        id: id, 
+                        label: `q${id}`, 
+                        originalLabel: `q${id}`,
+                        isStart: (id === finalNFA.start),
+                        isAccept: (id === finalNFA.accept)
+                    };
+                    newNodes.push(n);
+                });
+
+                // Add Edges (Clean up epsilon visual for vis.js)
+                let newEdges = tempEdges.map((e, idx) => ({
+                    id: `te_${idx}`,
+                    from: e.from,
+                    to: e.to,
+                    label: e.label === EPSILON ? 'ε' : e.label
+                }));
+                
+                const genNfaOnly = document.getElementById('gen-nfa-only').checked;
+                
+                if (genNfaOnly) {
+                    nodes.add(newNodes.map(n => updateNodeStyle(n)));
+                    edges.add(newEdges);
+                    nodeIdCounter = Math.max(1, ...newNodes.map(n => n.id)) + 1;
+                    network.fit();
+                    showMessage("Generated NFA from Regular Expression.");
+                } else {
+                    // OPTIMIZATION: Convert NFA to Minimal DFA to simplify completely
+                    let optimized = nfaToMinimalDfa(finalNFA.start, finalNFA.accept, newNodes, tempEdges);
+                    
+                    nodes.add(optimized.nodes.map(n => updateNodeStyle(n)));
+                    
+                    // Group multiple labels (e.g. 'a' and 'b') between the same states into a single edge
+                    let finalEdges = [];
+                    optimized.edges.forEach((e, idx) => { 
+                        let existing = finalEdges.find(fe => fe.from === e.from && fe.to === e.to);
+                        if (existing) {
+                            // Avoid duplicates like 'a, a' if they appear
+                            let currentLabels = existing.label.split(',').map(s => s.trim());
+                            if (!currentLabels.includes(e.label)) {
+                                existing.label += `, ${e.label}`;
+                            }
+                        } else {
+                            finalEdges.push({ id: `te_opt_${idx}`, from: e.from, to: e.to, label: e.label });
+                        }
+                    });
+                    
+                    edges.add(finalEdges);
+                    
+                    nodeIdCounter = Math.max(1, ...optimized.nodes.map(n => n.id)) + 1;
+                    network.fit();
+                    showMessage("Generated Minimal DFA from Regular Expression.");
+                }
+
+            } catch (err) {
+                console.error(err);
+                showMessage("Error parsing Regular Expression. Check syntax.", true);
+            }
+        }
+
+        // --- ALGORITHM 3: DFA Minimization (Optimization) ---
+        function nfaToMinimalDfa(nfaStartId, nfaAcceptId, tempNodes, tempEdges) {
+            // 1. Get Alphabet
+            let alphabet = new Set();
+            tempEdges.forEach(e => { if (e.label !== 'ε' && e.label !== EPSILON) alphabet.add(e.label); });
+            let alpha = Array.from(alphabet);
+
+            // 2. Helper: Epsilon-closure
+            function getEClosure(stateIds) {
+                let closure = new Set(stateIds);
+                let stack = [...stateIds];
+                while (stack.length > 0) {
+                    let curr = stack.pop();
+                    let epsEdges = tempEdges.filter(e => e.from === curr && (e.label === 'ε' || e.label === EPSILON));
+                    epsEdges.forEach(e => {
+                        if (!closure.has(e.to)) {
+                            closure.add(e.to);
+                            stack.push(e.to);
+                        }
+                    });
+                }
+                return Array.from(closure).sort((a,b)=>a-b);
+            }
+
+            // 3. Helper: Move
+            function getMove(stateIds, symbol) {
+                let next = new Set();
+                stateIds.forEach(id => {
+                    tempEdges.filter(e => e.from === id && e.label === symbol).forEach(e => next.add(e.to));
+                });
+                return Array.from(next);
+            }
+
+            // 4. Subset Construction (NFA to DFA)
+            let dfaStates = [];
+            let dfaEdges = [];
+            let dfaStateMap = {};
+            let nextDfaId = 1;
+
+            let startNfaIds = getEClosure([nfaStartId]);
+            let startKey = startNfaIds.join(',');
+            dfaStates.push({ id: nextDfaId, nfaIds: startNfaIds, isStart: true, isAccept: startNfaIds.includes(nfaAcceptId) });
+            dfaStateMap[startKey] = nextDfaId++;
+            
+            let queue = [startKey];
+            
+            while (queue.length > 0) {
+                let currKey = queue.shift();
+                let currDfaId = dfaStateMap[currKey];
+                let currNfaIds = currKey.split(',').map(Number);
+                
+                alpha.forEach(symbol => {
+                    let moveSet = getMove(currNfaIds, symbol);
+                    if (moveSet.length > 0) {
+                        let targetNfaIds = getEClosure(moveSet);
+                        let targetKey = targetNfaIds.join(',');
+                        
+                        if (!dfaStateMap[targetKey]) {
+                            dfaStates.push({ id: nextDfaId, nfaIds: targetNfaIds, isStart: false, isAccept: targetNfaIds.includes(nfaAcceptId) });
+                            dfaStateMap[targetKey] = nextDfaId++;
+                            queue.push(targetKey);
+                        }
+                        dfaEdges.push({ from: currDfaId, to: dfaStateMap[targetKey], label: symbol });
+                    }
+                });
+            }
+
+            // 5. Hopcroft's Minimization Algorithm
+            let accepting = dfaStates.filter(s => s.isAccept).map(s => s.id);
+            let nonAccepting = dfaStates.filter(s => !s.isAccept).map(s => s.id);
+            
+            let partitions = [];
+            if (accepting.length > 0) partitions.push(new Set(accepting));
+            if (nonAccepting.length > 0) partitions.push(new Set(nonAccepting));
+
+            let changed = true;
+            while (changed) {
+                changed = false;
+                let newPartitions = [];
+                
+                for (let part of partitions) {
+                    if (part.size <= 1) {
+                        newPartitions.push(part);
+                        continue;
+                    }
+                    
+                    let splits = new Map();
+                    for (let stateId of part) {
+                        let signature = "";
+                        alpha.forEach(symbol => {
+                            let edge = dfaEdges.find(e => e.from === stateId && e.label === symbol);
+                            if (edge) {
+                                let targetPartIdx = partitions.findIndex(p => p.has(edge.to));
+                                signature += `${symbol}:${targetPartIdx}|`;
+                            } else {
+                                signature += `${symbol}:-1|`; // -1 indicates no transition for this symbol
+                            }
+                        });
+                        
+                        if (!splits.has(signature)) splits.set(signature, new Set());
+                        splits.get(signature).add(stateId);
+                    }
+                    
+                    for (let split of splits.values()) newPartitions.push(split);
+                    if (splits.size > 1) changed = true;
+                }
+                partitions = newPartitions;
+            }
+
+            // 6. Rebuild Minimal DFA
+            let minNodes = [];
+            let minEdges = [];
+            let stateToPart = {};
+            
+            partitions.forEach((part, idx) => {
+                let partId = idx + 1;
+                let isStart = false;
+                let isAccept = false;
+                part.forEach(stateId => {
+                    stateToPart[stateId] = partId;
+                    let orig = dfaStates.find(s => s.id === stateId);
+                    if (orig.isStart) isStart = true;
+                    if (orig.isAccept) isAccept = true;
+                });
+                minNodes.push({
+                    id: partId,
+                    label: `q${partId-1}`,
+                    originalLabel: `q${partId-1}`,
+                    isStart: isStart,
+                    isAccept: isAccept
+                });
+            });
+
+            dfaEdges.forEach(e => {
+                let minFrom = stateToPart[e.from];
+                let minTo = stateToPart[e.to];
+                let existing = minEdges.find(me => me.from === minFrom && me.to === minTo && me.label === e.label);
+                if (!existing) {
+                    minEdges.push({ from: minFrom, to: minTo, label: e.label });
+                }
+            });
+
+            return { nodes: minNodes, edges: minEdges };
+        }
+
+        // --- ALGORITHM 4: String Simulator ---
+        let isSimulating = false;
+        
+        function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+        function getEpsilonClosureSim(stateIds) {
+            let closure = new Set(stateIds);
+            let stack = [...stateIds];
+            let allEdges = edges.get();
+            while (stack.length > 0) {
+                let curr = stack.pop();
+                let epsEdges = allEdges.filter(e => e.from === curr && (e.label === 'ε' || e.label === EPSILON || e.label === ''));
+                for (let edge of epsEdges) {
+                    if (!closure.has(edge.to)) {
+                        closure.add(edge.to);
+                        stack.push(edge.to);
+                    }
+                }
+            }
+            return Array.from(closure);
+        }
+
+        function getNextStatesSim(stateIds, char) {
+            let next = new Set();
+            let allEdges = edges.get();
+            for (let id of stateIds) {
+                let outEdges = allEdges.filter(e => e.from === id);
+                for (let edge of outEdges) {
+                    let labels = (edge.label || '').split(/[,+]/).map(l => l.trim());
+                    if (labels.includes(char)) {
+                        next.add(edge.to);
+                    }
+                }
+            }
+            return getEpsilonClosureSim(Array.from(next));
+        }
+
+        function highlightStates(stateIds, bgColor, borderColor) {
+            let updates = nodes.get().map(n => {
+                if (stateIds.includes(n.id)) {
+                    return { id: n.id, color: { background: bgColor, border: borderColor, highlight: { background: bgColor, border: borderColor } }, borderWidth: 3 };
+                } else {
+                    let baseStyle = styleConfig.node[n.isStart && n.isAccept ? 'both' : n.isStart ? 'start' : n.isAccept ? 'accept' : 'default'];
+                    return { id: n.id, color: baseStyle, borderWidth: baseStyle.borderWidth };
+                }
+            });
+            nodes.update(updates);
+        }
+
+        async function simulateString() {
+            if (isSimulating) return;
+            let str = document.getElementById('sim-input').value;
+            let startNodes = nodes.get().filter(n => n.isStart).map(n => n.id);
+            
+            if (startNodes.length === 0) {
+                showMessage("No start state defined!", true);
+                return;
+            }
+
+            isSimulating = true;
+            document.getElementById('sim-btn').disabled = true;
+            document.getElementById('sim-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Simulating...';
+
+            // Start state initialization
+            let currentStates = getEpsilonClosureSim(startNodes);
+            highlightStates(currentStates, '#fef08a', '#ca8a04'); // Yellow highlight
+
+            for (let i = 0; i < str.length; i++) {
+                let char = str[i];
+                await sleep(800); // 800ms delay per character for visualization
+                
+                currentStates = getNextStatesSim(currentStates, char);
+                
+                if (currentStates.length === 0) {
+                    showMessage(`Not Accepted: Stuck at character '${char}'`, true);
+                    highlightStates([], '', ''); // Reset
+                    isSimulating = false;
+                    resetSimBtn();
+                    return;
+                }
+                highlightStates(currentStates, '#fef08a', '#ca8a04');
+            }
+
+            await sleep(800);
+            
+            // Evaluation
+            let acceptNodes = nodes.get().filter(n => n.isAccept).map(n => n.id);
+            let accepted = currentStates.some(id => acceptNodes.includes(id));
+
+            if (accepted) {
+                highlightStates(currentStates.filter(id => acceptNodes.includes(id)), '#86efac', '#166534'); // Green highlight
+                showMessage("String Accepted!", false);
+            } else {
+                highlightStates(currentStates, '#fca5a5', '#991b1b'); // Red highlight
+                showMessage("Not Accepted: Ended in non-final state", true);
+            }
+
+            isSimulating = false;
+            resetSimBtn();
+        }
+
+        function resetSimBtn() {
+            document.getElementById('sim-btn').disabled = false;
+            document.getElementById('sim-btn').innerHTML = '<i class="fas fa-play"></i> Animate & Test';
+            setTimeout(() => {
+                // Reset colors automatically after a few seconds if not simulating
+                if(!isSimulating) highlightStates([], '', '');
+            }, 3000);
+        }
+
+        window.onload = function() {
+            initNetwork();
+            
+            // First state always be there on load
+            addNode();
+            
+            // Start with a small visual hint
+            setTimeout(() => {
+                showMessage("Welcome to Automata Studio!");
+            }, 500);
+        };
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Basics - Complete NCERT Detailed Notes in Hindi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:wght@400;600&family=Inter:wght@400;500;600;700;800&family=Kalam:wght@400;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 600: '#1976d2', 700: '#1565c0', 800: '#1e40af' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1976d2;
+            --accent: #d32f2f;
+            --bg-body: #f1f5f9;
+            --bg-page: #ffffff;
+            --text-main: #1e293b;
+            --code-bg: #1e1e1e;
+            --highlight-yellow: #fef08a;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            transition: all 0.3s ease;
+        }
+
+        /* Handwritten Mode Overrides */
+        body.handwritten-mode {
+            font-family: 'Kalam', 'Noto Sans Devanagari', cursive;
+            color: #00008b;
+            background-color: #dcdcdc;
+            font-size: 1.12rem;
+        }
+
+        body.handwritten-mode .ncert-chapter {
+            background-color: #fdfbf7;
+            background-image: repeating-linear-gradient(transparent, transparent 34px, #99d6ff 34px, #99d6ff 35.5px);
+            background-size: 100% 35.5px;
+            border-left: 4px solid #ff8080;
+            padding-left: 45px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+        }
+
+        body.handwritten-mode h2, 
+        body.handwritten-mode h3, 
+        body.handwritten-mode h4 {
+            color: #c62828 !important;
+            font-family: 'Kalam', cursive;
+        }
+
+        .ncert-chapter {
+            background-color: var(--bg-page);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            padding: 35px 40px;
+            margin-bottom: 35px;
+            position: relative;
+        }
+
+        .chapter-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        h2.section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #0f172a;
+            border-bottom: 3px solid #1976d2;
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3.sub-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #b91c1c;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h4.mini-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        ul.ncert-list, ol.ncert-list {
+            padding-left: 24px;
+            margin-bottom: 18px;
+        }
+
+        ul.ncert-list li {
+            list-style-type: disc;
+            margin-bottom: 8px;
+        }
+
+        ol.ncert-list li {
+            list-style-type: decimal;
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background-color: var(--highlight-yellow);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .inline-code {
+            font-family: 'Cascadia Code', Consolas, monospace;
+            background-color: #f1f5f9;
+            color: #d946ef;
+            border: 1px solid #cbd5e1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.92em;
+            font-weight: 600;
+        }
+
+        /* Code Block - Cascadia Code */
+        .code-block {
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 18px 0;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            border-left: 5px solid #38bdf8;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .code-comment {
+            color: #6a9955;
+        }
+
+        /* NCERT Special Callout Boxes */
+        .ncert-box {
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 22px 0;
+            border-left: 5px solid;
+        }
+
+        .ncert-think {
+            background-color: #eff6ff;
+            border-color: #2563eb;
+        }
+
+        .ncert-important {
+            background-color: #fef2f2;
+            border-color: #dc2626;
+        }
+
+        .ncert-tip {
+            background-color: #f0fdf4;
+            border-color: #16a34a;
+        }
+
+        .ncert-box-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Tables */
+        .ncert-table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table.ncert-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 0.96rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        table.ncert-table th {
+            background-color: #1e3a8a;
+            color: white;
+            font-weight: 600;
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #1e3a8a;
+        }
+
+        table.ncert-table td {
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+            vertical-align: top;
+        }
+
+        table.ncert-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* Flowchart / Diagram Box */
+        .diagram-box {
+            background: #f8fafc;
+            border: 2px dashed #94a3b8;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .flow-step {
+            display: inline-block;
+            background: white;
+            border: 2px solid #1976d2;
+            color: #1e293b;
+            font-weight: 600;
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+        }
+
+        .flow-diamond {
+            display: inline-block;
+            background: #fef9c3;
+            border: 2px solid #ca8a04;
+            color: #854d0e;
+            font-weight: 700;
+            padding: 10px 22px;
+            border-radius: 50px;
+            margin: 6px;
+        }
+
+        /* Interactive Simulator */
+        .terminal-sim {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .terminal-header {
+            background-color: #1e293b;
+            padding: 8px 15px;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .terminal-body {
+            padding: 18px;
+            color: #4ade80;
+            font-family: 'Cascadia Code', monospace;
+            font-size: 0.92rem;
+            white-space: pre-wrap;
+        }
+
+        .sim-controls {
+            background: #f8fafc;
+            padding: 12px 18px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sim-input {
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-family: 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            color: #0f172a;
+        }
+
+        .sim-btn {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .sim-btn:hover {
+            background-color: #15803d;
+        }
+
+        /* Quick Navigation Sidebar / TOC */
+        .toc-card {
+            background: white;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 20px 25px;
+            margin-bottom: 30px;
+        }
+
+        .toc-link {
+            color: #1976d2;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            padding: 4px 0;
+            transition: transform 0.15s;
+        }
+
+        .toc-link:hover {
+            color: #0d47a1;
+            transform: translateX(5px);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .ncert-chapter {
+                padding: 20px 18px;
+            }
+            body.handwritten-mode .ncert-chapter {
+                padding-left: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BitVedas Sticky Header -->
+    <header class="bg-white shadow-sm w-full sticky top-0 z-50 px-4 sm:px-6 lg:px-8 border-b">
+        <div class="max-w-7xl mx-auto flex justify-between items-center h-16">
+            <a href="https://bitsvedas.github.io/bitveda/" target="_blank" class="flex items-center cursor-pointer hover:opacity-80 transition" style="text-decoration: none;">
+                <i class="fa-solid fa-book-open-reader text-primary-600 text-3xl mr-3"></i>
+                <span class="font-bold text-2xl text-gray-900 tracking-tight">BitVedas</span>
+            </a>
+            
+            <div class="flex items-center space-x-4">
+                <a href="https://bitsvedas.github.io/bitveda/" target="_blank" class="text-gray-600 hover:text-primary-600 font-medium transition" style="text-decoration: none;">Home</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 py-10">
+
+        <!-- Title Banner -->
+        <div class="text-center mb-10 pb-8 border-b border-gray-300">
+            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">NCERT Class 11 / University Syllabus</span>
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-primary-700 mt-3 mb-3 tracking-tight">Python Basics: Complete Detailed Notes</h1>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto m-0">NCERT पैटर्न पर आधारित सरल हिंदी भाषा में गहन व्याख्या, सिंटैक्स, फ्लोचार्ट और इंटरैक्टिव कोड उदाहरणों के साथ।</p>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc-card shadow-sm">
+            <h3 class="text-lg font-bold text-gray-800 mt-0 mb-3 border-b pb-2"><i class="fa-solid fa-list-check text-primary-600 mr-2"></i>Table of Contents</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-1 text-sm">
+                <a href="#sec1" class="toc-link">1. Introduction to Python, Interpreter and IDLE</a>
+                <a href="#sec2" class="toc-link">2. Creating and Executing .py Scripts</a>
+                <a href="#sec3" class="toc-link">3. Dynamically Typed and Strongly Typed Features</a>
+                <a href="#sec4" class="toc-link">4. Variables, Expressions, Statements and Flow of Execution</a>
+                <a href="#sec5" class="toc-link">5. Basic Data Types in Python</a>
+                <a href="#sec6" class="toc-link">6. Operators in Python</a>
+                <a href="#sec7" class="toc-link">7. Input and Output Statements (input() & print())</a>
+                <a href="#sec8" class="toc-link">8. Conditionals: Boolean, if, if-else, if-elif-else & Nested if</a>
+                <a href="#sec9" class="toc-link">9. Iteration (Looping): while, for, range(), 'in' and 'not in'</a>
+                <a href="#sec10" class="toc-link">10. Jump Statements: break, continue, and pass</a>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             SECTION 1: PYTHON INTERPRETER & IDLE
+             ========================================== -->
+        <section id="sec1" class="ncert-chapter">
+            <span class="chapter-badge">Topic 1</span>
+            <h2 class="section-title"><i class="fa-brands fa-python text-primary-600"></i> Introduction to Python, Interpreter and IDLE</h2>
+
+            <p><strong>Python</strong> एक उच्च-स्तरीय (High-level), इंटरप्रिटेड (Interpreted), और ऑब्जेक्ट-ओरिएंटेड प्रोग्रामिंग भाषा है। इसका निर्माण <strong>Guido van Rossum</strong> द्वारा सन् <span class="highlight">1991</span> में किया गया था। पायथन की सबसे बड़ी खासियत इसका सरल सिंटैक्स (Syntax) है, जो सामान्य अंग्रेजी भाषा के बहुत करीब है।</p>
+
+            <h3 class="sub-title">1.1 Python Interpreter</h3>
+            <p>कंप्यूटर केवल मशीनी भाषा (Machine Language यानी <span class="inline-code">0</span> और <span class="inline-code">1</span> बाइनरी) समझता है, जबकि हम प्रोग्राम्स को हाई-लेवल भाषा (जैसे Python) में लिखते हैं। इसलिए हमारे लिखे गए कोड (Source Code) को मशीनी भाषा में बदलने के लिए एक अनुवादक (Translator) की आवश्यकता होती है।</p>
+            
+            <p>पायथन में इस अनुवाद के लिए <strong>Interpreter (इंटरप्रेटर)</strong> का उपयोग किया जाता है। इंटरप्रेटर का मुख्य कार्य प्रोग्राम के निर्देशों को <span class="highlight">एक-एक लाइन (Line-by-Line)</span> करके पढ़ना, उसका विश्लेषण करना और उसे तुरंत निष्पादित (Execute) करना है।</p>
+
+            <div class="diagram-box">
+                <div class="font-bold text-gray-700 mb-3">How Python Interpreter Works</div>
+                <div class="flow-step">Source Code (<span class="inline-code">.py</span>)</div>
+                <i class="fa-solid fa-arrow-right text-primary-600 mx-2"></i>
+                <div class="flow-step">Compiler (Internal)<br><small class="text-gray-500">Bytecode (.pyc) में बदलता है</small></div>
+                <i class="fa-solid fa-arrow-right text-primary-600 mx-2"></i>
+                <div class="flow-step">PVM (Python Virtual Machine)<br><small class="text-gray-500">Line-by-Line Machine Code में चलाता है</small></div>
+                <i class="fa-solid fa-arrow-right text-primary-600 mx-2"></i>
+                <div class="flow-step bg-green-50 border-green-600">Output (स्क्रीन पर परिणाम)</div>
+            </div>
+
+            <div class="ncert-box ncert-think">
+                <div class="ncert-box-title text-blue-800"><i class="fa-solid fa-lightbulb"></i> Did You Know? (Compiler vs Interpreter)</div>
+                <p class="m-0 text-sm"><strong>Compiler (जैसे C, C++ में):</strong> यह पूरे प्रोग्राम को एक ही बार में स्कैन करके मशीनी भाषा में बदल देता है। यदि कोड में गलतियाँ हों, तो सभी गलतियाँ एक साथ अंत में दिखाता है।<br>
+                <strong>Interpreter (जैसे Python में):</strong> यह कोड को <b>एक-एक लाइन (Line-by-Line)</b> करके अनुवाद और रन करता है। जैसे ही किसी लाइन में कोई गलती (Error) मिलती है, यह वहीं रुक जाता है और आगे की लाइनें तब तक नहीं चलाता जब तक वह गलती ठीक न कर दी जाए।</p>
+            </div>
+
+            <h3 class="sub-title">1.2 Python IDLE</h3>
+            <p>जब हम अपने कंप्यूटर में मानक पायथन (Standard Python) इंस्टॉल करते हैं, तो उसके साथ हमें कोड लिखने और चलाने के लिए एक विशेष सॉफ्टवेयर मुफ़्त मिलता है, जिसे <strong>IDLE</strong> कहा जाता है।</p>
+            <ul class="ncert-list">
+                <li><strong>IDLE का पूरा नाम:</strong> <span class="highlight">Integrated Development and Learning Environment</span> है।</li>
+                <li>इसमें कोड लिखने के लिए एक एडिटर (Syntax Highlighting और Auto-completion के साथ), कोड चलाने के लिए Python Shell, और गलतियाँ ढूँढने के लिए एक <strong>Debugger</strong> शामिल होता है।</li>
+            </ul>
+
+            <h4 class="mini-title">Modes of Working in Python IDLE:</h4>
+            <p>NCERT के अनुसार, पायथन इंटरप्रेटर के साथ काम करने के दो मुख्य मोड होते हैं:</p>
+
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Basis</th>
+                            <th>1. Interactive Mode</th>
+                            <th>2. Script Mode</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Prompt</strong></td>
+                            <td>इसमें <span class="inline-code">&gt;&gt;&gt;</span> (Chevron prompt) दिखाई देता है।</td>
+                            <td>यह एक खाली नोटपैड फाइल की तरह (File Editor) होता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Execution</strong></td>
+                            <td>इसमें आप एक कमांड टाइप करते हैं और <span class="inline-code">Enter</span> दबाते ही तुरंत परिणाम (Output) मिल जाता है।</td>
+                            <td>इसमें हम एक साथ कई लाइनों का पूरा प्रोग्राम लिखते हैं, उसे सेव करते हैं और फिर एक साथ रन करते हैं।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Saving Code</strong></td>
+                            <td>इसमें लिखा गया कोड भविष्य के लिए <strong>सेव (Save) नहीं होता</strong>। विंडो बंद करते ही कोड मिट जाता है।</td>
+                            <td>इसमें कोड को <span class="highlight">.py</span> एक्सटेंशन के साथ हार्ड डिस्क पर सेव किया जाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Primary Use</strong></td>
+                            <td>छोटे एक्सप्रेशन टेस्ट करने या किसी कमांड को जल्दी से सीखने के लिए।</td>
+                            <td>बड़े प्रोग्राम्स, प्रोजेक्ट्स और असाइनमेंट्स बनाने के लिए।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<div class="code-block"><span class="code-comment"># Interactive Mode (Python Shell) Example:</span>
+&gt;&gt;&gt; 10 + 20
+30
+&gt;&gt;&gt; print("Namaste NCERT!")
+Namaste NCERT!</div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 2: CREATING & EXECUTING .PY SCRIPTS
+             ========================================== -->
+        <section id="sec2" class="ncert-chapter">
+            <span class="chapter-badge">Topic 2</span>
+            <h2 class="section-title"><i class="fa-solid fa-file-code text-primary-600"></i> Creating and Executing .py Scripts</h2>
+
+            <p>जब हमें एक से अधिक लाइनों का कोड लिखना होता है और उसे भविष्य के उपयोग के लिए सुरक्षित रखना होता है, तो हम <strong>Script Mode</strong> का उपयोग करते हैं। पायथन की सोर्स कोड फाइल को <strong>स्क्रिप्ट (Script)</strong> कहा जाता है और इसका फाइल एक्सटेंशन हमेशा <span class="highlight">.py</span> होता है।</p>
+
+            <h3 class="sub-title">2.1 Step-by-Step Process in IDLE:</h3>
+            <ol class="ncert-list">
+                <li><strong>Step 1 (Open IDLE):</strong> सबसे पहले अपने कंप्यूटर में Start Menu से <em>Python IDLE</em> खोलें। आपके सामने Interactive Shell विंडो खुलेगी।</li>
+                <li><strong>Step 2 (Create New File):</strong> ऊपर मेन्यू बार में <span class="inline-code">File &rarr; New File</span> पर क्लिक करें (या शॉर्टकट की <span class="highlight">Ctrl + N</span> दबाएँ)। अब एक नई खाली एडिटर विंडो खुल जाएगी।</li>
+                <li><strong>Step 3 (Write Code):</strong> इस नई विंडो में अपना पायथन प्रोग्राम लिखें। उदाहरण के लिए:
+<div class="code-block"><span class="code-comment"># File Name: myfirstprog.py</span>
+name = "Rohan"
+print("Welcome to Python,", name)
+print("Sum of 15 and 25 is:", 15 + 25)</div>
+                </li>
+                <li><strong>Step 4 (Save File):</strong> अब <span class="inline-code">File &rarr; Save</span> पर क्लिक करें (या <span class="highlight">Ctrl + S</span> दबाएँ)। फाइल का नाम लिखें और अंत में <span class="inline-code">.py</span> लगाएँ (जैसे: <span class="inline-code">myfirstprog.py</span>)।</li>
+                <li><strong>Step 5 (Run / Execute Module):</strong> एडिटर विंडो के मेन्यू में <span class="inline-code">Run &rarr; Run Module</span> पर क्लिक करें या सीधे कीबोर्ड से <span class="highlight">F5</span> बटन दबाएँ।</li>
+                <li><strong>Step 6 (View Output):</strong> आपका प्रोग्राम निष्पादित होगा और उसका आउटपुट मुख्य <em>Python Shell (Interactive Window)</em> में दिखाई देगा।</li>
+            </ol>
+
+            <h3 class="sub-title">2.2 Executing .py Scripts via Command Prompt (CMD / Terminal)</h3>
+            <p>आप बिना IDLE खोले सीधे अपने ऑपरेटिंग सिस्टम के टर्मिनल या कमांड प्रॉम्प्ट (CMD) से भी पायथन स्क्रिप्ट चला सकते हैं:</p>
+<div class="code-block"><span class="code-comment"># 1. Navigate to the folder where your file is saved:</span>
+C:\Users\Student&gt; cd Desktop
+
+<span class="code-comment"># 2. Type python followed by the script name and press Enter:</span>
+C:\Users\Student\Desktop&gt; python myfirstprog.py
+
+<span class="code-comment"># Output:</span>
+Welcome to Python, Rohan
+Sum of 15 and 25 is: 40</div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 3: DYNAMICALLY & STRONGLY TYPED
+             ========================================== -->
+        <section id="sec3" class="ncert-chapter">
+            <span class="chapter-badge">Topic 3</span>
+            <h2 class="section-title"><i class="fa-solid fa-wand-magic-sparkles text-primary-600"></i> Dynamically Typed and Strongly Typed Features</h2>
+
+            <p>परीक्षा (Exams) और इंटरव्यू के दृष्टिकोण से यह सबसे महत्वपूर्ण विषय है। पायथन की टाइप प्रणाली (Type System) में दो प्रमुख विशेषताएँ होती हैं: यह <strong>Dynamically Typed</strong> भी है और <strong>Strongly Typed</strong> भी। आइए दोनों को विस्तार से समझते हैं:</p>
+
+            <h3 class="sub-title">3.1 Dynamically Typed Feature</h3>
+            <p>C, C++, या Java जैसी भाषाओं (Statically Typed Languages) में किसी भी वेरिएबल का उपयोग करने से पहले उसका डेटा प्रकार (Data Type) घोषित करना अनिवार्य होता है (जैसे <span class="inline-code">int x = 10;</span>), और बाद में आप <span class="inline-code">x</span> में कोई स्ट्रिंग या दशमलव संख्या नहीं रख सकते।</p>
+            <p>परंतु <strong>Python एक Dynamically Typed भाषा है</strong>। इसका अर्थ है:</p>
+            <ul class="ncert-list">
+                <li>पायथन में वेरिएबल बनाते समय उसका डेटा प्रकार (int, float, str आदि) लिखने की आवश्यकता <strong>नहीं</strong> होती।</li>
+                <li>वेरिएबल का डेटा प्रकार प्रोग्राम के चलते समय (<span class="highlight">Run-time पर</span>) उसमें डाली गई वैल्यू के आधार पर अपने आप तय हो जाता है।</li>
+                <li>एक ही वेरिएबल अलग-अलग समय पर अलग-अलग प्रकार के डेटा को स्टोर कर सकता है।</li>
+            </ul>
+
+<div class="code-block">x = 100          <span class="code-comment"># Here x is automatically assigned as Integer (int)</span>
+print(type(x))   <span class="code-comment"># Output: &lt;class 'int'&gt;</span>
+
+x = 99.75        <span class="code-comment"># Now the same x becomes a Float</span>
+print(type(x))   <span class="code-comment"># Output: &lt;class 'float'&gt;</span>
+
+x = "NCERT"      <span class="code-comment"># Now the same x becomes a String (str)!</span>
+print(type(x))   <span class="code-comment"># Output: &lt;class 'str'&gt;</span></div>
+
+            <h3 class="sub-title">3.2 Strongly Typed Feature</h3>
+            <p>कई छात्र यह गलती करते हैं कि चूँकि पायथन Dynamically Typed है, इसलिए यह Weakly Typed (कमजोर टाइपिंग वाली) भाषा होगी। <strong>यह गलत है! पायथन एक Strongly Typed भाषा है।</strong></p>
+            <p><strong>Strongly Typed का अर्थ है:</strong> पायथन में हर ऑब्जेक्ट का एक निश्चित प्रकार (Type) होता है, और पायथन दो असंगत डेटा प्रकारों (Incompatible Data Types) के बीच बिना स्पष्ट निर्देश के अपने आप (Implicitly) गलत बदलाव या ऑपरेशन की अनुमति <strong>नहीं</strong> देता है।</p>
+
+            <div class="ncert-box ncert-important">
+                <div class="ncert-box-title text-red-700"><i class="fa-solid fa-triangle-exclamation"></i> Why Python is Strongly Typed (Example):</div>
+                <p class="text-sm mb-2">यदि आप एक संख्या (<span class="inline-code">int</span>) और एक शब्द (<span class="inline-code">str</span>) को आपस में जोड़ने की कोशिश करेंगे, तो पायथन अपने आप संख्या को टेक्स्ट में नहीं बदलेगा, बल्कि तुरंत <span class="highlight">TypeError</span> दे देगा। (जबकि JavaScript जैसी Weakly Typed भाषा में <span class="inline-code">"5" + 10</span> का उत्तर <span class="inline-code">"510"</span> आ जाता है)।</p>
+<div class="code-block" style="margin: 8px 0;">a = 10        <span class="code-comment"># Integer</span>
+b = "20"      <span class="code-comment"># String</span>
+
+<span class="code-comment"># Wrong way (Raises TypeError because int and str cannot be added directly):</span>
+<span class="code-comment"># print(a + b)  --> TypeError: unsupported operand type(s) for +: 'int' and 'str'</span>
+
+<span class="code-comment"># Right way (Using Explicit Type Conversion):</span>
+print(a + int(b))   <span class="code-comment"># Output: 30</span></div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 4: VARIABLES, EXPRESSIONS, STATEMENTS, FLOW
+             ========================================== -->
+        <section id="sec4" class="ncert-chapter">
+            <span class="chapter-badge">Topic 4</span>
+            <h2 class="section-title"><i class="fa-solid fa-code-branch text-primary-600"></i> Variables, Expressions, Statements and Flow of Execution</h2>
+
+            <h3 class="sub-title">4.1 Variables</h3>
+            <p>प्रोग्रामिंग में, <strong>Variable</strong> कंप्यूटर की मेमोरी (RAM) में स्थित किसी डेटा या मान (Value) को दिया गया एक <strong>नाम (Label या Reference)</strong> होता है। पायथन में वेरिएबल्स किसी डिब्बे (Container) की तरह काम नहीं करते, बल्कि वे एक ऑब्जेक्ट की ओर इशारा करने वाले नाम (Name Tag) की तरह काम करते हैं।</p>
+            <ul class="ncert-list">
+                <li>पायथन में वेरिएबल असाइनमेंट ऑपरेटर (<span class="inline-code">=</span>) की मदद से बनाया जाता है। जैसे: <span class="inline-code">marks = 95</span></li>
+                <li>इसमें बाईं तरफ (Left side) लिखे वेरिएबल नाम को <strong>L-value</strong> और दाईं तरफ (Right side) लिखी गई वैल्यू को <strong>R-value</strong> कहते हैं।</li>
+                <li>मेमोरी एड्रेस जानने के लिए <span class="inline-code">id()</span> फंक्शन का उपयोग किया जाता है।</li>
+            </ul>
+
+            <h4 class="mini-title">Rules for Naming Identifiers / Variables:</h4>
+            <ol class="ncert-list">
+                <li>वेरिएबल का नाम केवल अक्षरों (<span class="inline-code">A-Z</span>, <span class="inline-code">a-z</span>), अंकों (<span class="inline-code">0-9</span>), या अंडरस्कोर (<span class="inline-code">_</span>) से मिलकर बन सकता है।</li>
+                <li>नाम की शुरुआत कभी भी किसी <strong>अंक (Digit) से नहीं</strong> हो सकती (जैसे <span class="inline-code">1num</span> गलत है, लेकिन <span class="inline-code">num1</span> सही है)।</li>
+                <li>नाम के बीच में कोई <strong>खाली जगह (Space)</strong> या विशेष चिह्न (<span class="inline-code">@, $, %, -</span> आदि) नहीं हो सकता।</li>
+                <li>पायथन के आरक्षित शब्दों (<strong>Keywords</strong> जैसे <span class="inline-code">if, else, for, while, True, None</span>) का उपयोग वेरिएबल नाम के रूप में नहीं किया जा सकता।</li>
+                <li>पायथन <strong>Case-Sensitive</strong> है, अर्थात <span class="inline-code">age</span>, <span class="inline-code">Age</span>, और <span class="inline-code">AGE</span> तीनों अलग-अलग वेरिएबल माने जाएंगे।</li>
+            </ol>
+
+            <h3 class="sub-title">4.2 Expressions vs Statements</h3>
+            <p>NCERT परीक्षाओं में अक्सर <em>Expression</em> और <em>Statement</em> के बीच अंतर पूछा जाता है:</p>
+
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Basis</th>
+                            <th>Expression</th>
+                            <th>Statement</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Definition</strong></td>
+                            <td>मूल्यों (Values), वेरिएबल्स और ऑपरेटर्स का एक ऐसा वैध संयोजन जिसे हल (Evaluate) करने पर <strong>कोई एक मान (Single Value) प्राप्त होता है</strong>।</td>
+                            <td>कोड की एक पूर्ण निर्देश इकाई (Complete Instruction) जिसे पायथन इंटरप्रेटर निष्पादित (Execute) कर सकता है। यह कोई <strong>क्रिया (Action)</strong> करता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Result</strong></td>
+                            <td>यह हमेशा कोई न कोई परिणाम (Value) लौटाता है।</td>
+                            <td>यह आवश्यक रूप से कोई वैल्यू नहीं लौटाता, बल्कि काम करता है (जैसे प्रिंट करना, लूप चलाना)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Examples</strong></td>
+                            <td><span class="inline-code">15 + 20</span>, <span class="inline-code">x * y - 5</span>, <span class="inline-code">a &gt; b</span></td>
+                            <td><span class="inline-code">x = 10</span> (Assignment Statement)<br><span class="inline-code">print(x)</span>, <span class="inline-code">if x &gt; 5:</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="sub-title">4.3 Flow of Execution</h3>
+            <p>किसी प्रोग्राम के अंदर लिखे गए स्टेटमेंट्स किस क्रम (Order) में एक के बाद एक चलते हैं, उसे <strong>Flow of Execution</strong> कहा जाता है। इंटरप्रेटर हमेशा प्रोग्राम की पहली लाइन (Top) से पढ़ना शुरू करता है। निष्पादन का प्रवाह तीन प्रकार का होता है:</p>
+
+            <div class="diagram-box">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                    <div class="bg-white p-4 rounded-lg border border-blue-200 shadow-sm">
+                        <div class="font-bold text-primary-700 mb-1">1. Sequential Flow</div>
+                        <p class="text-xs text-gray-600 m-0">डिफ़ॉल्ट रूप से कोड ऊपर से नीचे (Top-to-Bottom) एक के बाद एक सीधी रेखा में चलता है।</p>
+                        <div class="mt-2 text-center text-xs font-mono text-blue-800">Stmt 1 &rarr; Stmt 2 &rarr; Stmt 3</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-amber-200 shadow-sm">
+                        <div class="font-bold text-amber-700 mb-1">2. Conditional / Selection Flow</div>
+                        <p class="text-xs text-gray-600 m-0">इसमें किसी शर्त (<span class="inline-code">if-else</span>) के आधार पर तय होता है कि कौन सा कोड ब्लॉक चलेगा और कौन सा छूटेगा।</p>
+                        <div class="mt-2 text-center text-xs font-mono text-amber-800">Condition ? True Path : False Path</div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg border border-green-200 shadow-sm">
+                        <div class="font-bold text-green-700 mb-1">3. Iterative / Repetitive Flow</div>
+                        <p class="text-xs text-gray-600 m-0">इसमें एक ही कोड ब्लॉक को तब तक बार-बार दोहराया जाता है जब तक शर्त पूरी रहती है (<span class="inline-code">for</span>, <span class="inline-code">while</span>)।</p>
+                        <div class="mt-2 text-center text-xs font-mono text-green-800">Loop &circlearrowleft; Repeat until False</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 5: BASIC DATA TYPES
+             ========================================== -->
+        <section id="sec5" class="ncert-chapter">
+            <span class="chapter-badge">Topic 5</span>
+            <h2 class="section-title"><i class="fa-solid fa-database text-primary-600"></i> Basic Data Types in Python</h2>
+
+            <p>डेटा प्रकार (Data Type) यह निर्धारित करता है कि किसी वेरिएबल में किस प्रकार का मान स्टोर किया गया है और उस पर कौन-कौन से ऑपरेशन्स किए जा सकते हैं। किसी भी मान का डेटा प्रकार जांचने के लिए <span class="inline-code">type()</span> फंक्शन का प्रयोग किया जाता है।</p>
+
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Data Type</th>
+                            <th>Description</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="3"><strong>1. Numbers</strong></td>
+                            <td><span class="inline-code">int</span> (Integer)</td>
+                            <td>धनात्मक या ऋणात्मक पूर्ण संख्याएँ (बिना दशमलव के)।</td>
+                            <td><span class="inline-code">25</span>, <span class="inline-code">-104</span>, <span class="inline-code">0</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">float</span> (Floating Point)</td>
+                            <td>दशमलव (Decimal) वाली वास्तविक संख्याएँ या घातांक रूप।</td>
+                            <td><span class="inline-code">3.14</span>, <span class="inline-code">-0.05</span>, <span class="inline-code">2.5e3</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">complex</span></td>
+                            <td>$a + bj$ के रूप की संख्याएँ, जहाँ $a$ वास्तविक (real) और $b$ काल्पनिक (imaginary) भाग है।</td>
+                            <td><span class="inline-code">3 + 4j</span>, <span class="inline-code">2 - 5j</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Boolean</strong></td>
+                            <td><span class="inline-code">bool</span></td>
+                            <td>यह तार्किक सत्यता (Truth Value) को दर्शाता है। इसके केवल दो ही मान हो सकते हैं (<span class="inline-code">int</span> का उप-प्रकार)।</td>
+                            <td><span class="inline-code">True</span> (1), <span class="inline-code">False</span> (0)</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="3"><strong>3. Sequences</strong></td>
+                            <td><span class="inline-code">str</span> (String)</td>
+                            <td>अक्षरों का समूह जो सिंगल (<span class="inline-code">' '</span>), डबल (<span class="inline-code">" "</span>) या ट्रिपल कोट्स में बंद होता है। (Immutable)</td>
+                            <td><span class="inline-code">"Python"</span>, <span class="inline-code">'123'</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">list</span></td>
+                            <td>बड़े कोष्ठक <span class="inline-code">[ ]</span> में बंद विभिन्न डेटा आइटम्स की क्रमबद्ध सूची। इसे बदला जा सकता है (<strong>Mutable</strong>)।</td>
+                            <td><span class="inline-code">[10, "Ram", 85.5]</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">tuple</span></td>
+                            <td>छोटे कोष्ठक <span class="inline-code">( )</span> में बंद क्रमबद्ध सूची। एक बार बनने के बाद इसे बदला <strong>नहीं</strong> जा सकता (<strong>Immutable</strong>)।</td>
+                            <td><span class="inline-code">(10, 20, 30)</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Mapping</strong></td>
+                            <td><span class="inline-code">dict</span> (Dictionary)</td>
+                            <td>मंझले कोष्ठक <span class="inline-code">{ }</span> में <span class="inline-code">Key : Value</span> (कुंजी:मान) के जोड़े में डेटा स्टोर करता है। (Mutable)</td>
+                            <td><span class="inline-code">{"name": "Raj", "age": 17}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. None</strong></td>
+                            <td><span class="inline-code">NoneType</span></td>
+                            <td>यह एक विशेष डेटा प्रकार है जो 'कुछ नहीं' (Absence of a value / खालीपन) को दर्शाता है।</td>
+                            <td><span class="inline-code">x = None</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 6: OPERATORS IN PYTHON
+             ========================================== -->
+        <section id="sec6" class="ncert-chapter">
+            <span class="chapter-badge">Topic 6</span>
+            <h2 class="section-title"><i class="fa-solid fa-calculator text-primary-600"></i> Operators in Python</h2>
+
+            <p><strong>Operators (ऑपरेटर्स)</strong> वे विशेष प्रतीक या शब्द होते हैं जो वेरिएबल्स और मानों (जिन्हें <strong>Operands</strong> कहा जाता है) पर गणितीय या तार्किक गणनाएँ (Computations) करते हैं।</p>
+
+            <h3 class="sub-title">6.1 Arithmetic Operators</h3>
+            <p>मान लीजिए <span class="inline-code">a = 15</span> और <span class="inline-code">b = 4</span> है:</p>
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Operator</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Example (<span class="inline-code">a=15, b=4</span>)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="inline-code">+</span></td>
+                            <td>Addition</td>
+                            <td>दो संख्याओं को जोड़ता है (या दो स्ट्रिंग्स को आपस में जोड़ता है)।</td>
+                            <td><span class="inline-code">a + b</span> &rarr; <span class="inline-code">19</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">-</span></td>
+                            <td>Subtraction</td>
+                            <td>पहली संख्या में से दूसरी संख्या घटाता है।</td>
+                            <td><span class="inline-code">a - b</span> &rarr; <span class="inline-code">11</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">*</span></td>
+                            <td>Multiplication</td>
+                            <td>दो संख्याओं का गुणा करता है।</td>
+                            <td><span class="inline-code">a * b</span> &rarr; <span class="inline-code">60</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">/</span></td>
+                            <td>Division</td>
+                            <td>भाग देता है और परिणाम <strong>हमेशा Float (दशमलव)</strong> में देता है।</td>
+                            <td><span class="inline-code">a / b</span> &rarr; <span class="inline-code">3.75</span><br><span class="inline-code">10 / 2</span> &rarr; <span class="inline-code">5.0</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">//</span></td>
+                            <td><span class="highlight">Floor Division</span></td>
+                            <td>भाग देने के बाद दशमलव के बाद का हिस्सा हटाकर केवल पूर्णांक (Floor value) देता है।</td>
+                            <td><span class="inline-code">a // b</span> &rarr; <span class="inline-code">3</span><br><span class="inline-code">-15 // 4</span> &rarr; <span class="inline-code">-4</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">%</span></td>
+                            <td><span class="highlight">Modulus</span></td>
+                            <td>भाग देने के बाद बचने वाला <strong>शेषफल (Remainder)</strong> देता है।</td>
+                            <td><span class="inline-code">a % b</span> &rarr; <span class="inline-code">3</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">**</span></td>
+                            <td><span class="highlight">Exponentiation</span></td>
+                            <td>घातांक (Power) की गणना करता है ($a^b$)।</td>
+                            <td><span class="inline-code">2 ** 3</span> &rarr; <span class="inline-code">8</span> ($2^3$)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 class="sub-title">6.2 Relational / Comparison Operators</h3>
+            <p>ये दो मानों की तुलना करते हैं और परिणाम हमेशा Boolean (<span class="inline-code">True</span> या <span class="inline-code">False</span>) में देते हैं:</p>
+            <ul class="ncert-list">
+                <li><span class="inline-code">==</span> (Equal to): जैसे <span class="inline-code">5 == 5</span> &rarr; <span class="inline-code">True</span></li>
+                <li><span class="inline-code">!=</span> (Not equal to): जैसे <span class="inline-code">5 != 3</span> &rarr; <span class="inline-code">True</span></li>
+                <li><span class="inline-code">&gt;</span> (Greater than), <span class="inline-code">&lt;</span> (Less than), <span class="inline-code">&gt;=</span> (Greater than or equal to), <span class="inline-code">&lt;=</span> (Less than or equal to)।</li>
+            </ul>
+
+            <h3 class="sub-title">6.3 Assignment Operators</h3>
+            <p><span class="inline-code">=</span> का उपयोग मान असाइन करने के लिए होता है। इसके अलावा शॉर्टहैंड ऑपरेटर्स होते हैं: <span class="inline-code">+=</span>, <span class="inline-code">-=</span>, <span class="inline-code">*=</span>, <span class="inline-code">/=</span>, <span class="inline-code">//=</span>, <span class="inline-code">%=</span>, <span class="inline-code">**=</span>।<br>
+            उदाहरण: <span class="inline-code">x += 5</span> का बिल्कुल वही अर्थ है जो <span class="inline-code">x = x + 5</span> का है।</p>
+
+            <h3 class="sub-title">6.4 Identity and Membership Operators</h3>
+            <ul class="ncert-list">
+                <li><strong>Identity Operators (<span class="inline-code">is</span>, <span class="inline-code">is not</span>):</strong> यह जांचते हैं कि क्या दो वेरिएबल्स मेमोरी के एक ही ऑब्जेक्ट की ओर इशारा कर रहे हैं (अर्थात क्या दोनों का <span class="inline-code">id()</span> समान है)।</li>
+                <li><strong>Membership Operators (<span class="inline-code">in</span>, <span class="inline-code">not in</span>):</strong> यह जांचते हैं कि कोई मान किसी अनुक्रम (String, List, Tuple आदि) में मौजूद है या नहीं।</li>
+            </ul>
+
+            <div class="ncert-box ncert-tip">
+                <div class="ncert-box-title text-green-800"><i class="fa-solid fa-medal"></i> Exam Tip: Operator Precedence</div>
+                <p class="text-sm m-0">जब एक ही एक्सप्रेशन में कई ऑपरेटर होते हैं, तो पायथन <strong>PEMDAS</strong> नियम का पालन करता है:<br>
+                1. <span class="inline-code">()</span> Parentheses (कोष्ठक - सबसे उच्च प्राथमिकता)<br>
+                2. <span class="inline-code">**</span> Exponentiation (घातांक - यह <strong>Right-to-Left</strong> हल होता है! जैसे <span class="inline-code">2 ** 3 ** 2</span> = $2^{(3^2)} = 2^9 = 512$)<br>
+                3. <span class="inline-code">*, /, //, %</span> (गुणा और भाग - Left-to-Right)<br>
+                4. <span class="inline-code">+, -</span> (जोड़ और घटाव)<br>
+                5. Relational (<span class="inline-code">==, !=, &gt;, &lt;</span>) &rarr; 6. <span class="inline-code">not</span> &rarr; 7. <span class="inline-code">and</span> &rarr; 8. <span class="inline-code">or</span> (सबसे कम प्राथमिकता)।</p>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 7: INPUT AND OUTPUT STATEMENTS
+             ========================================== -->
+        <section id="sec7" class="ncert-chapter">
+            <span class="chapter-badge">Topic 7</span>
+            <h2 class="section-title"><i class="fa-solid fa-terminal text-primary-600"></i> Input and Output Statements</h2>
+
+            <h3 class="sub-title">7.1 Taking Input: The <span class="inline-code">input()</span> Function</h3>
+            <p>प्रोग्राम के रन होते समय उपयोगकर्ता (User) से कीबोर्ड के माध्यम से डेटा लेने के लिए <span class="inline-code">input()</span> फंक्शन का उपयोग किया जाता है।</p>
+            <div class="ncert-box ncert-important">
+                <div class="ncert-box-title text-red-700"><i class="fa-solid fa-bell"></i> Golden Rule of input():</div>
+                <p class="text-sm m-0"><span class="inline-code">input()</span> फंक्शन उपयोगकर्ता से जो कुछ भी लेता है, उसे हमेशा <strong>String (<span class="inline-code">str</span>)</strong> के रूप में ही लौटाता है—भले ही यूज़र ने कोई संख्या क्यों न टाइप की हो! इसलिए गणितीय गणना करने के लिए हमें <span class="highlight">int()</span> या <span class="highlight">float()</span> का उपयोग करके उसे बदलना (Typecast करना) पड़ता है।</p>
+            </div>
+
+<div class="code-block"><span class="code-comment"># Taking String input:</span>
+name = input("Enter your name: ")
+
+<span class="code-comment"># Taking Numeric (Integer & Float) input:</span>
+age = int(input("Enter your age: "))
+price = float(input("Enter item price: "))
+
+print("Hello", name, "next year you will be", age + 1, "years old.")</div>
+
+            <h3 class="sub-title">7.2 Displaying Output: The <span class="inline-code">print()</span> Function</h3>
+            <p>स्क्रीन (Console) पर डेटा या परिणाम प्रदर्शित करने के लिए <span class="inline-code">print()</span> फंक्शन का उपयोग किया जाता है। इसमें दो अत्यंत महत्वपूर्ण वैकल्पिक पैरामीटर्स (Parameters) होते हैं:</p>
+            <ul class="ncert-list">
+                <li><strong>1. <span class="inline-code">sep</span> (Separator):</strong> जब हम <span class="inline-code">print()</span> में कॉमा (<span class="inline-code">,</span>) लगाकर एक से अधिक मान देते हैं, तो डिफ़ॉल्ट रूप से उनके बीच एक स्पेस (<span class="inline-code">' '</span>) छपता है। हम <span class="inline-code">sep</span> की मदद से स्पेस की जगह कोई भी चिह्न लगा सकते हैं।</li>
+                <li><strong>2. <span class="inline-code">end</span>:</strong> डिफ़ॉल्ट रूप से हर <span class="inline-code">print()</span> स्टेटमेंट के अंत में एक नई लाइन (<span class="inline-code">'\n'</span>) जुड़ जाती है। यदि हम चाहते हैं कि अगला प्रिंट स्टेटमेंट भी उसी लाइन में छपे, तो हम <span class="inline-code">end=" "</span> का उपयोग करते हैं।</li>
+            </ul>
+
+<div class="code-block"><span class="code-comment"># Example of sep and end parameters:</span>
+print("25", "12", "2026", sep="-")     <span class="code-comment"># Output: 25-12-2026</span>
+
+print("Hello", end=" ")
+print("World!")                        <span class="code-comment"># Output: Hello World! (Printed on the same line)</span></div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 8: CONDITIONALS (IF, ELSE, ELIF, NESTED IF)
+             ========================================== -->
+        <section id="sec8" class="ncert-chapter">
+            <span class="chapter-badge">Topic 8</span>
+            <h2 class="section-title"><i class="fa-solid fa-code-fork text-primary-600"></i> Conditionals: Boolean, if, else, if-elif-else & Nested if</h2>
+
+            <h3 class="sub-title">8.1 Boolean Values and Logical Operators</h3>
+            <p>कंडीशनल स्टेटमेंट्स पूरी तरह से <strong>Boolean एक्सप्रेशन</strong> पर काम करते हैं। एक बूलियन एक्सप्रेशन वह होता है जिसका परिणाम या तो सत्य (<span class="highlight">True</span>) होता है या असत्य (<span class="highlight">False</span>)।</p>
+            <ul class="ncert-list">
+                <li><strong>Truthy और Falsy मान:</strong> पायथन में <span class="inline-code">False</span>, शून्य (<span class="inline-code">0</span>, <span class="inline-code">0.0</span>), खाली स्ट्रिंग (<span class="inline-code">""</span>), खाली लिस्ट (<span class="inline-code">[]</span>), और <span class="inline-code">None</span> को <strong>False (Falsy)</strong> माना जाता है। इनके अलावा अन्य सभी गैर-शून्य संख्याओं और मानों को <strong>True (Truthy)</strong> माना जाता है।</li>
+                <li><strong>Boolean / Logical Operators:</strong>
+                    <ul>
+                        <li><span class="inline-code">and</span> : यह तभी <span class="inline-code">True</span> देता है जब <strong>दोनों</strong> शर्तें सत्य हों।</li>
+                        <li><span class="inline-code">or</span> : यह तब <span class="inline-code">True</span> देता है जब दोनों में से <strong>कम से कम एक</strong> शर्त सत्य हो।</li>
+                        <li><span class="inline-code">not</span> : यह परिणाम को उल्टा कर देता है (<span class="inline-code">True</span> को <span class="inline-code">False</span> और <span class="inline-code">False</span> को <span class="inline-code">True</span>)।</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <div class="ncert-box ncert-think">
+                <div class="ncert-box-title text-blue-800"><i class="fa-solid fa-indent"></i> Importance of Indentation</div>
+                <p class="text-sm m-0">C++ या Java में कोड ब्लॉक बनाने के लिए घुंघराले कोष्ठक <span class="inline-code">{ }</span> का उपयोग होता है, लेकिन पायथन में कोष्ठक के बजाय <strong>Indentation (लाइन की शुरुआत में छोड़ा गया खाली स्थान - आमतौर पर 4 Spaces या 1 Tab)</strong> का उपयोग किया जाता है। समान दूरी पर लिखे गए सभी स्टेटमेंट्स एक ही ब्लॉक का हिस्सा माने जाते हैं।</p>
+            </div>
+
+            <h3 class="sub-title">8.2 Conditional (<span class="inline-code">if</span>) Statement</h3>
+            <p>यह सबसे सरल निर्णय लेने वाला स्टेटमेंट है। यदि दी गई शर्त (Condition) <span class="inline-code">True</span> होती है, तभी <span class="inline-code">if</span> के अंदर का ब्लॉक चलता है। यदि शर्त <span class="inline-code">False</span> है, तो वह ब्लॉक छोड़ दिया जाता है।</p>
+<div class="code-block">age = 20
+if age &gt;= 18:
+    print("You are eligible to vote.")  <span class="code-comment"># 4 spaces indentation</span></div>
+
+            <h3 class="sub-title">8.3 Alternative Execution (<span class="inline-code">if - else</span>) Statement</h3>
+            <p>जब हमारे पास दो विकल्प हों—यदि शर्त <span class="inline-code">True</span> हो तो पहला काम हो, और यदि शर्त <span class="inline-code">False</span> हो तो दूसरा (वैकल्पिक) काम हो, तब हम <span class="inline-code">if-else</span> का उपयोग करते हैं। दोनों में से कोई एक ब्लॉक का चलना तय होता है।</p>
+<div class="code-block">num = int(input("Enter a number: "))
+if num % 2 == 0:
+    print(num, "is an Even number.")
+else:
+    print(num, "is an Odd number.")</div>
+
+            <h3 class="sub-title">8.4 Chained Conditionals (<span class="inline-code">if - elif - else</span>)</h3>
+            <p>जब हमारे पास दो से अधिक संभावनाएँ (Multiple Conditions) होती हैं, तो हम <span class="highlight">if-elif-else</span> श्रृंखला का उपयोग करते हैं। यहाँ <span class="inline-code">elif</span> का अर्थ <strong>"else if"</strong> होता है।</p>
+            <ul class="ncert-list">
+                <li>पायथन ऊपर से नीचे की ओर शर्तों को जांचता है।</li>
+                <li>जैसे ही कोई एक शर्त <span class="inline-code">True</span> मिल जाती है, उसका ब्लॉक चल जाता है और बाकी नीचे के सभी <span class="inline-code">elif</span> और <span class="inline-code">else</span> को छोड़ दिया जाता है।</li>
+                <li>यदि ऊपर की कोई भी शर्त सत्य नहीं होती, तो अंत में <span class="inline-code">else</span> ब्लॉक चलता है।</li>
+            </ul>
+
+<div class="code-block"><span class="code-comment"># Grading System using Chained Conditional (if-elif-else):</span>
+marks = 82
+
+if marks &gt;= 90:
+    print("Grade: A+ (Outstanding)")
+elif marks &gt;= 75:
+    print("Grade: A (Distinction)")
+elif marks &gt;= 60:
+    print("Grade: B (First Division)")
+elif marks &gt;= 33:
+    print("Grade: C (Pass)")
+else:
+    print("Grade: F (Fail - Needs Improvement)")</div>
+
+            <!-- Interactive Simulator for if-elif-else -->
+            <div class="terminal-sim">
+                <div class="terminal-header">
+                    <span><i class="fa-solid fa-play text-green-400 mr-2"></i>Interactive Simulator: Test Chained Conditional (if-elif-else)</span>
+                    <span>Python 3.x</span>
+                </div>
+                <div class="sim-controls">
+                    <label class="text-sm font-semibold text-gray-700">Enter Marks (0-100):</label>
+                    <input type="number" id="simMarks" class="sim-input" value="82" min="0" max="100">
+                    <button class="sim-btn" onclick="runGradeSim()">Run Program</button>
+                </div>
+                <div id="gradeOutput" class="terminal-body">&gt;&gt;&gt; marks = 82
+Grade: A (Distinction)</div>
+            </div>
+
+            <!-- NEW SUB-SECTION: 8.5 NESTED IF STATEMENTS -->
+            <h3 class="sub-title">8.5 Nested <span class="inline-code">if</span> Statements</h3>
+            <p>जब एक <span class="inline-code">if</span> या <span class="inline-code">else</span> स्टेटमेंट के अंदर दूसरा <span class="inline-code">if</span>, <span class="inline-code">if-else</span> या <span class="inline-code">if-elif-else</span> स्टेटमेंट लिखा जाता है, तो इसे <span class="highlight">Nested if Statement</span> कहा जाता है। <em>"Nesting"</em> का अर्थ होता है—एक के अंदर दूसरा।</p>
+            
+            <ul class="ncert-list">
+                <li><strong>उपयोग कब करें?</strong> जब किसी दूसरी शर्त (Inner Condition) की जांच केवल तभी करनी हो जब पहली मुख्य शर्त (Outer Condition) सत्य (<span class="inline-code">True</span>) साबित हो जाए।</li>
+                <li><strong>Indentation का नियम:</strong> बाहरी <span class="inline-code">if</span> (Outer if) के लिए 4 स्पेस और भीतरी <span class="inline-code">if</span> (Inner if) के लिए 8 स्पेस (यानी 2 Tabs) का इंडेंटेशन दिया जाता है।</li>
+            </ul>
+
+            <div class="diagram-box">
+                <div class="font-bold text-gray-700 mb-3">Working of Nested if Statement</div>
+                <div class="flow-diamond">Outer if Condition?</div>
+                <i class="fa-solid fa-arrow-right text-green-600 mx-2"></i>
+                <span class="text-xs font-bold text-green-700">True</span>
+                <i class="fa-solid fa-arrow-right text-green-600 mx-2"></i>
+                <div class="flow-diamond" style="background:#dbeafe; border-color:#2563eb; color:#1e40af;">Inner if Condition?</div>
+                <i class="fa-solid fa-arrow-right text-primary-600 mx-2"></i>
+                <div class="flow-step bg-green-50 border-green-600">Inner Block Executes</div>
+            </div>
+
+            <h4 class="mini-title">Syntax of Nested if:</h4>
+<div class="code-block">if condition_1:               <span class="code-comment"># Outer if condition</span>
+    <span class="code-comment"># Executes if condition_1 is True</span>
+    if condition_2:           <span class="code-comment"># Inner (Nested) if condition</span>
+        <span class="code-comment"># Executes when both condition_1 and condition_2 are True</span>
+        statement_A
+    else:
+        <span class="code-comment"># Executes when condition_1 is True, but condition_2 is False</span>
+        statement_B
+else:
+    <span class="code-comment"># Executes when outer condition_1 is False</span>
+    statement_C</div>
+
+            <h4 class="mini-title">Example 1: Checking Positive Even / Odd Number using Nested if</h4>
+            <p>नीचे दिए गए प्रोग्राम में पहले बाहरी <span class="inline-code">if</span> यह जांचता है कि संख्या धनात्मक (Positive) है या नहीं। यदि संख्या 0 या धनात्मक है, तभी भीतरी <span class="inline-code">if-else</span> यह जांचता है कि वह शून्य (Zero) है या धनात्मक सम/विषम संख्या है:</p>
+<div class="code-block">num = 24
+
+if num &gt;= 0:                           <span class="code-comment"># Outer if</span>
+    if num == 0:                       <span class="code-comment"># Inner if-elif-else</span>
+        print("The number is Zero.")
+    elif num % 2 == 0:
+        print(num, "is a Positive Even number.")
+    else:
+        print(num, "is a Positive Odd number.")
+else:                                  <span class="code-comment"># Outer else</span>
+    print(num, "is a Negative number.")
+
+<span class="code-comment"># Output: 24 is a Positive Even number.</span></div>
+
+            <h4 class="mini-title">Example 2: Finding Largest of Three Numbers using Nested if</h4>
+<div class="code-block">a = 45
+b = 78
+c = 62
+
+if a &gt;= b:
+    if a &gt;= c:
+        print("Largest number is:", a)
+    else:
+        print("Largest number is:", c)
+else:
+    if b &gt;= c:
+        print("Largest number is:", b)
+    else:
+        print("Largest number is:", c)
+
+<span class="code-comment"># Output: Largest number is: 78</span></div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 9: ITERATION (WHILE, FOR, RANGE, IN)
+             ========================================== -->
+        <section id="sec9" class="ncert-chapter">
+            <span class="chapter-badge">Topic 9</span>
+            <h2 class="section-title"><i class="fa-solid fa-rotate text-primary-600"></i> Iteration (Looping): while, for, range(), 'in' and 'not in'</h2>
+
+            <p>निर्देशों के किसी समूह को किसी शर्त के पूरा होने तक बार-बार दोहराने की प्रक्रिया को <strong>Iteration (पुनरावृत्ति या लूपिंग)</strong> कहते हैं। पायथन में दो मुख्य लूप होते हैं: <span class="inline-code">while</span> लूप और <span class="inline-code">for</span> लूप।</p>
+
+            <h3 class="sub-title">9.1 The <span class="inline-code">while</span> Loop (Entry-Controlled Loop)</h3>
+            <p><span class="inline-code">while</span> लूप तब तक कोड को दोहराता रहता है जब तक उसकी शर्त (Test Condition) <span class="inline-code">True</span> रहती है। जैसे ही शर्त <span class="inline-code">False</span> होती है, लूप समाप्त हो जाता है। एक सही <span class="inline-code">while</span> लूप के 3 मुख्य भाग होते हैं:</p>
+            <ol class="ncert-list">
+                <li><strong>Initialization:</strong> लूप शुरू होने से पहले कंट्रोल वेरिएबल को शुरुआती मान देना।</li>
+                <li><strong>Test Condition:</strong> <span class="inline-code">while</span> के साथ लिखी जाने वाली बूलियन शर्त।</li>
+                <li><strong>Updation:</strong> लूप के अंदर वेरिएबल का मान बढ़ाना या घटाना। <em>(यदि आप Updation भूल जाते हैं, तो लूप कभी खत्म नहीं होगा जिसे <strong>Infinite Loop</strong> कहते हैं!)</em></li>
+            </ol>
+
+<div class="code-block"><span class="code-comment"># Printing numbers from 1 to 5 using while loop:</span>
+count = 1                  <span class="code-comment"># 1. Initialization</span>
+while count &lt;= 5:          <span class="code-comment"># 2. Condition</span>
+    print("Number:", count)
+    count = count + 1      <span class="code-comment"># 3. Updation</span>
+print("Loop finished!")</div>
+
+            <h3 class="sub-title">9.2 The <span class="inline-code">for</span> Loop and Sequence Traversal (<span class="inline-code">in</span> & <span class="inline-code">not in</span> Operators)</h3>
+            <p>पायथन का <span class="inline-code">for</span> लूप किसी अनुक्रम (Sequence जैसे String, List, Tuple) या <span class="inline-code">range()</span> के प्रत्येक तत्व (Item) पर एक-एक करके जाने के लिए बनाया गया है। किसी अनुक्रम के प्रत्येक तत्व को क्रम से एक्सेस करने की प्रक्रिया को <strong>Traversal (ट्रैवर्सल)</strong> कहते हैं।</p>
+            <ul class="ncert-list">
+                <li><strong><span class="inline-code">in</span> ऑपरेटर:</strong> यह अनुक्रम में से एक-एक मान निकालकर लूप वेरिएबल को देता है, और बूलियन शर्त में यह जांचता है कि कोई तत्व अनुक्रम में मौजूद है या नहीं।</li>
+                <li><strong><span class="inline-code">not in</span> ऑपरेटर:</strong> यह ठीक उल्टा काम करता है; यदि तत्व अनुक्रम में मौजूद <strong>नहीं</strong> है तो यह <span class="inline-code">True</span> लौटाता है।</li>
+            </ul>
+
+<div class="code-block"><span class="code-comment"># 1. String Traversal using 'for' and 'in':</span>
+word = "PYTHON"
+for ch in word:
+    print(ch, end=" - ")
+<span class="code-comment"># Output: P - Y - T - H - O - N - </span>
+
+<span class="code-comment"># 2. List Traversal & 'not in' operator check:</span>
+fruits = ["Apple", "Mango", "Banana"]
+if "Orange" not in fruits:
+    print("\nOrange is not present in the list.")</div>
+
+            <h3 class="sub-title">9.3 Implementing <span class="inline-code">for</span> Loop through <span class="inline-code">range()</span> Function</h3>
+            <p><span class="inline-code">range()</span> पायथन का एक इन-बिल्ट फंक्शन है जो संख्याओं का एक अनुक्रम (Sequence of integers) उत्पन्न करता है। इसका सिंटैक्स है:</p>
+            <p class="text-center font-bold text-lg"><span class="inline-code">range(start, stop, step)</span></p>
+            <ul class="ncert-list">
+                <li><strong>start (Optional):</strong> अनुक्रम कहाँ से शुरू होगा (डिफ़ॉल्ट मान <span class="inline-code">0</span> होता है)।</li>
+                <li><strong>stop (Required):</strong> अनुक्रम कहाँ रुकेगा। <span class="highlight">ध्यान रहे: range() हमेशा stop से एक कदम पहले (stop - 1) पर रुक जाता है!</span> यानी <span class="inline-code">stop</span> वाली संख्या खुद शामिल नहीं होती।</li>
+                <li><strong>step (Optional):</strong> दो संख्याओं के बीच का अंतर (डिफ़ॉल्ट मान <span class="inline-code">+1</span> होता है)। उल्टी गिनती के लिए इसे ऋणात्मक (<span class="inline-code">-1</span>) रखा जाता है।</li>
+            </ul>
+
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>range() Expression</th>
+                            <th>Meaning</th>
+                            <th>Generated Sequence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="inline-code">range(5)</span></td>
+                            <td>0 से शुरू होकर 5 से पहले (4 तक)</td>
+                            <td><span class="inline-code">0, 1, 2, 3, 4</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">range(2, 7)</span></td>
+                            <td>2 से शुरू होकर 7 से पहले (6 तक)</td>
+                            <td><span class="inline-code">2, 3, 4, 5, 6</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">range(1, 10, 2)</span></td>
+                            <td>1 से 9 तक, 2-2 के अंतराल (Step) पर</td>
+                            <td><span class="inline-code">1, 3, 5, 7, 9</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">range(5, 0, -1)</span></td>
+                            <td>5 से उल्टी गिनती 1 तक (0 से पहले)</td>
+                            <td><span class="inline-code">5, 4, 3, 2, 1</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<div class="code-block"><span class="code-comment"># Printing multiplication table of 5 using for loop with range():</span>
+for i in range(1, 11):
+    print("5 x", i, "=", 5 * i)</div>
+
+            <!-- Interactive Simulator for range() -->
+            <div class="terminal-sim">
+                <div class="terminal-header">
+                    <span><i class="fa-solid fa-Sliders text-blue-400 mr-2"></i>Interactive range(start, stop, step) Visualizer</span>
+                    <span>Try your own values!</span>
+                </div>
+                <div class="sim-controls">
+                    <label class="text-xs font-bold text-gray-700">start:</label>
+                    <input type="number" id="rStart" class="sim-input w-20" value="1">
+                    <label class="text-xs font-bold text-gray-700">stop:</label>
+                    <input type="number" id="rStop" class="sim-input w-20" value="10">
+                    <label class="text-xs font-bold text-gray-700">step:</label>
+                    <input type="number" id="rStep" class="sim-input w-20" value="2">
+                    <button class="sim-btn" onclick="runRangeSim()">Generate Loop Output</button>
+                </div>
+                <div id="rangeOutput" class="terminal-body">&gt;&gt;&gt; for i in range(1, 10, 2): print(i, end=" ")
+Output: 1 3 5 7 9</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 10: BREAK, CONTINUE, PASS
+             ========================================== -->
+        <section id="sec10" class="ncert-chapter">
+            <span class="chapter-badge">Topic 10</span>
+            <h2 class="section-title"><i class="fa-solid fa-forward-step text-primary-600"></i> Jump Statements: break, continue, and pass</h2>
+
+            <p>कभी-कभी हमें लूप की सामान्य कार्यप्रणाली को बीच में ही बदलने, रोकने या किसी चरण को छोड़ने की आवश्यकता होती है। इसके लिए पायथन तीन <strong>Jump / Control Statements</strong> प्रदान करता है:</p>
+
+            <h3 class="sub-title">10.1 The <span class="inline-code">break</span> Statement</h3>
+            <p><span class="inline-code">break</span> स्टेटमेंट का उपयोग लूप को बीच में ही <strong>पूरी तरह समाप्त (Terminate)</strong> करने के लिए किया जाता है। जैसे ही लूप के अंदर <span class="inline-code">break</span> चलता है, प्रोग्राम का नियंत्रण तुरंत लूप से बाहर निकलकर लूप के बाद वाली लाइन पर चला जाता है।</p>
+
+<div class="code-block">for num in range(1, 10):
+    if num == 5:
+        print("Found 5! Breaking the loop...")
+        break
+    print(num, end=" ")
+<span class="code-comment"># Output: 1 2 3 4 Found 5! Breaking the loop...</span></div>
+
+            <h3 class="sub-title">10.2 The <span class="inline-code">continue</span> Statement</h3>
+            <p><span class="inline-code">continue</span> स्टेटमेंट पूरे लूप को बंद <strong>नहीं</strong> करता। यह केवल <strong>वर्तमान चक्र (Current Iteration) के शेष कोड को छोड़ देता है</strong> और नियंत्रण को तुरंत लूप के अगले चक्र (Next Iteration) की शुरुआत में भेज देता है।</p>
+
+<div class="code-block">for num in range(1, 6):
+    if num == 3:
+        continue   <span class="code-comment"># When num is 3, it skips the print statement below</span>
+    print(num, end=" ")
+<span class="code-comment"># Output: 1 2 4 5   (Note: Only 3 was skipped, loop did not stop!)</span></div>
+
+            <h3 class="sub-title">10.3 The <span class="inline-code">pass</span> Statement</h3>
+            <p>पायथन में <span class="inline-code">pass</span> एक <strong>Null Statement (शून्य ऑपरेशन)</strong> है। जब यह चलता है तो कुछ भी नहीं होता (No-operation)।</p>
+            <p><strong>इसका उपयोग कब होता है?</strong> पायथन में सिंटैक्स के नियम के अनुसार आप किसी <span class="inline-code">if</span>, <span class="inline-code">for</span>, <span class="inline-code">while</span> या <span class="inline-code">def</span> ब्लॉक को अंदर से बिल्कुल खाली नहीं छोड़ सकते (वरना <span class="inline-code">IndentationError</span> आएगा)। यदि आप भविष्य में कोड लिखना चाहते हैं और अभी केवल ढांचा (Skeleton) बनाना चाहते हैं, तो खाली जगह भरने के लिए <span class="highlight">pass</span> लिख देते हैं।</p>
+
+<div class="code-block">x = 10
+if x &gt; 5:
+    pass   <span class="code-comment"># Placeholder: nothing happens here, will add code later</span>
+else:
+    print("Small number")</div>
+
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Statement</th>
+                            <th>Effect on Loop</th>
+                            <th>Real-life Analogy</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong><span class="inline-code">break</span></strong></td>
+                            <td>पूरे लूप को हमेशा के लिए बंद कर देता है और बाहर निकल जाता है।</td>
+                            <td>मैच बीच में ही रद्द (Cancel) होकर स्टेडियम से बाहर आ जाना।</td>
+                        </tr>
+                        <tr>
+                            <td><strong><span class="inline-code">continue</span></strong></td>
+                            <td>केवल वर्तमान राउंड को छोड़कर अगले राउंड पर चला जाता है।</td>
+                            <td>एक गेंद को वाइड छोड़कर तुरंत अगली गेंद फेंकना।</td>
+                        </tr>
+                        <tr>
+                            <td><strong><span class="inline-code">pass</span></strong></td>
+                            <td>कुछ नहीं करता; केवल सिंटैक्स एरर से बचाने के लिए खाली जगह भरता है।</td>
+                            <td>कुर्सी पर बैग रखकर सीट रिज़र्व करना ताकि जगह खाली न दिखे।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="w-full mt-12 pt-6 border-t border-gray-300 text-center pb-8">
+            <p class="text-gray-700 font-semibold text-lg m-0 flex items-center justify-center">
+                <i class="fa-solid fa-laptop-code text-primary-600 mr-2"></i> Author: Aakash Sen | BitVedas Study Portal
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Interactive Grade Simulator (if-elif-else)
+        function runGradeSim() {
+            const val = document.getElementById('simMarks').value;
+            const marks = parseFloat(val);
+            const out = document.getElementById('gradeOutput');
+
+            if (isNaN(marks) || marks < 0 || marks > 100) {
+                out.innerText = ">>> Error: Please enter valid marks between 0 and 100!";
+                return;
+            }
+
+            let grade = "";
+            if (marks >= 90) grade = "Grade: A+ (Outstanding)";
+            else if (marks >= 75) grade = "Grade: A (Distinction)";
+            else if (marks >= 60) grade = "Grade: B (First Division)";
+            else if (marks >= 33) grade = "Grade: C (Pass)";
+            else grade = "Grade: F (Fail - Needs Improvement)";
+
+            out.innerText = `>>> marks = ${marks}\n${grade}`;
+        }
+
+        // Interactive range() Simulator
+        function runRangeSim() {
+            const start = parseInt(document.getElementById('rStart').value);
+            const stop = parseInt(document.getElementById('rStop').value);
+            const step = parseInt(document.getElementById('rStep').value);
+            const out = document.getElementById('rangeOutput');
+
+            if (isNaN(start) || isNaN(stop) || isNaN(step)) {
+                out.innerText = "Error: Please enter valid integers in all three fields.";
+                return;
+            }
+            if (step === 0) {
+                out.innerText = "ValueError: range() arg 3 must not be zero";
+                return;
+            }
+
+            let result = [];
+            let safetyCounter = 0;
+
+            if (step > 0) {
+                for (let i = start; i < stop && safetyCounter < 100; i += step) {
+                    result.push(i);
+                    safetyCounter++;
+                }
+            } else {
+                for (let i = start; i > stop && safetyCounter < 100; i += step) {
+                    result.push(i);
+                    safetyCounter++;
+                }
+            }
+
+            const seqStr = result.length > 0 ? result.join(" ") : "(Empty Sequence)";
+            out.innerText = `>>> for i in range(${start}, ${stop}, ${step}): print(i, end=" ")\nOutput: ${seqStr}`;
+        }
+    </script>
+</body>
+</html>

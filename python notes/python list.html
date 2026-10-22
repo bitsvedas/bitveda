@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Python Data Structures - Complete NCERT Detailed Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:wght@400;600&family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: { 50: '#eff6ff', 100: '#dbeafe', 600: '#1976d2', 700: '#1565c0', 800: '#1e40af' }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #1976d2;
+            --accent: #d32f2f;
+            --bg-body: #f1f5f9;
+            --bg-page: #ffffff;
+            --text-main: #1e293b;
+            --code-bg: #1e1e1e;
+            --highlight-yellow: #fef08a;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', 'Noto Sans Devanagari', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        .ncert-chapter {
+            background-color: var(--bg-page);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            padding: 35px 40px;
+            margin-bottom: 35px;
+            position: relative;
+            scroll-margin-top: 140px;
+        }
+
+        .chapter-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #1976d2, #0d47a1);
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        h2.section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: #0f172a;
+            border-bottom: 3px solid #1976d2;
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3.sub-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #b91c1c;
+            margin-top: 28px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        h4.mini-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1e40af;
+            margin-top: 18px;
+            margin-bottom: 8px;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+
+        ul.ncert-list, ol.ncert-list {
+            padding-left: 24px;
+            margin-bottom: 18px;
+        }
+
+        ul.ncert-list li {
+            list-style-type: disc;
+            margin-bottom: 8px;
+        }
+
+        ol.ncert-list li {
+            list-style-type: decimal;
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            background-color: var(--highlight-yellow);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        .inline-code {
+            font-family: 'Cascadia Code', Consolas, monospace;
+            background-color: #f1f5f9;
+            color: #d946ef;
+            border: 1px solid #cbd5e1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.92em;
+            font-weight: 600;
+        }
+
+        /* Code Block - Cascadia Code */
+        .code-block {
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.95rem;
+            color: #e2e8f0;
+            background-color: var(--code-bg);
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 18px 0;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            border-left: 5px solid #38bdf8;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .code-comment {
+            color: #6a9955;
+        }
+
+        /* NCERT Special Callout Boxes */
+        .ncert-box {
+            border-radius: 8px;
+            padding: 18px 22px;
+            margin: 22px 0;
+            border-left: 5px solid;
+        }
+
+        .ncert-think {
+            background-color: #eff6ff;
+            border-color: #2563eb;
+        }
+
+        .ncert-important {
+            background-color: #fef2f2;
+            border-color: #dc2626;
+        }
+
+        .ncert-tip {
+            background-color: #f0fdf4;
+            border-color: #16a34a;
+        }
+
+        .ncert-box-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Tables */
+        .ncert-table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        table.ncert-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: 0.95rem;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        table.ncert-table th {
+            background-color: #1e3a8a;
+            color: white;
+            font-weight: 600;
+            padding: 12px 15px;
+            text-align: left;
+            border: 1px solid #1e3a8a;
+        }
+
+        table.ncert-table td {
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            color: #1e293b;
+            vertical-align: top;
+        }
+
+        table.ncert-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        /* Diagram Box */
+        .diagram-box {
+            background: #f8fafc;
+            border: 2px dashed #94a3b8;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .flow-step {
+            display: inline-block;
+            background: white;
+            border: 2px solid #1976d2;
+            color: #1e293b;
+            font-weight: 600;
+            padding: 10px 18px;
+            border-radius: 8px;
+            margin: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.06);
+        }
+
+        /* Top Topic Filter / Jump Buttons */
+        .topic-nav-bar {
+            position: sticky;
+            top: 64px;
+            z-index: 40;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid #cbd5e1;
+            padding: 12px 16px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .topic-btn {
+            padding: 8px 18px;
+            border-radius: 9999px;
+            font-weight: 700;
+            font-size: 0.92rem;
+            border: 2px solid #cbd5e1;
+            background-color: #ffffff;
+            color: #334155;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .topic-btn:hover {
+            border-color: #1976d2;
+            color: #1976d2;
+            background-color: #eff6ff;
+            transform: translateY(-1px);
+        }
+
+        .topic-btn.active {
+            background: linear-gradient(135deg, #1976d2, #1e40af);
+            color: #ffffff;
+            border-color: #1976d2;
+            box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3);
+        }
+
+        /* Interactive Simulator */
+        .terminal-sim {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        .terminal-header {
+            background-color: #1e293b;
+            padding: 8px 15px;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .terminal-body {
+            padding: 18px;
+            color: #4ade80;
+            font-family: 'Cascadia Code', monospace;
+            font-size: 0.92rem;
+            white-space: pre-wrap;
+        }
+
+        .sim-controls {
+            background: #f8fafc;
+            padding: 12px 18px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .sim-input, .sim-select {
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-family: 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            color: #0f172a;
+            background: white;
+        }
+
+        .sim-btn {
+            background-color: #16a34a;
+            color: white;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .sim-btn:hover {
+            background-color: #15803d;
+        }
+
+        @media (max-width: 768px) {
+            .ncert-chapter {
+                padding: 20px 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- BitVedas Sticky Header -->
+    <header class="bg-white shadow-sm w-full sticky top-0 z-50 px-4 sm:px-6 lg:px-8 border-b">
+        <div class="max-w-7xl mx-auto flex justify-between items-center h-16">
+            <a href="https://bitsvedas.github.io/bitveda/" target="_blank" class="flex items-center cursor-pointer hover:opacity-80 transition" style="text-decoration: none;">
+                <i class="fa-solid fa-book-open-reader text-primary-600 text-3xl mr-3"></i>
+                <span class="font-bold text-2xl text-gray-900 tracking-tight">BitVedas</span>
+            </a>
+            
+            <div class="flex items-center space-x-4">
+                <a href="https://bitsvedas.github.io/bitveda/" target="_blank" class="text-gray-600 hover:text-primary-600 font-medium transition" style="text-decoration: none;">Home</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Sticky Topic Navigation Bar (List, Tuple, Dictionary, String, Set) -->
+    <nav class="topic-nav-bar">
+        <div class="max-w-5xl mx-auto flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+            <button onclick="selectTopic('all', this)" class="topic-btn active">
+                <i class="fa-solid fa-layer-group"></i> All Topics
+            </button>
+            <button onclick="selectTopic('sec-list', this)" class="topic-btn">
+                <i class="fa-solid fa-list-ol"></i> List
+            </button>
+            <button onclick="selectTopic('sec-tuple', this)" class="topic-btn">
+                <i class="fa-solid fa-lock"></i> Tuple
+            </button>
+            <button onclick="selectTopic('sec-dict', this)" class="topic-btn">
+                <i class="fa-solid fa-book"></i> Dictionary
+            </button>
+            <button onclick="selectTopic('sec-string', this)" class="topic-btn">
+                <i class="fa-solid fa-quote-right"></i> String
+            </button>
+            <button onclick="selectTopic('sec-set', this)" class="topic-btn">
+                <i class="fa-solid fa-circle-nodes"></i> Set
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="max-w-5xl mx-auto px-4 pb-10">
+
+        <!-- Title Banner -->
+        <div class="text-center mb-10 pb-8 border-b border-gray-300">
+            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">NCERT Class 11 & 12 / University Syllabus</span>
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-primary-700 mt-3 mb-3 tracking-tight">Python Data Structures: Complete Detailed Notes</h1>
+            <p class="text-gray-600 text-lg max-w-3xl mx-auto m-0">List, Tuple, Dictionary, String और Set की संपूर्ण NCERT आधारित हिंदी व्याख्या, मेथड्स, कॉम्प्रिहेंशन, मेमोरी डायग्राम और इंग्लिश कोड उदाहरणों के साथ।</p>
+        </div>
+
+        <!-- ==========================================
+             SECTION 1: PYTHON LISTS
+             ========================================== -->
+        <section id="sec-list" class="ncert-chapter topic-section">
+            <span class="chapter-badge">Topic 1: Lists</span>
+            <h2 class="section-title"><i class="fa-solid fa-list-ol text-primary-600"></i> Lists in Python</h2>
+
+            <p>पायथन में <strong>List</strong> सबसे अधिक उपयोग किया जाने वाला डेटा स्ट्रक्चर है। यह विभिन्न प्रकार के तत्वों (Elements) का एक <strong>क्रमबद्ध (Ordered)</strong> और <span class="highlight">परिवर्तनशील (Mutable)</span> संग्रह है। लिस्ट के तत्वों को बड़े कोष्ठक <strong>Square Brackets <span class="inline-code">[ ]</span></strong> के अंदर कॉमा (<span class="inline-code">,</span>) से अलग करके लिखा जाता है।</p>
+
+            <ul class="ncert-list">
+                <li><strong>Ordered Sequence:</strong> लिस्ट में तत्वों का एक निश्चित क्रम (Index) होता है। पहला तत्व <span class="inline-code">0</span> इंडेक्स पर और अंतिम तत्व <span class="inline-code">-1</span> इंडेक्स पर होता है।</li>
+                <li><strong>Mutable (परिवर्तनशील):</strong> लिस्ट बनने के बाद भी हम उसके तत्वों को बदल सकते हैं, नए तत्व जोड़ सकते हैं या पुराने हटा सकते हैं।</li>
+                <li><strong>Heterogeneous Elements:</strong> एक ही लिस्ट के अंदर <span class="inline-code">int</span>, <span class="inline-code">float</span>, <span class="inline-code">str</span>, या एक अन्य <span class="inline-code">list</span> (Nested List) भी स्टोर की जा सकती है।</li>
+            </ul>
+
+            <div class="diagram-box">
+                <div class="font-bold text-gray-700 mb-3">Positive and Negative Indexing in List: <span class="inline-code">marks = [85, 92, 78, 90, 88]</span></div>
+                <div class="ncert-table-wrapper" style="margin: 0;">
+                    <table class="ncert-table text-center">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Index Type</th>
+                                <th class="text-center">Element 1</th>
+                                <th class="text-center">Element 2</th>
+                                <th class="text-center">Element 3</th>
+                                <th class="text-center">Element 4</th>
+                                <th class="text-center">Element 5</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Positive Index (Left to Right)</strong></td>
+                                <td><span class="inline-code">0</span></td>
+                                <td><span class="inline-code">1</span></td>
+                                <td><span class="inline-code">2</span></td>
+                                <td><span class="inline-code">3</span></td>
+                                <td><span class="inline-code">4</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>List Values</strong></td>
+                                <td><strong>85</strong></td>
+                                <td><strong>92</strong></td>
+                                <td><strong>78</strong></td>
+                                <td><strong>90</strong></td>
+                                <td><strong>88</strong></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Negative Index (Right to Left)</strong></td>
+                                <td><span class="inline-code">-5</span></td>
+                                <td><span class="inline-code">-4</span></td>
+                                <td><span class="inline-code">-3</span></td>
+                                <td><span class="inline-code">-2</span></td>
+                                <td><span class="inline-code">-1</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <h3 class="sub-title">1.1 Built-in List Methods</h3>
+            <p>पायथन में लिस्ट पर विभिन्न ऑपरेशन्स करने के लिए निम्नलिखित इन-बिल्ट मेथड्स उपलब्ध हैं:</p>
+
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Syntax</th>
+                            <th>Detailed Explanation in Hindi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. append()</strong></td>
+                            <td><span class="inline-code">list.append(item)</span></td>
+                            <td>यह मेथड लिस्ट के <strong>अंत (End) में केवल एक नया तत्व (Single Element)</strong> जोड़ता है। यदि आप इसके अंदर कोई दूसरी लिस्ट पास करते हैं, तो वह पूरी लिस्ट एक सिंगल सब-लिस्ट के रूप में अंत में जुड़ जाएगी।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. extend()</strong></td>
+                            <td><span class="inline-code">list.extend(iterable)</span></td>
+                            <td>यह मेथड किसी दूसरी लिस्ट या अनुक्रम (Iterable) के <strong>सभी तत्वों को एक-एक करके (Individually)</strong> वर्तमान लिस्ट के अंत में जोड़ देता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. insert()</strong></td>
+                            <td><span class="inline-code">list.insert(index, item)</span></td>
+                            <td>यह मेथड किसी <strong>निश्चित स्थान (Specified Index)</strong> पर नया तत्व जोड़ता है। उस स्थान और उसके बाद के सभी तत्व एक स्थान दाईं ओर खिसक जाते हैं।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. index()</strong></td>
+                            <td><span class="inline-code">list.index(item)</span></td>
+                            <td>यह दिए गए तत्व की <strong>पहली उपस्थिति (First Occurrence) का इंडेक्स नंबर</strong> लौटाता है। यदि तत्व लिस्ट में मौजूद नहीं है, तो यह <span class="inline-code">ValueError</span> देता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. remove()</strong></td>
+                            <td><span class="inline-code">list.remove(item)</span></td>
+                            <td>यह मेथड दिए गए <strong>मान (Value) की पहली उपस्थिति</strong> को लिस्ट से हटाता है। यह कुछ भी रिटर्न नहीं करता (<span class="inline-code">None</span>)। यदि मान नहीं मिलता, तो <span class="inline-code">ValueError</span> आता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>6. pop()</strong></td>
+                            <td><span class="inline-code">list.pop([index])</span></td>
+                            <td>यह दिए गए <strong>इंडेक्स पर स्थित तत्व को हटाता भी है और उसे रिटर्न भी करता है</strong>। यदि कोई इंडेक्स न दिया जाए, तो यह डिफ़ॉल्ट रूप से <strong>अंतिम तत्व (Last item)</strong> को हटाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>7. count()</strong></td>
+                            <td><span class="inline-code">list.count(item)</span></td>
+                            <td>यह गिनकर बताता है कि कोई तत्व लिस्ट के अंदर <strong>कुल कितनी बार (Frequency)</strong> आया है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>8. sort()</strong></td>
+                            <td><span class="inline-code">list.sort(reverse=False)</span></td>
+                            <td>यह मूल लिस्ट के तत्वों को <strong>आरोही क्रम (Ascending Order)</strong> में व्यवस्थित करता है। यदि <span class="inline-code">reverse=True</span> लिखा जाए, तो यह अवरोही क्रम (Descending Order) में सॉर्ट करता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>9. reverse()</strong></td>
+                            <td><span class="inline-code">list.reverse()</span></td>
+                            <td>यह लिस्ट के तत्वों के वर्तमान क्रम को <strong>उल्टा (Reverse in-place)</strong> कर देता है। (यह सॉर्ट नहीं करता, केवल क्रम पलटता है)।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<div class="code-block"><span class="code-comment"># Complete Demonstration of List Methods:</span>
+numbers = [10, 20, 30, 20]
+
+<span class="code-comment"># 1. append() - Adds a single element at the end</span>
+numbers.append(40)
+print("After append(40):", numbers)          <span class="code-comment"># Output: [10, 20, 30, 20, 40]</span>
+
+<span class="code-comment"># 2. extend() - Adds multiple elements at the end</span>
+numbers.extend([50, 60])
+print("After extend([50, 60]):", numbers)    <span class="code-comment"># Output: [10, 20, 30, 20, 40, 50, 60]</span>
+
+<span class="code-comment"># 3. insert() - Inserts 15 at index 1</span>
+numbers.insert(1, 15)
+print("After insert(1, 15):", numbers)       <span class="code-comment"># Output: [10, 15, 20, 30, 20, 40, 50, 60]</span>
+
+<span class="code-comment"># 4. index() and 5. count()</span>
+print("First index of 20:", numbers.index(20)) <span class="code-comment"># Output: 2</span>
+print("Count of 20:", numbers.count(20))       <span class="code-comment"># Output: 2</span>
+
+<span class="code-comment"># 6. remove() - Removes first occurrence of value 20</span>
+numbers.remove(20)
+print("After remove(20):", numbers)          <span class="code-comment"># Output: [10, 15, 30, 20, 40, 50, 60]</span>
+
+<span class="code-comment"># 7. pop() - Removes and returns element at index 2 (or last if omitted)</span>
+popped_val = numbers.pop(2)
+print("Popped value:", popped_val)           <span class="code-comment"># Output: 30</span>
+print("List after pop(2):", numbers)         <span class="code-comment"># Output: [10, 15, 20, 40, 50, 60]</span>
+
+<span class="code-comment"># 8. reverse() and 9. sort()</span>
+numbers.reverse()
+print("After reverse():", numbers)           <span class="code-comment"># Output: [60, 50, 40, 20, 15, 10]</span>
+
+numbers.sort()
+print("After sort() Ascending:", numbers)    <span class="code-comment"># Output: [10, 15, 20, 40, 50, 60]</span>
+
+numbers.sort(reverse=True)
+print("After sort(reverse=True):", numbers)  <span class="code-comment"># Output: [60, 50, 40, 20, 15, 10]</span></div>
+
+            <div class="ncert-box ncert-think">
+                <div class="ncert-box-title text-blue-800"><i class="fa-solid fa-circle-question"></i> Exam Question: Difference between append() and extend()</div>
+                <p class="text-sm m-0"><span class="inline-code">append([4, 5])</span> पूरी लिस्ट को <b>एक सिंगल तत्व</b> मानकर जोड़ता है (जैसे: <span class="inline-code">[1, 2, [4, 5]]</span>, जिससे लंबाई केवल 1 बढ़ती है)। जबकि <span class="inline-code">extend([4, 5])</span> लिस्ट को खोलकर उसके प्रत्येक तत्व को अलग-अलग जोड़ता है (जैसे: <span class="inline-code">[1, 2, 4, 5]</span>, जिससे लंबाई 2 बढ़ती है)।</p>
+            </div>
+
+            <h3 class="sub-title">1.2 List Slicing</h3>
+            <p>किसी बड़ी लिस्ट में से उसके एक छोटे हिस्से (Sub-list) को काटकर निकालने की प्रक्रिया को <strong>List Slicing</strong> कहते हैं। इसका सिंटैक्स <span class="inline-code">range()</span> जैसा ही होता है:</p>
+            <p class="text-center font-bold text-lg"><span class="inline-code">list_name[start : stop : step]</span></p>
+            <ul class="ncert-list">
+                <li><strong>start:</strong> वह इंडेक्स जहाँ से स्लाइसिंग शुरू होगी (डिफ़ॉल्ट <span class="inline-code">0</span>)।</li>
+                <li><strong>stop:</strong> वह इंडेक्स जहाँ स्लाइसिंग रुकेगी। <span class="highlight">stop इंडेक्स वाला तत्व खुद शामिल नहीं होता</span> (हमेशा <span class="inline-code">stop - 1</span> तक तत्व मिलते हैं)।</li>
+                <li><strong>step:</strong> तत्वों के बीच का उछाल या अंतराल (डिफ़ॉल्ट <span class="inline-code">1</span>)। यदि <span class="inline-code">step = -1</span> दिया जाए, तो लिस्ट उल्टी दिशा में स्लाइस होती है।</li>
+            </ul>
+
+<div class="code-block">items = ["A", "B", "C", "D", "E", "F", "G"]
+
+print(items[1:5])      <span class="code-comment"># From index 1 to 4 -> ['B', 'C', 'D', 'E']</span>
+print(items[:4])       <span class="code-comment"># From start to index 3 -> ['A', 'B', 'C', 'D']</span>
+print(items[3:])       <span class="code-comment"># From index 3 to end -> ['D', 'E', 'F', 'G']</span>
+print(items[::2])      <span class="code-comment"># Every 2nd element -> ['A', 'C', 'E', 'G']</span>
+print(items[-4:-1])    <span class="code-comment"># Using negative indices -> ['D', 'E', 'F']</span>
+print(items[::-1])     <span class="code-comment"># Reverses the entire list -> ['G', 'F', 'E', 'D', 'C', 'B', 'A']</span></div>
+
+            <h3 class="sub-title">1.3 List Comprehension</h3>
+            <p><strong>List Comprehension</strong> पायथन की एक बेहद शक्तिशाली सुविधा है, जिसकी मदद से हम किसी मौजूदा लिस्ट या अनुक्रम से <strong>केवल एक ही लाइन के कोड (Single Line of Code)</strong> में एक नई लिस्ट बना सकते हैं। यह सामान्य <span class="inline-code">for</span> लूप की तुलना में छोटा और तेज़ होता है।</p>
+            <p class="text-center font-bold text-lg"><span class="inline-code">new_list = [expression for item in iterable if condition]</span></p>
+
+<div class="code-block"><span class="code-comment"># 1. Creating a list of squares from 1 to 5:</span>
+squares = [x ** 2 for x in range(1, 6)]
+print("Squares:", squares)             <span class="code-comment"># Output: [1, 4, 9, 16, 25]</span>
+
+<span class="code-comment"># 2. Filtering only Even numbers from 1 to 10 using List Comprehension:</span>
+evens = [num for num in range(1, 11) if num % 2 == 0]
+print("Even Numbers:", evens)          <span class="code-comment"># Output: [2, 4, 6, 8, 10]</span>
+
+<span class="code-comment"># 3. Converting words to uppercase if length > 3:</span>
+words = ["cat", "apple", "dog", "mango"]
+long_words = [w.upper() for w in words if len(w) &gt; 3]
+print("Long Words:", long_words)       <span class="code-comment"># Output: ['APPLE', 'MANGO']</span></div>
+
+            <h3 class="sub-title">1.4 Copying a List: Shallow Copy vs Deep Copy</h3>
+            <p>पायथन में यदि आप <span class="inline-code">list2 = list1</span> लिखते हैं, तो नई कॉपी <strong>नहीं</strong> बनती! दोनों वेरिएबल्स मेमोरी में एक ही लिस्ट (Same Memory Address) की ओर इशारा करते हैं (इसे <strong>Aliasing</strong> कहते हैं)। यदि आपको वास्तव में एक अलग कॉपी बनानी है, तो पायथन में दो तरीके होते हैं: <strong>Shallow Copy</strong> और <strong>Deep Copy</strong>।</p>
+
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Basis</th>
+                            <th>1. Shallow Copy (उथली कॉपी)</th>
+                            <th>2. Deep Copy (गहरी कॉपी)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>How to Create</strong></td>
+                            <td><span class="inline-code">list.copy()</span>, <span class="inline-code">list[:]</span> या <span class="inline-code">copy.copy(list)</span> द्वारा।</td>
+                            <td><span class="inline-code">copy</span> मॉड्यूल के <span class="inline-code">copy.deepcopy(list)</span> फंक्शन द्वारा।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Outer List Behavior</strong></td>
+                            <td>यह बाहरी (Top-level) लिस्ट के लिए एक नया मेमोरी ऑब्जेक्ट बनाता है।</td>
+                            <td>यह बाहरी लिस्ट के साथ-साथ अंदर की सभी सब-लिस्ट्स के लिए भी बिल्कुल नया ऑब्जेक्ट बनाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nested List (Sub-list) Behavior</strong></td>
+                            <td>यदि लिस्ट के अंदर कोई दूसरी लिस्ट (Nested List) है, तो यह उसकी कॉपी <strong>नहीं</strong> बनाता, बल्कि पुरानी सब-लिस्ट का ही रेफरेंस साझा करता है।</td>
+                            <td>यह अंदर की सभी <strong>Nested Lists की भी पूरी तरह स्वतंत्र कॉपी</strong> बनाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Effect of Modification</strong></td>
+                            <td>अंदर की Nested List में बदलाव करने पर <strong>मूल (Original) लिस्ट भी बदल जाती है!</strong></td>
+                            <td>Nested List में बदलाव करने पर मूल लिस्ट पर <strong>कोई प्रभाव नहीं पड़ता</strong> (100% Independent)।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<div class="code-block">import copy
+
+<span class="code-comment"># Original Nested List</span>
+original = [10, 20, [30, 40]]
+
+<span class="code-comment"># Creating Shallow Copy and Deep Copy</span>
+shallow_list = copy.copy(original)
+deep_list = copy.deepcopy(original)
+
+<span class="code-comment"># Modifying the nested element [30, 40] -> changing 30 to 999</span>
+shallow_list[2][0] = 999
+
+print("Original after Shallow modification:", original)
+<span class="code-comment"># Output: [10, 20, [999, 40]]  --> Notice: Original also changed!</span>
+
+print("Deep Copy remains completely safe:", deep_list)
+<span class="code-comment"># Output: [10, 20, [30, 40]]   --> Deep copy was NOT affected!</span></div>
+
+            <!-- Interactive Simulator for List -->
+            <div class="terminal-sim">
+                <div class="terminal-header">
+                    <span><i class="fa-solid fa-play text-green-400 mr-2"></i>Interactive List Slicing Simulator</span>
+                    <span>list = [10, 20, 30, 40, 50, 60, 70]</span>
+                </div>
+                <div class="sim-controls">
+                    <label class="text-xs font-bold text-gray-700">start:</label>
+                    <input type="number" id="lStart" class="sim-input w-20" value="1">
+                    <label class="text-xs font-bold text-gray-700">stop:</label>
+                    <input type="number" id="lStop" class="sim-input w-20" value="6">
+                    <label class="text-xs font-bold text-gray-700">step:</label>
+                    <input type="number" id="lStep" class="sim-input w-20" value="2">
+                    <button class="sim-btn" onclick="runListSliceSim()">Slice List</button>
+                </div>
+                <div id="listSimOutput" class="terminal-body">&gt;&gt;&gt; nums = [10, 20, 30, 40, 50, 60, 70]
+&gt;&gt;&gt; print(nums[1:6:2])
+[20, 40, 60]</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 2: PYTHON TUPLES
+             ========================================== -->
+        <section id="sec-tuple" class="ncert-chapter topic-section">
+            <span class="chapter-badge">Topic 2: Tuples</span>
+            <h2 class="section-title"><i class="fa-solid fa-lock text-primary-600"></i> Tuples in Python</h2>
+
+            <p><strong>Tuple</strong> भी लिस्ट की तरह ही विभिन्न डेटा प्रकारों का एक क्रमबद्ध (Ordered) संग्रह है, लेकिन इसकी सबसे बड़ी विशेषता यह है कि यह <span class="highlight">अपरिवर्तनीय (Immutable)</span> होता है। इसका अर्थ है कि एक बार टपल बन जाने के बाद हम उसके तत्वों को बदल (Modify), जोड़ (Add) या हटा (Delete) <strong>नहीं</strong> सकते।</p>
+            <ul class="ncert-list">
+                <li>टपल को छोटे कोष्ठक <strong>Parentheses <span class="inline-code">( )</span></strong> में लिखा जाता है। जैसे: <span class="inline-code">t = (10, 20, "Python")</span></li>
+                <li>बिना कोष्ठक के केवल कॉमा लगाकर मान लिखने पर भी पायथन उसे टपल मानता है (इसे <strong>Tuple Packing</strong> कहते हैं), जैसे: <span class="inline-code">t = 10, 20, 30</span>।</li>
+            </ul>
+
+            <div class="ncert-box ncert-important">
+                <div class="ncert-box-title text-red-700"><i class="fa-solid fa-triangle-exclamation"></i> Common Mistake: Creating a Single Element Tuple</div>
+                <p class="text-sm m-0">यदि आप एक तत्व का टपल बनाने के लिए केवल <span class="inline-code">t = (50)</span> लिखते हैं, तो पायथन इसे टपल नहीं बल्कि एक साधारण पूर्णांक (<span class="inline-code">int</span>) मानेगा! एकल तत्व (Singleton Tuple) बनाने के लिए तत्व के बाद <strong>कॉमा (<span class="inline-code">,</span>) लगाना अनिवार्य है</strong>: <span class="highlight">t = (50,)</span></p>
+            </div>
+
+            <h3 class="sub-title">2.1 Tuple Methods: <span class="inline-code">index()</span> and <span class="inline-code">count()</span></h3>
+            <p>चूँकि टपल Immutable (अपरिवर्तनीय) होता है, इसलिए इसमें <span class="inline-code">append()</span>, <span class="inline-code">remove()</span> या <span class="inline-code">pop()</span> जैसे मेथड्स नहीं होते। टपल में मुख्य रूप से दो ही इन-बिल्ट मेथड्स होते हैं:</p>
+            <ol class="ncert-list">
+                <li><strong><span class="inline-code">tuple.index(item)</span>:</strong> यह टपल में दिए गए तत्व के पहले स्थान (First Index) को लौटाता है। तत्व न मिलने पर <span class="inline-code">ValueError</span> देता है।</li>
+                <li><strong><span class="inline-code">tuple.count(item)</span>:</strong> यह बताता है कि दिया गया तत्व टपल में कितनी बार आया है। यदि तत्व मौजूद नहीं है, तो यह <span class="inline-code">0</span> लौटाता है।</li>
+            </ol>
+
+<div class="code-block"><span class="code-comment"># Creating Tuples and using index() and count()</span>
+single_tuple = (100,)
+print("Type of single_tuple:", type(single_tuple))  <span class="code-comment"># Output: &lt;class 'tuple'&gt;</span>
+
+scores = (85, 90, 75, 90, 95, 90)
+print("Count of 90:", scores.count(90))             <span class="code-comment"># Output: 3</span>
+print("First Index of 75:", scores.index(75))       <span class="code-comment"># Output: 2</span>
+
+<span class="code-comment"># Trying to modify a tuple raises TypeError:</span>
+<span class="code-comment"># scores[0] = 100  --> TypeError: 'tuple' object does not support item assignment</span></div>
+
+            <h3 class="sub-title">2.2 Usage of Tuples (Why use Tuples instead of Lists?)</h3>
+            <p>जब हमारे पास लिस्ट है, तो हमें टपल की आवश्यकता क्यों पड़ती है? इसके प्रमुख कारण निम्नलिखित हैं:</p>
+            <ul class="ncert-list">
+                <li><strong>1. Faster Execution Speed:</strong> चूँकि टपल का आकार और डेटा निश्चित (Immutable) होता है, इसलिए यह लिस्ट की तुलना में <strong>कम मेमोरी घेरता है और तेज़ी से प्रोसेस होता है</strong>।</li>
+                <li><strong>2. Data Security (Write-Protected Data):</strong> जब हम चाहते हैं कि प्रोग्राम के चलते समय कोई भी गलती से हमारे महत्वपूर्ण डेटा (जैसे: आधार नंबर, जन्मतिथि, सप्ताह के दिन, भू-निर्देशांक) को बदल न सके, तब हम टपल का उपयोग करते हैं।</li>
+                <li><strong>3. Valid Dictionary Keys:</strong> डिक्शनरी में कुंजी (Key) केवल Immutable डेटा प्रकार की हो सकती है। लिस्ट को डिक्शनरी की Key <strong>नहीं</strong> बनाया जा सकता, लेकिन <strong>Tuple को डिक्शनरी की Key के रूप में उपयोग किया जा सकता है</strong>।</li>
+                <li><strong>4. Returning Multiple Values from Functions:</strong> जब कोई फंक्शन एक से अधिक मान एक साथ लौटाता है, तो वह उन्हें टपल के रूप में ही लौटाता है।</li>
+            </ul>
+
+            <h3 class="sub-title">2.3 Use of Tuples as a Swap Function</h3>
+            <p>C, C++ या Java जैसी भाषाओं में दो वेरिएबल्स के मान आपस में बदलने (Swapping) के लिए एक तीसरे अस्थायी वेरिएबल (<span class="inline-code">temp</span>) की आवश्यकता होती है। लेकिन पायथन में <strong>Tuple Packing और Unpacking</strong> की मदद से हम बिना किसी तीसरे वेरिएबल के, केवल एक लाइन <span class="highlight">a, b = b, a</span> लिखकर दो वेरिएबल्स को स्वैप कर सकते हैं!</p>
+
+            <div class="diagram-box">
+                <div class="font-bold text-gray-700 mb-2">How <span class="inline-code">a, b = b, a</span> Works Internally using Tuple</div>
+                <div class="flow-step">Step 1: Right Side (<span class="inline-code">b, a</span>)<br><small class="text-gray-500">Creates a temporary Tuple <span class="inline-code">(20, 10)</span> (Tuple Packing)</small></div>
+                <i class="fa-solid fa-arrow-right text-primary-600 mx-2"></i>
+                <div class="flow-step bg-green-50 border-green-600">Step 2: Left Side (<span class="inline-code">a, b</span>)<br><small class="text-gray-500">Unpacks <span class="inline-code">20</span> into <span class="inline-code">a</span> and <span class="inline-code">10</span> into <span class="inline-code">b</span> (Tuple Unpacking)</small></div>
+            </div>
+
+<div class="code-block"><span class="code-comment"># Swapping two variables using Tuple Packing and Unpacking</span>
+a = 10
+b = 20
+print("Before Swap -> a:", a, "b:", b)
+
+<span class="code-comment"># Tuple assignment swaps values in a single line without a temp variable</span>
+a, b = b, a
+
+print("After Swap  -> a:", a, "b:", b)
+<span class="code-comment"># Output:</span>
+<span class="code-comment"># Before Swap -> a: 10 b: 20</span>
+<span class="code-comment"># After Swap  -> a: 20 b: 10</span></div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 3: PYTHON DICTIONARIES
+             ========================================== -->
+        <section id="sec-dict" class="ncert-chapter topic-section">
+            <span class="chapter-badge">Topic 3: Dictionaries</span>
+            <h2 class="section-title"><i class="fa-solid fa-book text-primary-600"></i> Dictionaries in Python</h2>
+
+            <p>पायथन में <strong>Dictionary</strong> एक <strong>Mapping</strong> डेटा प्रकार है। जहाँ लिस्ट और टपल में डेटा को संख्यात्मक इंडेक्स (<span class="inline-code">0, 1, 2...</span>) द्वारा पहचाना जाता है, वहीं डिक्शनरी में डेटा को <span class="highlight">Key : Value (कुंजी : मान)</span> के जोड़े (Pairs) के रूप में मंझले कोष्ठक <strong>Curly Brackets <span class="inline-code">{ }</span></strong> के अंदर स्टोर किया जाता है।</p>
+
+            <ul class="ncert-list">
+                <li><strong>Unique & Immutable Keys:</strong> डिक्शनरी की प्रत्येक <strong>Key (कुंजी) अद्वितीय (Unique)</strong> होनी चाहिए (कोई भी दो Keys समान नहीं हो सकतीं) और Key हमेशा <strong>Immutable</strong> (जैसे <span class="inline-code">int</span>, <span class="inline-code">str</span>, <span class="inline-code">tuple</span>) होनी चाहिए।</li>
+                <li><strong>Mutable Values:</strong> डिक्शनरी स्वयं <strong>Mutable</strong> होती है और इसके <strong>Values (मान)</strong> किसी भी डेटा प्रकार के हो सकते हैं और डुप्लीकेट भी हो सकते हैं।</li>
+            </ul>
+
+            <h3 class="sub-title">3.1 Dictionary Methods: <span class="inline-code">keys()</span>, <span class="inline-code">values()</span>, and <span class="inline-code">items()</span> (Tuples)</h3>
+            <p>डिक्शनरी से कुंजियों, मानों और टपल जोड़ों को प्राप्त करने के लिए तीन मुख्य मेथड्स का उपयोग किया जाता है:</p>
+
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Return Format</th>
+                            <th>Explanation in Hindi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. dict.keys()</strong></td>
+                            <td><span class="inline-code">dict_keys([k1, k2, ...])</span></td>
+                            <td>यह डिक्शनरी में मौजूद <strong>सभी Keys (कुंजियों)</strong> की एक सूची (View object) लौटाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. dict.values()</strong></td>
+                            <td><span class="inline-code">dict_values([v1, v2, ...])</span></td>
+                            <td>यह डिक्शनरी में मौजूद <strong>सभी Values (मानों)</strong> की एक सूची लौटाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. dict.items()</strong> (Tuples)</td>
+                            <td><span class="inline-code">dict_items([(k1, v1), (k2, v2)])</span></td>
+                            <td>यह डिक्शनरी के प्रत्येक <span class="inline-code">Key:Value</span> जोड़े को <span class="highlight">(key, value) Tuples</span> की सूची के रूप में लौटाता है। लूप चलाने के लिए यह सबसे उपयोगी मेथड है।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<div class="code-block"><span class="code-comment"># Creating a Dictionary and accessing keys, values, and tuple pairs</span>
+student = {"roll_no": 101, "name": "Rohan", "marks": 92.5}
+
+<span class="code-comment"># Adding / Updating a key-value pair</span>
+student["grade"] = "A1"
+
+print("All Keys:", list(student.keys()))
+<span class="code-comment"># Output: ['roll_no', 'name', 'marks', 'grade']</span>
+
+print("All Values:", list(student.values()))
+<span class="code-comment"># Output: [101, 'Rohan', 92.5, 'A1']</span>
+
+print("All Items (List of Tuples):", list(student.items()))
+<span class="code-comment"># Output: [('roll_no', 101), ('name', 'Rohan'), ('marks', 92.5), ('grade', 'A1')]</span>
+
+<span class="code-comment"># Traversing dictionary using tuple unpacking in items():</span>
+for key, val in student.items():
+    print(key, "->", val)</div>
+
+            <h3 class="sub-title">3.2 Nested Dictionaries</h3>
+            <p>जब एक डिक्शनरी के अंदर किसी Key के मान (Value) के रूप में <strong>एक और डिक्शनरी</strong> स्टोर की जाती है, तो उसे <span class="highlight">Nested Dictionary</span> कहा जाता है। इसका उपयोग जटिल और पदानुक्रमित (Hierarchical) डेटा—जैसे कई छात्रों या कर्मचारियों का पूरा रिकॉर्ड—स्टोर करने के लिए किया जाता है।</p>
+
+<div class="code-block"><span class="code-comment"># Example of Nested Dictionary: Storing records of multiple students</span>
+classroom = {
+    "S101": {"name": "Aman", "age": 17, "marks": 88},
+    "S102": {"name": "Priya", "age": 16, "marks": 95}
+}
+
+<span class="code-comment"># Accessing nested elements using multiple square brackets [outer_key][inner_key]:</span>
+print("Name of S101:", classroom["S101"]["name"])     <span class="code-comment"># Output: Aman</span>
+print("Marks of S102:", classroom["S102"]["marks"])   <span class="code-comment"># Output: 95</span>
+
+<span class="code-comment"># Modifying a nested value:</span>
+classroom["S101"]["marks"] = 91
+print("Updated S101 Record:", classroom["S101"])
+<span class="code-comment"># Output: {'name': 'Aman', 'age': 17, 'marks': 91}</span></div>
+
+            <h3 class="sub-title">3.3 Dictionary Comprehension</h3>
+            <p>जिस प्रकार List Comprehension से एक लाइन में लिस्ट बनाई जाती है, उसी प्रकार <strong>Dictionary Comprehension</strong> का उपयोग करके हम केवल एक ही लाइन के कोड में नई डिक्शनरी बना सकते हैं। इसका सिंटैक्स है:</p>
+            <p class="text-center font-bold text-lg"><span class="inline-code">new_dict = {key_expr : value_expr for item in iterable if condition}</span></p>
+
+<div class="code-block"><span class="code-comment"># 1. Creating a dictionary of numbers and their cubes from 1 to 5:</span>
+cubes = {x: x ** 3 for x in range(1, 6)}
+print("Cubes Dictionary:", cubes)
+<span class="code-comment"># Output: {1: 1, 2: 8, 3: 27, 4: 64, 5: 125}</span>
+
+<span class="code-comment"># 2. Dictionary Comprehension with if condition (Only Even squares):</span>
+even_squares = {x: x ** 2 for x in range(1, 9) if x % 2 == 0}
+print("Even Squares:", even_squares)
+<span class="code-comment"># Output: {2: 4, 4: 16, 6: 36, 8: 64}</span>
+
+<span class="code-comment"># 3. Creating a dictionary from two lists using zip():</span>
+names = ["Rahul", "Sneha", "Karan"]
+scores = [85, 92, 78]
+result_dict = {k: v for k, v in zip(names, scores)}
+print("Student Scores:", result_dict)
+<span class="code-comment"># Output: {'Rahul': 85, 'Sneha': 92, 'Karan': 78}</span></div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 4: PYTHON STRINGS
+             ========================================== -->
+        <section id="sec-string" class="ncert-chapter topic-section">
+            <span class="chapter-badge">Topic 4: Strings</span>
+            <h2 class="section-title"><i class="fa-solid fa-quote-right text-primary-600"></i> Strings in Python</h2>
+
+            <p>पायथन में <strong>String</strong> अक्षरों, अंकों या विशेष चिह्नों (Characters / Unicode characters) का एक क्रमबद्ध अनुक्रम (Sequence) है। स्ट्रिंग एक <span class="highlight">Immutable (अपरिवर्तनीय)</span> डेटा प्रकार है, अर्थात एक बार स्ट्रिंग बन जाने के बाद हम उसके किसी अक्षर को सीधे इंडेक्स द्वारा बदल नहीं सकते (जैसे <span class="inline-code">s[0] = 'A'</span> करने पर <span class="inline-code">TypeError</span> आता है)।</p>
+
+            <h3 class="sub-title">4.1 Single-line and Multi-line Strings</h3>
+            <ul class="ncert-list">
+                <li><strong>Single-line Strings:</strong> वे स्ट्रिंग्स जो एक ही लाइन में शुरू और समाप्त हो जाती हैं। इन्हें <strong>Single Quotes (<span class="inline-code">' '</span>)</strong> या <strong>Double Quotes (<span class="inline-code">" "</span>)</strong> के अंदर लिखा जाता है।</li>
+                <li><strong>Multi-line Strings:</strong> जब हमें एक से अधिक लाइनों (Multiple Lines / Paragraphs) का टेक्स्ट स्टोर करना हो, तो हम <strong>Triple Quotes (<span class="inline-code">''' '''</span> या <span class="inline-code">""" """</span>)</strong> का उपयोग करते हैं। इसमें नई लाइन (Enter) और स्पेस अपने आप सुरक्षित रहते हैं।</li>
+            </ul>
+
+<div class="code-block"><span class="code-comment"># 1. Single-line Strings</span>
+str1 = 'Hello Python'
+str2 = "Welcome to NCERT Notes"
+
+<span class="code-comment"># 2. Multi-line String using Triple Quotes</span>
+multi_str = """Python is easy to learn.
+It supports multiple data structures.
+Strings are immutable in Python."""
+
+print(multi_str)</div>
+
+            <h3 class="sub-title">4.2 String Formatter (<span class="inline-code">.format()</span> and <span class="inline-code">f-strings</span>)</h3>
+            <p>स्ट्रिंग के बीच में वेरिएबल्स के मानों को डायनामिक रूप से फिट (Insert) करने की प्रक्रिया को <strong>String Formatting</strong> कहते हैं। पायथन में इसके लिए प्लेसहोल्डर <span class="inline-code">{ }</span> के साथ <span class="inline-code">.format()</span> मेथड और आधुनिक <span class="inline-code">f-string</span> का उपयोग किया जाता है:</p>
+
+<div class="code-block">name = "Vikram"
+age = 18
+percentage = 94.567
+
+<span class="code-comment"># Method 1: Default Positional .format()</span>
+print("Hello {}, you are {} years old.".format(name, age))
+
+<span class="code-comment"># Method 2: Indexed and Keyword .format()</span>
+print("Student {1} scored {0}% marks.".format(percentage, name))
+print("City: {city}, Pin: {pin}".format(city="Indore", pin=452001))
+
+<span class="code-comment"># Method 3: Modern f-string (Formatted String Literal - Python 3.6+)</span>
+print(f"{name} is {age} years old and scored {percentage:.2f}%.")
+<span class="code-comment"># Output: Vikram is 18 years old and scored 94.57%.</span></div>
+
+            <h3 class="sub-title">4.3 Built-in String Methods</h3>
+            <p>NCERT पाठ्यक्रम और परीक्षाओं के लिए स्ट्रिंग के इन-बिल्ट मेथड्स को तीन श्रेणियों में बांटकर समझना सबसे आसान है:</p>
+
+            <h4 class="mini-title">A. Character Checking / Boolean Methods (Return <span class="inline-code">True</span> or <span class="inline-code">False</span>)</h4>
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Condition for returning <span class="inline-code">True</span> (Hindi Explanation)</th>
+                            <th>Example & Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="inline-code">isdigit()</span></td>
+                            <td>यदि स्ट्रिंग गैर-खाली हो और उसके <strong>सभी अक्षर केवल अंक (Digits 0-9)</strong> हों।</td>
+                            <td><span class="inline-code">"2026".isdigit()</span> &rarr; <span class="inline-code">True</span><br><span class="inline-code">"25.5".isdigit()</span> &rarr; <span class="inline-code">False</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">isalpha()</span></td>
+                            <td>यदि स्ट्रिंग के <strong>सभी अक्षर केवल वर्णमाला (Alphabets A-Z, a-z)</strong> हों (बिना स्पेस या अंक के)।</td>
+                            <td><span class="inline-code">"Python".isalpha()</span> &rarr; <span class="inline-code">True</span><br><span class="inline-code">"Py 3".isalpha()</span> &rarr; <span class="inline-code">False</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">isalnum()</span></td>
+                            <td>यदि स्ट्रिंग में केवल <strong>अक्षर (Alphabets) या अंक (Numbers) या दोनों</strong> हों (कोई स्पेस या सिंबल जैसे <span class="inline-code">@, #</span> न हो)।</td>
+                            <td><span class="inline-code">"User123".isalnum()</span> &rarr; <span class="inline-code">True</span><br><span class="inline-code">"User@1".isalnum()</span> &rarr; <span class="inline-code">False</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">islower()</span></td>
+                            <td>यदि स्ट्रिंग के सभी अंग्रेजी अक्षर <strong>छोटे अक्षरों (Lowercase)</strong> में हों।</td>
+                            <td><span class="inline-code">"hello123".islower()</span> &rarr; <span class="inline-code">True</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">isupper()</span></td>
+                            <td>यदि स्ट्रिंग के सभी अंग्रेजी अक्षर <strong>बड़े अक्षरों (Uppercase)</strong> में हों।</td>
+                            <td><span class="inline-code">"NCERT".isupper()</span> &rarr; <span class="inline-code">True</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">istitle()</span></td>
+                            <td>यदि स्ट्रिंग के <strong>प्रत्येक शब्द का पहला अक्षर Capital</strong> हो और बाकी अक्षर छोटे (Lowercase) हों।</td>
+                            <td><span class="inline-code">"Hello World".istitle()</span> &rarr; <span class="inline-code">True</span><br><span class="inline-code">"Hello world".istitle()</span> &rarr; <span class="inline-code">False</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">isspace()</span></td>
+                            <td>यदि स्ट्रिंग में <strong>केवल खाली स्थान (Whitespace जैसे Space, Tab <span class="inline-code">\t</span>, या Newline <span class="inline-code">\n</span>)</strong> हों।</td>
+                            <td><span class="inline-code">"   \t\n".isspace()</span> &rarr; <span class="inline-code">True</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="mini-title">B. Case Conversion & Whitespace Removal Methods</h4>
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Explanation in Hindi</th>
+                            <th>Example & Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="inline-code">lower()</span></td>
+                            <td>पूरी स्ट्रिंग को छोटे अक्षरों (Lowercase) में बदलकर नई स्ट्रिंग लौटाता है।</td>
+                            <td><span class="inline-code">"PyThOn".lower()</span> &rarr; <span class="inline-code">"python"</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">upper()</span></td>
+                            <td>पूरी स्ट्रिंग को बड़े अक्षरों (Uppercase) में बदलकर नई स्ट्रिंग लौटाता है।</td>
+                            <td><span class="inline-code">"python".upper()</span> &rarr; <span class="inline-code">"PYTHON"</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">title()</span></td>
+                            <td>स्ट्रिंग के <strong>हर शब्द के पहले अक्षर को बड़ा (Capital)</strong> और बाकी को छोटा कर देता है।</td>
+                            <td><span class="inline-code">"welcome to python".title()</span> &rarr; <span class="inline-code">"Welcome To Python"</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="inline-code">strip()</span></td>
+                            <td>स्ट्रिंग के <strong>दोनों किनारों (Left और Right)</strong> से फालतू खाली जगह (Leading & Trailing spaces) या निर्दिष्ट अक्षरों को हटाता है। (बीच के स्पेस नहीं हटाता)।</td>
+                            <td><span class="inline-code">"  hello  ".strip()</span> &rarr; <span class="inline-code">"hello"</span><br><span class="inline-code">(lstrip बाएँ से व rstrip दाएँ से हटाता है)</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h4 class="mini-title">C. Splitting and Joining Methods (<span class="inline-code">split()</span>, <span class="inline-code">splitlines()</span>, <span class="inline-code">join()</span>)</h4>
+            <ul class="ncert-list">
+                <li><strong>1. <span class="inline-code">str.split(separator)</span>:</strong> यह स्ट्रिंग को दिए गए विभाजक (Separator) के आधार पर तोड़ता है और <strong>शब्दों की एक List (<span class="inline-code">list</span>) लौटाता है</strong>। यदि कोई separator न दिया जाए, तो यह डिफ़ॉल्ट रूप से Whitespace (स्पेस) से तोड़ता है।</li>
+                <li><strong>2. <span class="inline-code">str.splitlines()</span>:</strong> यह एक मल्टी-लाइन स्ट्रिंग को <strong>नई लाइन (<span class="inline-code">\n</span> Line breaks)</strong> के आधार पर तोड़ता है और प्रत्येक लाइन की एक List लौटाता है।</li>
+                <li><strong>3. <span class="inline-code">separator.join(iterable)</span>:</strong> यह <span class="inline-code">split()</span> का ठीक उल्टा काम करता है! यह किसी लिस्ट या टपल के सभी स्ट्रिंग तत्वों को आपस में जोड़कर <strong>एक सिंगल String बनाता है</strong>।</li>
+            </ul>
+
+<div class="code-block"><span class="code-comment"># Demonstration of String Methods:</span>
+text = "   python programming language   "
+
+<span class="code-comment"># 1. strip(), title(), upper(), lower()</span>
+clean_text = text.strip()
+print("Stripped:", clean_text)              <span class="code-comment"># Output: python programming language</span>
+print("Title Case:", clean_text.title())    <span class="code-comment"># Output: Python Programming Language</span>
+print("Upper Case:", clean_text.upper())    <span class="code-comment"># Output: PYTHON PROGRAMMING LANGUAGE</span>
+
+<span class="code-comment"># 2. Boolean check methods</span>
+code = "Python311"
+print("isalnum():", code.isalnum())         <span class="code-comment"># Output: True</span>
+print("isalpha():", code.isalpha())         <span class="code-comment"># Output: False (contains digits)</span>
+print("isdigit():", "98765".isdigit())      <span class="code-comment"># Output: True</span>
+
+<span class="code-comment"># 3. split(), splitlines(), and join()</span>
+words_list = clean_text.split()
+print("After split():", words_list)
+<span class="code-comment"># Output: ['python', 'programming', 'language']</span>
+
+date_str = "22-10-2026"
+print("Split by hyphen:", date_str.split("-"))
+<span class="code-comment"># Output: ['22', '10', '2026']</span>
+
+joined_str = " -> ".join(words_list)
+print("After join():", joined_str)
+<span class="code-comment"># Output: python -> programming -> language</span>
+
+poem = "Line One\nLine Two\nLine Three"
+print("After splitlines():", poem.splitlines())
+<span class="code-comment"># Output: ['Line One', 'Line Two', 'Line Three']</span></div>
+
+            <!-- Interactive String Method Simulator -->
+            <div class="terminal-sim">
+                <div class="terminal-header">
+                    <span><i class="fa-solid fa-wand-magic-sparkles text-blue-400 mr-2"></i>Interactive String Methods Tester</span>
+                    <span>Test Real-time Output</span>
+                </div>
+                <div class="sim-controls">
+                    <input type="text" id="strInput" class="sim-input flex-1" value="  welcome to bitvedas 2026  ">
+                    <select id="strMethod" class="sim-select">
+                        <option value="strip()">.strip()</option>
+                        <option value="title()">.title()</option>
+                        <option value="upper()">.upper()</option>
+                        <option value="lower()">.lower()</option>
+                        <option value="split()">.split()</option>
+                        <option value="isalnum()">.isalnum()</option>
+                        <option value="isalpha()">.isalpha()</option>
+                        <option value="isdigit()">.isdigit()</option>
+                    </select>
+                    <button class="sim-btn" onclick="runStringSim()">Execute</button>
+                </div>
+                <div id="strSimOutput" class="terminal-body">&gt;&gt;&gt; s = "  welcome to bitvedas 2026  "
+&gt;&gt;&gt; print(s.strip())
+"welcome to bitvedas 2026"</div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             SECTION 5: PYTHON SETS
+             ========================================== -->
+        <section id="sec-set" class="ncert-chapter topic-section">
+            <span class="chapter-badge">Topic 5: Sets</span>
+            <h2 class="section-title"><i class="fa-solid fa-circle-nodes text-primary-600"></i> Sets in Python</h2>
+
+            <p>पायथन में <strong>Set</strong> अद्वितीय (Unique) तत्वों का एक <strong>अक्रमबद्ध (Unordered)</strong> और <strong>असूचीबद्ध (Unindexed)</strong> संग्रह है। यह गणित के समुच्चय सिद्धांत (Mathematical Set Theory) पर आधारित है। सेट के तत्वों को मंझले कोष्ठक <strong>Curly Brackets <span class="inline-code">{ }</span></strong> के अंदर कॉमा से अलग करके लिखा जाता है।</p>
+
+            <ul class="ncert-list">
+                <li><strong>No Duplicate Elements:</strong> सेट कभी भी डुप्लीकेट मान स्टोर नहीं करता। यदि आप <span class="inline-code">{10, 20, 10, 30}</span> बनाते हैं, तो पायथन अपने आप डुप्लीकेट हटाकर उसे <span class="inline-code">{10, 20, 30}</span> कर देगा।</li>
+                <li><strong>Unordered & Unindexed:</strong> सेट में तत्वों का कोई निश्चित क्रम या इंडेक्स नहीं होता, इसलिए आप <span class="inline-code">my_set[0]</span> लिखकर तत्व एक्सेस नहीं कर सकते।</li>
+                <li><strong>Empty Set Rule:</strong> खाली मंझला कोष्ठक <span class="inline-code">s = {}</span> एक खाली <strong>Dictionary</strong> बनाता है, सेट नहीं! खाली सेट बनाने के लिए हमेशा <span class="highlight">s = set()</span> का उपयोग किया जाता है।</li>
+            </ul>
+
+            <h3 class="sub-title">5.1 Adding, Copying and Removing Elements (<span class="inline-code">add</span>, <span class="inline-code">copy</span>, <span class="inline-code">remove</span>, <span class="inline-code">discard</span>)</h3>
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Syntax</th>
+                            <th>Explanation in Hindi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. add()</strong></td>
+                            <td><span class="inline-code">set.add(item)</span></td>
+                            <td>यह सेट में एक नया तत्व जोड़ता है। (यदि तत्व पहले से मौजूद है, तो कुछ नहीं बदलता)।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. copy()</strong></td>
+                            <td><span class="inline-code">set.copy()</span></td>
+                            <td>यह सेट की एक स्वतंत्र उथली कॉपी (Shallow Copy) बनाकर लौटाता है।</td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. remove()</strong></td>
+                            <td><span class="inline-code">set.remove(item)</span></td>
+                            <td>यह दिए गए तत्व को सेट से हटाता है। <span class="highlight">यदि तत्व सेट में मौजूद नहीं है, तो यह KeyError देता है!</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. discard()</strong></td>
+                            <td><span class="inline-code">set.discard(item)</span></td>
+                            <td>यह भी दिए गए तत्व को सेट से हटाता है, लेकिन इसकी खासियत यह है कि <span class="highlight">यदि तत्व सेट में न मिले, तो यह कोई Error नहीं देता</span> (प्रोग्राम सुरक्षित रूप से चलता रहता है)।</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<div class="code-block"><span class="code-comment"># Demonstration of add(), copy(), remove(), and discard()</span>
+colors = {"Red", "Green", "Blue", "Red"}
+print("Unique Set:", colors)              <span class="code-comment"># Output: {'Red', 'Green', 'Blue'}</span>
+
+colors.add("Yellow")
+backup_colors = colors.copy()
+
+colors.remove("Green")                    <span class="code-comment"># Removes 'Green'</span>
+colors.discard("Purple")                  <span class="code-comment"># 'Purple' is not in set, but NO error is raised!</span>
+<span class="code-comment"># colors.remove("Purple")                 # Raises KeyError: 'Purple'</span>
+
+print("Modified Set:", colors)
+print("Copied Set:", backup_colors)</div>
+
+            <h3 class="sub-title">5.2 Mathematical Set Operations</h3>
+            <p>मान लीजिए हमारे पास दो सेट हैं: <span class="inline-code">A = {1, 2, 3, 4}</span> और <span class="inline-code">B = {3, 4, 5, 6}</span>। पायथन में इन पर निम्नलिखित गणितीय ऑपरेशन्स किए जा सकते हैं:</p>
+
+            <div class="ncert-table-wrapper">
+                <table class="ncert-table">
+                    <thead>
+                        <tr>
+                            <th>Operation</th>
+                            <th>Method & Operator</th>
+                            <th>Meaning in Hindi</th>
+                            <th>Result for <span class="inline-code">A={1,2,3,4}, B={3,4,5,6}</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>1. Union</strong> (सम्मिलन)</td>
+                            <td><span class="inline-code">A.union(B)</span><br>या <span class="inline-code">A | B</span></td>
+                            <td>दोनों सेटों के सभी तत्वों को मिलाकर एक नया सेट बनाता है (डुप्लीकेट केवल एक बार आते हैं)।</td>
+                            <td><span class="inline-code">{1, 2, 3, 4, 5, 6}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Intersection</strong> (सर्वनिष्ठ)</td>
+                            <td><span class="inline-code">A.intersection(B)</span><br>या <span class="inline-code">A &amp; B</span></td>
+                            <td>केवल वे तत्व लौटाता है जो <strong>दोनों सेटों में उभयनिष्ठ (Common)</strong> हैं।</td>
+                            <td><span class="inline-code">{3, 4}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. Difference</strong> (अंतर)</td>
+                            <td><span class="inline-code">A.difference(B)</span><br>या <span class="inline-code">A - B</span></td>
+                            <td>सेट <span class="inline-code">A</span> के वे तत्व जो सेट <span class="inline-code">B</span> में मौजूद <strong>नहीं</strong> हैं।</td>
+                            <td><span class="inline-code">A - B</span> &rarr; <span class="inline-code">{1, 2}</span><br><span class="inline-code">B - A</span> &rarr; <span class="inline-code">{5, 6}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Symmetric Difference</strong></td>
+                            <td><span class="inline-code">A.symmetric_difference(B)</span><br>या <span class="inline-code">A ^ B</span></td>
+                            <td>दोनों सेटों के वे सभी तत्व जो <strong>आपस में कॉमन (Common) नहीं हैं</strong>। अर्थात <span class="inline-code">(A | B) - (A &amp; B)</span>।</td>
+                            <td><span class="inline-code">{1, 2, 5, 6}</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. Subset</strong> (उपसमुच्चय)</td>
+                            <td><span class="inline-code">X.issubset(A)</span><br>या <span class="inline-code">X &lt;= A</span></td>
+                            <td>यदि सेट <span class="inline-code">X</span> का प्रत्येक तत्व सेट <span class="inline-code">A</span> में मौजूद है, तो <span class="inline-code">True</span> लौटाता है।</td>
+                            <td><span class="inline-code">{1, 2}.issubset(A)</span> &rarr; <span class="inline-code">True</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>6. Superset</strong> (अधिसमुच्चय)</td>
+                            <td><span class="inline-code">A.issuperset(X)</span><br>या <span class="inline-code">A &gt;= X</span></td>
+                            <td>यदि सेट <span class="inline-code">A</span> के अंदर सेट <span class="inline-code">X</span> के सभी तत्व मौजूद हैं, तो <span class="inline-code">True</span> लौटाता है।</td>
+                            <td><span class="inline-code">A.issuperset({1, 2})</span> &rarr; <span class="inline-code">True</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+<div class="code-block"><span class="code-comment"># Complete Program for Mathematical Set Operations</span>
+A = {1, 2, 3, 4}
+B = {3, 4, 5, 6}
+C = {1, 2}
+
+print("Union (A | B):", A.union(B))
+<span class="code-comment"># Output: {1, 2, 3, 4, 5, 6}</span>
+
+print("Intersection (A & B):", A.intersection(B))
+<span class="code-comment"># Output: {3, 4}</span>
+
+print("Difference (A - B):", A.difference(B))
+<span class="code-comment"># Output: {1, 2}</span>
+
+print("Symmetric Difference (A ^ B):", A.symmetric_difference(B))
+<span class="code-comment"># Output: {1, 2, 5, 6}</span>
+
+print("Is C a subset of A?:", C.issubset(A))
+<span class="code-comment"># Output: True</span>
+
+print("Is A a superset of C?:", A.issuperset(C))
+<span class="code-comment"># Output: True</span></div>
+
+            <div class="ncert-box ncert-tip">
+                <div class="ncert-box-title text-green-800"><i class="fa-solid fa-table"></i> Quick Revision Summary Table (All 5 Data Structures)</div>
+                <div class="ncert-table-wrapper" style="margin-bottom: 0;">
+                    <table class="ncert-table">
+                        <thead>
+                            <tr>
+                                <th>Data Structure</th>
+                                <th>Brackets</th>
+                                <th>Mutable / Immutable</th>
+                                <th>Ordered / Unordered</th>
+                                <th>Duplicates Allowed?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>1. List</strong></td>
+                                <td><span class="inline-code">[ ]</span></td>
+                                <td><strong>Mutable</strong></td>
+                                <td>Ordered (Indexed)</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>2. Tuple</strong></td>
+                                <td><span class="inline-code">( )</span></td>
+                                <td><strong>Immutable</strong></td>
+                                <td>Ordered (Indexed)</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>3. Dictionary</strong></td>
+                                <td><span class="inline-code">{ k : v }</span></td>
+                                <td><strong>Mutable</strong> (Keys Immutable)</td>
+                                <td>Ordered (Python 3.7+)</td>
+                                <td>Keys: No | Values: Yes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>4. String</strong></td>
+                                <td><span class="inline-code">' '</span> or <span class="inline-code">" "</span></td>
+                                <td><strong>Immutable</strong></td>
+                                <td>Ordered (Indexed)</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td><strong>5. Set</strong></td>
+                                <td><span class="inline-code">{ }</span> / <span class="inline-code">set()</span></td>
+                                <td><strong>Mutable</strong></td>
+                                <td>Unordered (Unindexed)</td>
+                                <td><strong>No (Unique Only)</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="w-full mt-12 pt-6 border-t border-gray-300 text-center pb-8">
+            <p class="text-gray-700 font-semibold text-lg m-0 flex items-center justify-center">
+                <i class="fa-solid fa-laptop-code text-primary-600 mr-2"></i> Author: Aakash Sen | BitVedas Study Portal
+            </p>
+        </footer>
+
+    </main>
+
+    <script>
+        // Top Navigation Bar Function (Filters or Scrolls smoothly)
+        function selectTopic(sectionId, btnElement) {
+            const buttons = document.querySelectorAll('.topic-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const sections = document.querySelectorAll('.topic-section');
+
+            if (sectionId === 'all') {
+                sections.forEach(sec => sec.style.display = 'block');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                sections.forEach(sec => {
+                    if (sec.id === sectionId) {
+                        sec.style.display = 'block';
+                    } else {
+                        sec.style.display = 'none';
+                    }
+                });
+                const target = document.getElementById(sectionId);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        }
+
+        // Interactive List Slicing Simulator
+        function runListSliceSim() {
+            const arr = [10, 20, 30, 40, 50, 60, 70];
+            let start = parseInt(document.getElementById('lStart').value);
+            let stop = parseInt(document.getElementById('lStop').value);
+            let step = parseInt(document.getElementById('lStep').value);
+            const out = document.getElementById('listSimOutput');
+
+            if (isNaN(start)) start = 0;
+            if (isNaN(stop)) stop = arr.length;
+            if (isNaN(step)) step = 1;
+
+            if (step === 0) {
+                out.innerText = "ValueError: slice step cannot be zero";
+                return;
+            }
+
+            const len = arr.length;
+            let normStart = start < 0 ? Math.max(len + start, 0) : Math.min(start, len);
+            let normStop = stop < 0 ? Math.max(len + stop, 0) : Math.min(stop, len);
+
+            let res = [];
+            if (step > 0) {
+                for (let i = normStart; i < normStop; i += step) {
+                    res.push(arr[i]);
+                }
+            } else {
+                let s = start < 0 ? len + start : Math.min(start, len - 1);
+                let e = stop < 0 ? len + stop : stop;
+                for (let i = s; i > e && i >= 0; i += step) {
+                    res.push(arr[i]);
+                }
+            }
+
+            out.innerText = `>>> nums = [10, 20, 30, 40, 50, 60, 70]\n>>> print(nums[${start}:${stop}:${step}])\n[${res.join(", ")}]`;
+        }
+
+        // Interactive String Method Simulator
+        function runStringSim() {
+            const s = document.getElementById('strInput').value;
+            const method = document.getElementById('strMethod').value;
+            const out = document.getElementById('strSimOutput');
+            let result = "";
+
+            if (method === "strip()") {
+                result = `"${s.trim()}"`;
+            } else if (method === "title()") {
+                result = `"${s.toLowerCase().replace(/\b\w/g, ch => ch.toUpperCase())}"`;
+            } else if (method === "upper()") {
+                result = `"${s.toUpperCase()}"`;
+            } else if (method === "lower()") {
+                result = `"${s.toLowerCase()}"`;
+            } else if (method === "split()") {
+                const parts = s.trim() === "" ? [] : s.trim().split(/\s+/);
+                result = `[${parts.map(p => `'${p}'`).join(", ")}]`;
+            } else if (method === "isalnum()") {
+                result = s.length > 0 && /^[a-zA-Z0-9]+$/.test(s) ? "True" : "False";
+            } else if (method === "isalpha()") {
+                result = s.length > 0 && /^[a-zA-Z]+$/.test(s) ? "True" : "False";
+            } else if (method === "isdigit()") {
+                result = s.length > 0 && /^[0-9]+$/.test(s) ? "True" : "False";
+            }
+
+            out.innerText = `>>> s = "${s}"\n>>> print(s.${method})\n${result}`;
+        }
+    </script>
+</body>
+</html>

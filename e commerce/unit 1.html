@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="hi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ई-कॉमर्स (E-Commerce) संपूर्ण नोट्स | Bitvedas - By Aakash Sen</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Noto Sans Devanagari for crisp Hindi typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans Devanagari"', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            900: '#312e81',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Noto Sans Devanagari', 'Inter', sans-serif;
+            line-height: 1.75;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+        /* Print Styles */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            .print-full {
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 dark:bg-slate-950 dark:text-slate-100 transition-colors duration-300">
+
+    <!-- Top Reading Progress Bar -->
+    <div class="fixed top-0 left-0 w-full h-1 bg-slate-200 dark:bg-slate-800 z-50 no-print">
+        <div id="scroll-progress" class="h-full bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 w-0 transition-all duration-150"></div>
+    </div>
+
+    <!-- Sticky Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            
+            <!-- Brand / Home Link -->
+            <div class="flex items-center gap-3">
+                <button id="mobile-menu-btn" class="lg:hidden p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <a href="https://bitsvedas.github.io/bitveda/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
+                        B
+                    </div>
+                    <div>
+                        <span class="font-extrabold text-xl tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
+                            Bitvedas
+                        </span>
+                        <span class="block text-[11px] text-slate-500 dark:text-slate-400 -mt-1 font-medium">
+                            by Aakash Sen
+                        </span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="hidden md:flex flex-1 max-w-md mx-4">
+                <div class="relative w-full">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+                    <input 
+                        type="text" 
+                        id="search-input" 
+                        placeholder="नोट्स में खोजें (उदा. EDI, B2B, Amazon, सुरक्षा)..." 
+                        class="w-full pl-10 pr-4 py-2 text-sm rounded-xl bg-slate-100 dark:bg-slate-800 border border-transparent focus:border-indigo-500 focus:bg-white dark:focus:bg-slate-900 focus:outline-none transition-all"
+                    >
+                </div>
+            </div>
+
+            <!-- Right Actions -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <!-- Visit Bitvedas Home Button -->
+                <a href="https://bitsvedas.github.io/bitveda/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 dark:bg-indigo-950/60 dark:text-indigo-300 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60 transition-all">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="hidden sm:inline">Bitvedas Home</span>
+                </a>
+
+                <!-- Print Button -->
+                <button onclick="window.print()" title="नोट्स प्रिंट या PDF में सेव करें" class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-print"></i>
+                </button>
+
+                <!-- Dark Mode Toggle -->
+                <button id="theme-toggle" title="डार्क/लाइट मोड बदलें" class="p-2.5 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-indigo-900 via-slate-900 to-purple-950 text-white py-12 sm:py-16 border-b border-slate-800">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-3xl">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/20 border border-indigo-400/30 text-indigo-200 text-xs sm:text-sm font-medium mb-4">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span>NCERT पैटर्न पर आधारित सरल हिंदी नोट्स</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight mb-4">
+                    ई-कॉमर्स (E-Commerce) : <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">संपूर्ण अध्ययन गाइड</span>
+                </h1>
+                <p class="text-slate-300 text-base sm:text-lg mb-6 leading-relaxed">
+                    इतिहास, प्रकार (B2B, B2C), लाभ-हानि, प्रमुख तत्व, सिद्धांत, मैसेजिंग सिस्टम और EDI की कार्यप्रणाली को आसान भाषा और डायग्राम के साथ समझें।
+                </p>
+                
+                <!-- Creator & Portal Metadata Badges -->
+                <div class="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
+                    <div class="flex items-center gap-2.5 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/15">
+                        <div class="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center font-bold text-sm">
+                            AS
+                        </div>
+                        <div>
+                            <div class="text-[11px] text-indigo-200 uppercase tracking-wider">Created By</div>
+                            <div class="text-sm font-bold text-white">Aakash Sen</div>
+                        </div>
+                    </div>
+
+                    <a href="https://bitsvedas.github.io/bitveda/" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2.5 bg-indigo-600 hover:bg-indigo-500 px-4 py-2.5 rounded-xl font-semibold text-sm shadow-lg shadow-indigo-600/30 transition-all">
+                        <i class="fa-solid fa-globe"></i>
+                        <span>ऑफिशियल पोर्टल: Bitvedas</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs opacity-80"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mobile Search Bar -->
+    <div class="md:hidden px-4 pt-4 no-print">
+        <div class="relative w-full">
+            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm"></i>
+            <input 
+                type="text" 
+                id="mobile-search-input" 
+                placeholder="नोट्स में कोई भी टॉपिक खोजें..." 
+                class="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-indigo-500 focus:outline-none shadow-sm"
+            >
+        </div>
+    </div>
+
+    <!-- Main Content Layout -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12 flex flex-col lg:flex-row gap-8">
+        
+        <!-- Left Sidebar: Table of Contents & Progress -->
+        <aside id="sidebar" class="lg:w-72 flex-shrink-0 no-print hidden lg:block">
+            <div class="sticky top-24 space-y-6">
+                
+                <!-- Navigation Card -->
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200/80 dark:border-slate-800 shadow-sm">
+                    <h3 class="font-bold text-sm uppercase tracking-wider text-slate-400 dark:text-slate-500 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-list-ul text-indigo-500"></i>
+                        <span>विषय-सूची (Chapters)</span>
+                    </h3>
+                    <nav class="space-y-1.5 text-sm font-medium" id="toc-nav">
+                        <a href="#chapter-1" class="toc-link flex items-center gap-2.5 px-3 py-2 rounded-xl text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/50 transition-all">
+                            <span class="w-6 h-6 rounded-lg bg-indigo-600 text-white text-xs flex items-center justify-center font-bold">1</span>
+                            <span>परिचय और संक्षिप्त इतिहास</span>
+                        </a>
+                        <a href="#chapter-2" class="toc-link flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all">
+                            <span class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs flex items-center justify-center font-bold">2</span>
+                            <span>ई-कॉमर्स के प्रकार (Types)</span>
+                        </a>
+                        <a href="#chapter-3" class="toc-link flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all">
+                            <span class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs flex items-center justify-center font-bold">3</span>
+                            <span>लाभ और हानियाँ</span>
+                        </a>
+                        <a href="#chapter-4" class="toc-link flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all">
+                            <span class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs flex items-center justify-center font-bold">4</span>
+                            <span>प्रमुख तत्व और सिद्धांत</span>
+                        </a>
+                        <a href="#chapter-5" class="toc-link flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all">
+                            <span class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs flex items-center justify-center font-bold">5</span>
+                            <span>मैसेजिंग और सूचना वितरण</span>
+                        </a>
+                        <a href="#chapter-6" class="toc-link flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all">
+                            <span class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs flex items-center justify-center font-bold">6</span>
+                            <span>EDI और इसकी कार्यप्रणाली</span>
+                        </a>
+                        <a href="#quiz-section" class="toc-link flex items-center gap-2.5 px-3 py-2 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-all">
+                            <span class="w-6 h-6 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs flex items-center justify-center font-bold">★</span>
+                            <span>अभ्यास प्रश्नोत्तरी (Quiz)</span>
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Study Tracker Card -->
+                <div class="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-2xl p-5 text-white shadow-lg shadow-indigo-500/10">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-xs font-semibold uppercase tracking-wider text-indigo-200">अध्ययन प्रगति</span>
+                        <span id="read-counter" class="text-xs font-bold bg-white/20 px-2 py-0.5 rounded-full">0 / 6 पूर्ण</span>
+                    </div>
+                    <div class="w-full h-2 bg-black/20 rounded-full overflow-hidden mb-3">
+                        <div id="study-progress-bar" class="h-full bg-emerald-400 w-0 transition-all duration-300"></div>
+                    </div>
+                    <p class="text-xs text-indigo-100 leading-relaxed mb-4">
+                        प्रत्येक अध्याय पढ़ने के बाद <span class="underline font-semibold">"पढ़ लिया (Mark Read)"</span> बटन पर क्लिक करें।
+                    </p>
+                    <a href="https://bitsvedas.github.io/bitveda/" target="_blank" rel="noopener noreferrer" class="block w-full text-center py-2 px-3 bg-white text-indigo-700 rounded-xl text-xs font-bold hover:bg-indigo-50 transition-colors">
+                        Bitvedas पर और नोट्स देखें →
+                    </a>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- Mobile Drawer Modal for TOC -->
+        <div id="mobile-drawer" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden lg:hidden no-print">
+            <div class="w-72 max-w-[80vw] bg-white dark:bg-slate-900 h-full p-5 flex flex-col justify-between shadow-2xl">
+                <div>
+                    <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+                        <span class="font-bold text-lg text-indigo-600 dark:text-indigo-400">Bitvedas Notes</span>
+                        <button id="close-drawer-btn" class="p-2 text-slate-500 hover:text-slate-800 dark:hover:text-white">
+                            <i class="fa-solid fa-xmark text-xl"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-2 text-sm font-medium">
+                        <a href="#chapter-1" class="mobile-toc-link block px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800">1. परिचय और संक्षिप्त इतिहास</a>
+                        <a href="#chapter-2" class="mobile-toc-link block px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">2. ई-कॉमर्स के प्रकार (Types)</a>
+                        <a href="#chapter-3" class="mobile-toc-link block px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">3. लाभ और हानियाँ</a>
+                        <a href="#chapter-4" class="mobile-toc-link block px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">4. प्रमुख तत्व और सिद्धांत</a>
+                        <a href="#chapter-5" class="mobile-toc-link block px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">5. मैसेजिंग और सूचना वितरण</a>
+                        <a href="#chapter-6" class="mobile-toc-link block px-3 py-2.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800">6. EDI और इसकी कार्यप्रणाली</a>
+                        <a href="#quiz-section" class="mobile-toc-link block px-3 py-2.5 rounded-xl text-emerald-600 font-bold">★ अभ्यास प्रश्नोत्तरी (Quiz)</a>
+                    </div>
+                </div>
+                <div class="pt-4 border-t border-slate-200 dark:border-slate-800 text-xs text-slate-500">
+                    <div>Creator: <strong class="text-slate-800 dark:text-slate-200">Aakash Sen</strong></div>
+                    <a href="https://bitsvedas.github.io/bitveda/" target="_blank" class="text-indigo-600 dark:text-indigo-400 font-semibold mt-1 inline-block">bitsvedas.github.io/bitveda/</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Main Content Area -->
+        <main class="flex-1 space-y-10 print-full" id="notes-container">
+
+            <!-- CHAPTER 1: INTRODUCTION & HISTORY -->
+            <article id="chapter-1" class="note-chapter bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-indigo-600 text-white font-bold flex items-center justify-center shadow-md shadow-indigo-500/20">01</span>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">अध्याय 1 • NCERT सार</span>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">ई-कॉमर्स का परिचय और संक्षिप्त इतिहास</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <button onclick="copySection('chapter-1')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                        </button>
+                        <button onclick="toggleRead(1, this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-emerald-500 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-circle-check"></i> <span>पढ़ लिया</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Definition Highlight Box -->
+                <div class="bg-indigo-50/70 dark:bg-indigo-950/30 border-l-4 border-indigo-600 p-4 sm:p-5 rounded-r-2xl mb-8">
+                    <h3 class="font-bold text-indigo-950 dark:text-indigo-200 text-base sm:text-lg mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-lightbulb text-amber-500"></i>
+                        <span>ई-कॉमर्स (E-Commerce) क्या है?</span>
+                    </h3>
+                    <p class="text-slate-700 dark:text-slate-300 text-sm sm:text-base">
+                        ई-कॉमर्स या <strong>इलेक्ट्रॉनिक कॉमर्स (Electronic Commerce)</strong> का अर्थ इंटरनेट और इलेक्ट्रॉनिक नेटवर्क के माध्यम से वस्तुओं (Goods) और सेवाओं (Services) की खरीद और बिक्री करना है। इसके अंतर्गत पैसे का ऑनलाइन लेन-देन और डेटा का ट्रांसफर भी शामिल है।
+                    </p>
+                </div>
+
+                <h3 class="font-bold text-lg text-slate-800 dark:text-slate-200 mb-6 flex items-center gap-2">
+                    <i class="fa-solid fa-clock-rotate-left text-indigo-500"></i>
+                    <span>ई-कॉमर्स का ऐतिहासिक विकास (Timeline)</span>
+                </h3>
+
+                <!-- Vertical Timeline -->
+                <div class="relative pl-6 sm:pl-8 border-l-2 border-indigo-200 dark:border-indigo-900 space-y-8">
+                    
+                    <!-- Step 1 -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 rounded-full bg-indigo-600 ring-4 ring-white dark:ring-slate-900"></div>
+                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-xs font-bold mb-1">1960 और 1970 का दशक</span>
+                        <h4 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white mb-2">प्रारंभिक दौर (बुनियाद)</h4>
+                        <ul class="space-y-1.5 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside">
+                            <li><strong>EDI (Electronic Data Interchange):</strong> ई-कॉमर्स की शुरुआत 1960 के दशक में EDI के विकास के साथ हुई।</li>
+                            <li><strong>उपयोग:</strong> इसने व्यावसायिक कंपनियों को कागजी कार्रवाई (जैसे- चालान और खरीद ऑर्डर) की जगह इलेक्ट्रॉनिक रूप से डेटा साझा करने की सुविधा दी।</li>
+                            <li><strong>ARPANET:</strong> इसी दौरान इंटरनेट के शुरुआती रूप 'अर्पानेट' का विकास हुआ, जिसने भविष्य के ऑनलाइन संचार का आधार तैयार किया।</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 rounded-full bg-purple-600 ring-4 ring-white dark:ring-slate-900"></div>
+                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-purple-100 dark:bg-purple-900/60 text-purple-700 dark:text-purple-300 text-xs font-bold mb-1">1980 का दशक</span>
+                        <h4 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white mb-2">ऑनलाइन शॉपिंग का आविष्कार</h4>
+                        <ul class="space-y-1.5 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside">
+                            <li><strong>माइकल एल्ड्रिच (Michael Aldrich):</strong> 1979-1980 में, अंग्रेजी आविष्कारक माइकल एल्ड्रिच ने एक मॉडिफाइड टेलीविज़न को टेलीफोन लाइन के जरिए कंप्यूटर से जोड़कर पहली बार सुरक्षित डेटा ट्रांसमिशन किया। इसे <strong>'टेलीशॉपिंग' (Teleshopping)</strong> कहा गया।</li>
+                            <li><strong>पहला ऑनलाइन सिस्टम:</strong> इसे पहली ऑनलाइन शॉपिंग प्रणाली माना जाता है, जिसका उपयोग मुख्य रूप से B2B (Business-to-Business) मॉडल के लिए किया गया।</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 rounded-full bg-pink-600 ring-4 ring-white dark:ring-slate-900"></div>
+                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-pink-100 dark:bg-pink-900/60 text-pink-700 dark:text-pink-300 text-xs font-bold mb-1">1990 का दशक</span>
+                        <h4 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white mb-2">ई-कॉमर्स की क्रांति (World Wide Web)</h4>
+                        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-2">यह वह दशक था जब ई-कॉमर्स आम उपभोक्ताओं (Consumers) तक पहुँचा:</p>
+                        <ul class="space-y-1.5 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside">
+                            <li><strong>1990 (WWW का आविष्कार):</strong> टिम बर्नर्स-ली ने वर्ल्ड वाइड वेब (WWW) बनाया, जिससे इंटरनेट का उपयोग आसान हो गया।</li>
+                            <li><strong>1991 (व्यावसायिक उपयोग):</strong> नेशनल साइंस फाउंडेशन (NSF) ने इंटरनेट पर लगे कमर्शियल प्रतिबंध हटा दिए।</li>
+                            <li><strong>1994 (सुरक्षित लेन-देन):</strong> नेटस्केप (Netscape) ने <strong>SSL (Secure Sockets Layer)</strong> एन्क्रिप्शन विकसित किया, जिससे क्रेडिट कार्ड की जानकारी ऑनलाइन सुरक्षित हुई।</li>
+                            <li><strong>1995 (Amazon और eBay):</strong> जेफ बेजोस ने ऑनलाइन किताबों की दुकान के रूप में <strong>Amazon</strong> शुरू की और पियरे ओमिडयार ने <strong>eBay</strong> लॉन्च किया।</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 rounded-full bg-amber-500 ring-4 ring-white dark:ring-slate-900"></div>
+                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-amber-100 dark:bg-amber-900/60 text-amber-700 dark:text-amber-300 text-xs font-bold mb-1">2000 का दशक</span>
+                        <h4 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white mb-2">विस्तार और डिजिटल पेमेंट</h4>
+                        <ul class="space-y-1.5 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside">
+                            <li><strong>PayPal (1998):</strong> सुरक्षित पेमेंट गेटवे की जरूरत को पेपाल (PayPal) ने पूरा किया।</li>
+                            <li><strong>Alibaba (1999):</strong> चीन में जैक मा द्वारा अलीबाबा की स्थापना हुई, जो दुनिया की सबसे बड़ी B2B और B2C कंपनियों में से एक बनी।</li>
+                            <li><strong>डॉट-कॉम बबल (Dot-com Bubble):</strong> सन 2000 के आसपास कई इंटरनेट कंपनियां दिवालिया हुईं, लेकिन Amazon और eBay जैसी मजबूत कंपनियां उबर कर और बड़ी बन गईं।</li>
+                        </ul>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="relative">
+                        <div class="absolute -left-[31px] sm:-left-[39px] top-1 w-4 h-4 rounded-full bg-emerald-500 ring-4 ring-white dark:ring-slate-900"></div>
+                        <span class="inline-block px-2.5 py-0.5 rounded-md bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 text-xs font-bold mb-1">2010 से वर्तमान</span>
+                        <h4 class="font-bold text-base sm:text-lg text-slate-900 dark:text-white mb-2">मोबाइल कॉमर्स और भारत में ई-कॉमर्स</h4>
+                        <ul class="space-y-1.5 text-sm sm:text-base text-slate-600 dark:text-slate-300 list-disc list-inside">
+                            <li><strong>एम-कॉमर्स (M-Commerce):</strong> स्मार्टफ़ोन और 4G/5G इंटरनेट के आने से ज़्यादातर शॉपिंग मोबाइल ऐप्स के जरिए होने लगी।</li>
+                            <li><strong>भारतीय परिदृश्य:</strong> भारत में <strong>Flipkart (2007)</strong> और <strong>Snapdeal (2010)</strong> ने ई-कॉमर्स को छोटे शहरों तक पहुँचाया। कैश ऑन डिलीवरी (COD) और UPI ने भारत में गेम-चेंजर का काम किया।</li>
+                            <li><strong>कोविड-19 प्रभाव (2020):</strong> महामारी के दौरान किराने का सामान (Groceries) और दवाइयां भी ई-कॉमर्स का मुख्य हिस्सा बन गईं।</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Conclusion Box -->
+                <div class="mt-8 p-4 rounded-2xl bg-slate-100 dark:bg-slate-800/70 text-sm text-slate-700 dark:text-slate-300">
+                    <strong>निष्कर्ष (Conclusion):</strong> जो ई-कॉमर्स 1960 के दशक में केवल दो कंपनियों के बीच इलेक्ट्रॉनिक डेटा शेयरिंग (EDI) तक सीमित था, वह आज AI (आर्टिफिशियल इंटेलिजेंस), ड्रोन डिलीवरी और सोशल कॉमर्स के साथ एक ग्लोबल ट्रिलियन-डॉलर इंडस्ट्री बन चुका है।
+                </div>
+            </article>
+
+            <!-- CHAPTER 2: TYPES OF E-COMMERCE -->
+            <article id="chapter-2" class="note-chapter bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-purple-600 text-white font-bold flex items-center justify-center shadow-md shadow-purple-500/20">02</span>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400">अध्याय 2 • बिजनेस मॉडल</span>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">ई-कॉमर्स के प्रकार (Types of E-Commerce)</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <button onclick="copySection('chapter-2')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                        </button>
+                        <button onclick="toggleRead(2, this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-emerald-500 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-circle-check"></i> <span>पढ़ लिया</span>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-slate-600 dark:text-slate-300 mb-6 text-sm sm:text-base">
+                    लेन-देन में शामिल पक्षों (Business, Consumer और Government) के आधार पर ई-कॉमर्स को मुख्य रूप से निम्नलिखित 5 श्रेणियों में बांटा जाता है:
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- B2B -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 hover:border-indigo-400 transition-all">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-3 py-1 rounded-lg bg-indigo-600 text-white font-extrabold text-sm">1. B2B</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Business-to-Business</span>
+                        </div>
+                        <h3 class="font-bold text-base sm:text-lg mb-2 text-slate-900 dark:text-white">व्यवसाय से व्यवसाय</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+                            इसमें लेन-देन दो व्यावसायिक कंपनियों के बीच होता है। आम उपभोक्ता इसमें शामिल नहीं होता।
+                        </p>
+                        <div class="text-xs bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700">
+                            <strong>उदाहरण:</strong> एक निर्माता (Manufacturer) द्वारा थोक विक्रेता (Wholesaler) को माल बेचना। जैसे- <span class="text-indigo-600 dark:text-indigo-400 font-semibold">Alibaba, IndiaMART</span>.
+                        </div>
+                    </div>
+
+                    <!-- B2C -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 hover:border-purple-400 transition-all">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-3 py-1 rounded-lg bg-purple-600 text-white font-extrabold text-sm">2. B2C</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Business-to-Consumer</span>
+                        </div>
+                        <h3 class="font-bold text-base sm:text-lg mb-2 text-slate-900 dark:text-white">व्यवसाय से उपभोक्ता</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+                            यह सबसे आम मॉडल है जहाँ कंपनियाँ अपने उत्पाद या सेवाएँ सीधे अंतिम उपभोक्ता (End-user) को बेचती हैं।
+                        </p>
+                        <div class="text-xs bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700">
+                            <strong>उदाहरण:</strong> <span class="text-purple-600 dark:text-purple-400 font-semibold">Amazon, Flipkart, Myntra</span> से व्यक्तिगत खरीदारी करना।
+                        </div>
+                    </div>
+
+                    <!-- C2C -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 hover:border-pink-400 transition-all">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-3 py-1 rounded-lg bg-pink-600 text-white font-extrabold text-sm">3. C2C</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Consumer-to-Consumer</span>
+                        </div>
+                        <h3 class="font-bold text-base sm:text-lg mb-2 text-slate-900 dark:text-white">उपभोक्ता से उपभोक्ता</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+                            इसमें एक उपभोक्ता अपने पुराने या नए उत्पाद दूसरे उपभोक्ता को इंटरनेट के माध्यम से बेचता है। वेबसाइट केवल एक मध्यस्थ (Platform) का काम करती है।
+                        </p>
+                        <div class="text-xs bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700">
+                            <strong>उदाहरण:</strong> <span class="text-pink-600 dark:text-pink-400 font-semibold">OLX, Quikr, और eBay</span> पर पुराना फोन या बाइक बेचना।
+                        </div>
+                    </div>
+
+                    <!-- C2B -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 hover:border-amber-400 transition-all">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-3 py-1 rounded-lg bg-amber-600 text-white font-extrabold text-sm">4. C2B</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Consumer-to-Business</span>
+                        </div>
+                        <h3 class="font-bold text-base sm:text-lg mb-2 text-slate-900 dark:text-white">उपभोक्ता से व्यवसाय</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+                            इस मॉडल में उपभोक्ता (व्यक्ति) किसी कंपनी को अपनी सेवाएँ या उत्पाद प्रदान करता है और बदले में भुगतान पाता है।
+                        </p>
+                        <div class="text-xs bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700">
+                            <strong>उदाहरण:</strong> फ्रीलांसर (<span class="text-amber-600 dark:text-amber-400 font-semibold">Upwork, Fiverr</span>) द्वारा किसी कंपनी के लिए लोगो बनाना या इन्फ्लुएंसर द्वारा ब्रांड प्रमोशन।
+                        </div>
+                    </div>
+
+                    <!-- B2G / G2B -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/70 dark:border-slate-800 md:col-span-2 hover:border-emerald-400 transition-all">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="px-3 py-1 rounded-lg bg-emerald-600 text-white font-extrabold text-sm">5. B2G / G2B</span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400">Business-to-Government</span>
+                        </div>
+                        <h3 class="font-bold text-base sm:text-lg mb-2 text-slate-900 dark:text-white">व्यवसाय और सरकार के बीच लेन-देन</h3>
+                        <p class="text-sm text-slate-600 dark:text-slate-300 mb-3">
+                            इसमें सरकारी एजेंसियों और व्यावसायिक कंपनियों के बीच सूचनाओं, उत्पादों और सेवाओं का ऑनलाइन लेन-देन होता है।
+                        </p>
+                        <div class="text-xs bg-white dark:bg-slate-900 p-3 rounded-xl border border-slate-200/60 dark:border-slate-700">
+                            <strong>उदाहरण:</strong> सरकारी पोर्टल (<span class="text-emerald-600 dark:text-emerald-400 font-semibold">GeM - Government e-Marketplace</span>), ई-टेंडरिंग (e-Tendering), और कंपनियों द्वारा ऑनलाइन कॉर्पोरेट टैक्स या GST भरना।
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- CHAPTER 3: ADVANTAGES & DISADVANTAGES -->
+            <article id="chapter-3" class="note-chapter bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-emerald-600 text-white font-bold flex items-center justify-center shadow-md shadow-emerald-500/20">03</span>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">अध्याय 3 • तुलनात्मक अध्ययन</span>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">ई-कॉमर्स के लाभ और हानियाँ</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <button onclick="copySection('chapter-3')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                        </button>
+                        <button onclick="toggleRead(3, this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-emerald-500 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-circle-check"></i> <span>पढ़ लिया</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Advantages Grid -->
+                <div class="mb-8">
+                    <h3 class="font-bold text-lg text-emerald-700 dark:text-emerald-400 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-plus"></i>
+                        <span>ई-कॉमर्स के लाभ (Advantages of E-Commerce)</span>
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- For Businesses -->
+                        <div class="p-5 rounded-2xl bg-emerald-50/60 dark:bg-emerald-950/20 border border-emerald-200/70 dark:border-emerald-900/50">
+                            <h4 class="font-bold text-base text-emerald-900 dark:text-emerald-300 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-briefcase"></i> व्यापारियों (Businesses) के लिए लाभ
+                            </h4>
+                            <ul class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+                                <li><strong>1. वैश्विक पहुँच (Global Reach):</strong> भौतिक दुकान की सीमाएँ खत्म हो जाती हैं। व्यापारी देश-विदेश के ग्राहकों तक अपना माल बेच सकते हैं।</li>
+                                <li><strong>2. कम संचालन लागत (Lower Operational Cost):</strong> महंगे शोरूम का किराया, बिजली का बिल और बड़ी संख्या में कर्मचारियों का खर्च बचता है।</li>
+                                <li><strong>3. 24/7 उपलब्धता:</strong> ऑनलाइन स्टोर 24 घंटे, सातों दिन खुले रहते हैं, जिससे किसी भी समय बिक्री संभव है।</li>
+                            </ul>
+                        </div>
+
+                        <!-- For Consumers -->
+                        <div class="p-5 rounded-2xl bg-blue-50/60 dark:bg-blue-950/20 border border-blue-200/70 dark:border-blue-900/50">
+                            <h4 class="font-bold text-base text-blue-900 dark:text-blue-300 mb-3 flex items-center gap-2">
+                                <i class="fa-solid fa-users"></i> ग्राहकों (Consumers) के लिए लाभ
+                            </h4>
+                            <ul class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+                                <li><strong>1. सुविधा (Convenience):</strong> घर बैठे, यात्रा करते हुए या ऑफिस से स्मार्टफोन के जरिए कभी भी खरीदारी की जा सकती है।</li>
+                                <li><strong>2. विकल्पों की विविधता (Wide Choices):</strong> एक ही प्लेटफॉर्म पर दुनिया भर के विभिन्न ब्रांड्स और उत्पाद उपलब्ध होते हैं।</li>
+                                <li><strong>3. कीमतों की तुलना (Price Comparison):</strong> ग्राहक अलग-अलग वेबसाइट्स पर जाकर आसानी से कीमतों और रिव्यूज की तुलना कर सकते हैं।</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Disadvantages -->
+                <div>
+                    <h3 class="font-bold text-lg text-rose-600 dark:text-rose-400 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span>ई-कॉमर्स की हानियाँ और सीमाएँ (Disadvantages)</span>
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200/60 dark:border-rose-900/40 text-sm">
+                            <strong class="block text-rose-900 dark:text-rose-300 mb-1">1. सुरक्षा और धोखाधड़ी (Security Issues):</strong>
+                            <span class="text-slate-600 dark:text-slate-300">हैकिंग, क्रेडिट कार्ड फ्रॉड, फिशिंग और व्यक्तिगत डेटा के लीक होने का खतरा हमेशा बना रहता है।</span>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200/60 dark:border-rose-900/40 text-sm">
+                            <strong class="block text-rose-900 dark:text-rose-300 mb-1">2. छूकर न देख पाना (Lack of Touch & Feel):</strong>
+                            <span class="text-slate-600 dark:text-slate-300">ग्राहक कपड़े या सामान को भौतिक रूप से जांच नहीं सकते। कई बार डिलीवर किया गया सामान फोटो से अलग निकलता है।</span>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200/60 dark:border-rose-900/40 text-sm">
+                            <strong class="block text-rose-900 dark:text-rose-300 mb-1">3. वितरण में देरी (Delay in Delivery):</strong>
+                            <span class="text-slate-600 dark:text-slate-300">भौतिक दुकान में पैसे देते ही सामान मिल जाता है, जबकि ई-कॉमर्स में शिपिंग में 2 से 7 दिन लग सकते हैं।</span>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200/60 dark:border-rose-900/40 text-sm">
+                            <strong class="block text-rose-900 dark:text-rose-300 mb-1">4. तकनीकी निर्भरता (Tech Dependence):</strong>
+                            <span class="text-slate-600 dark:text-slate-300">यह पूरी तरह इंटरनेट और सर्वर पर निर्भर है। सर्वर डाउन होने पर व्यापार तुरंत ठप हो जाता है।</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- CHAPTER 4: ELEMENTS & PRINCIPLES -->
+            <article id="chapter-4" class="note-chapter bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-amber-500 text-white font-bold flex items-center justify-center shadow-md shadow-amber-500/20">04</span>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400">अध्याय 4 • संरचना और नियम</span>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">ई-कॉमर्स के प्रमुख तत्व और सिद्धांत</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <button onclick="copySection('chapter-4')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                        </button>
+                        <button onclick="toggleRead(4, this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-emerald-500 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-circle-check"></i> <span>पढ़ लिया</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 6 Elements -->
+                <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-cubes text-amber-500"></i>
+                    <span>भाग A: ई-कॉमर्स के 6 प्रमुख तत्व (Elements of E-Commerce)</span>
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 flex items-center justify-center mb-2"><i class="fa-solid fa-store"></i></div>
+                        <h4 class="font-bold text-sm sm:text-base mb-1">1. डिजिटल स्टोरफ्रंट</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">वह वेबसाइट या ऐप जो आभासी दुकान का काम करती है जहाँ उत्पादों का कैटलॉग दिखता है।</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 flex items-center justify-center mb-2"><i class="fa-solid fa-box-open"></i></div>
+                        <h4 class="font-bold text-sm sm:text-base mb-1">2. उत्पाद या सेवा</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">भौतिक वस्तुएं (किताबें, कपड़े) या डिजिटल उत्पाद (ई-बुक्स, सॉफ्टवेयर, ऑनलाइन कोर्स)।</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 flex items-center justify-center mb-2"><i class="fa-solid fa-cart-shopping"></i></div>
+                        <h4 class="font-bold text-sm sm:text-base mb-1">3. शॉपिंग कार्ट</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">ब्राउज़िंग के दौरान कई उत्पादों को एक साथ चुनने और चेकआउट तक सुरक्षित रखने की सुविधा।</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 flex items-center justify-center mb-2"><i class="fa-solid fa-credit-card"></i></div>
+                        <h4 class="font-bold text-sm sm:text-base mb-1">4. पेमेंट गेटवे</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">ग्राहक के बैंक और प्लेटफॉर्म के बीच सुरक्षित भुगतान (UPI, Card, Net Banking) का माध्यम।</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 flex items-center justify-center mb-2"><i class="fa-solid fa-truck-fast"></i></div>
+                        <h4 class="font-bold text-sm sm:text-base mb-1">5. लॉजिस्टिक्स और सप्लाई चेन</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">वेयरहाउस (गोदाम) से लेकर ग्राहक के दरवाजे तक सामान पहुँचाने (Last-mile delivery) की व्यवस्था।</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <div class="w-8 h-8 rounded-lg bg-amber-100 dark:bg-amber-900/50 text-amber-600 flex items-center justify-center mb-2"><i class="fa-solid fa-headset"></i></div>
+                        <h4 class="font-bold text-sm sm:text-base mb-1">6. ग्राहक सेवा प्रणाली</h4>
+                        <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300">रिटर्न, रिफंड और शिकायतों के समाधान के लिए हेल्पडेस्क, ईमेल या चैटबॉट सपोर्ट।</p>
+                    </div>
+                </div>
+
+                <!-- 6 Principles -->
+                <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-shield-halved text-indigo-500"></i>
+                    <span>भाग B: ई-कॉमर्स के मुख्य सिद्धांत (Principles of E-Commerce)</span>
+                </h3>
+                <div class="space-y-3 text-sm sm:text-base">
+                    <div class="p-4 rounded-xl bg-indigo-50/50 dark:bg-slate-800/80 border border-indigo-100 dark:border-slate-700">
+                        <strong>1. सुरक्षा का सिद्धांत (Principle of Security):</strong> ग्राहक का वित्तीय डेटा हैकर्स से सुरक्षित होना चाहिए (जैसे SSL एन्क्रिप्शन का उपयोग)।
+                    </div>
+                    <div class="p-4 rounded-xl bg-indigo-50/50 dark:bg-slate-800/80 border border-indigo-100 dark:border-slate-700">
+                        <strong>2. गोपनीयता का सिद्धांत (Principle of Privacy):</strong> ग्राहक की सर्च हिस्ट्री, पता और फोन नंबर बिना अनुमति किसी तीसरे पक्ष (Third Party) को नहीं बेचा जाना चाहिए।
+                    </div>
+                    <div class="p-4 rounded-xl bg-indigo-50/50 dark:bg-slate-800/80 border border-indigo-100 dark:border-slate-700">
+                        <strong>3. पारदर्शिता (Principle of Transparency):</strong> उत्पादों की कीमत, छिपे हुए शुल्क, डिलीवरी समय और रिटर्न पॉलिसी बिल्कुल स्पष्ट होनी चाहिए।
+                    </div>
+                    <div class="p-4 rounded-xl bg-indigo-50/50 dark:bg-slate-800/80 border border-indigo-100 dark:border-slate-700">
+                        <strong>4. सत्यनिष्ठा (Principle of Integrity):</strong> डेटा ट्रांसमिशन के दौरान जानकारी (राशि या ऑर्डर विवरण) में कोई अनाधिकृत बदलाव नहीं होना चाहिए।
+                    </div>
+                    <div class="p-4 rounded-xl bg-indigo-50/50 dark:bg-slate-800/80 border border-indigo-100 dark:border-slate-700">
+                        <strong>5. गैर-अस्वीकरण (Non-Repudiation):</strong> लेन-देन पूरा होने के बाद कोई भी पक्ष मुकर न सके, इसके लिए डिजिटल रसीदें और इनवॉइस प्रमाण के रूप में रखे जाते हैं।
+                    </div>
+                    <div class="p-4 rounded-xl bg-indigo-50/50 dark:bg-slate-800/80 border border-indigo-100 dark:border-slate-700">
+                        <strong>6. उपयोगिता और नेविगेशन (Usability & Navigation):</strong> वेबसाइट का डिज़ाइन सरल होना चाहिए ताकि बिना तकनीकी ज्ञान वाला व्यक्ति भी आसानी से खरीदारी कर सके।
+                    </div>
+                </div>
+            </article>
+
+            <!-- CHAPTER 5: MESSAGING & INFORMATION DISTRIBUTION -->
+            <article id="chapter-5" class="note-chapter bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-sky-600 text-white font-bold flex items-center justify-center shadow-md shadow-sky-500/20">05</span>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-sky-600 dark:text-sky-400">अध्याय 5 • संचार और नेटवर्क</span>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">मैसेजिंग और सूचना वितरण प्रणाली</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <button onclick="copySection('chapter-5')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                        </button>
+                        <button onclick="toggleRead(5, this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-emerald-500 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-circle-check"></i> <span>पढ़ लिया</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Messaging Systems -->
+                    <div class="p-5 rounded-2xl bg-sky-50/50 dark:bg-slate-800/50 border border-sky-200/60 dark:border-slate-700">
+                        <h3 class="font-bold text-lg text-sky-900 dark:text-sky-300 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-envelope-open-text"></i> 1. मैसेजिंग प्रणालियाँ (Messaging)
+                        </h3>
+                        <ul class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+                            <li><strong>• EDI (Electronic Data Interchange):</strong> B2B कंपनियों के बीच परचेज ऑर्डर और इनवॉइस को कंप्यूटर-से-कंप्यूटर भेजने की तकनीक।</li>
+                            <li><strong>• ईमेल मैसेजिंग (Email):</strong> ऑर्डर कन्फर्मेशन, पासवर्ड रीसेट और डिजिटल रसीदें भेजने के लिए (SMTP प्रोटोकॉल)।</li>
+                            <li><strong>• SMS और पुश नोटिफिकेशन:</strong> सुरक्षित लॉगिन के लिए OTP, डिलीवरी ट्रैकिंग और फ्लैश सेल अपडेट्स के लिए।</li>
+                            <li><strong>• इंस्टेंट मैसेजिंग और चैटबॉट्स:</strong> लाइव चैट और WhatsApp Business के माध्यम से तुरंत ग्राहक सहायता।</li>
+                        </ul>
+                    </div>
+
+                    <!-- Information Distribution -->
+                    <div class="p-5 rounded-2xl bg-purple-50/50 dark:bg-slate-800/50 border border-purple-200/60 dark:border-slate-700">
+                        <h3 class="font-bold text-lg text-purple-900 dark:text-purple-300 mb-3 flex items-center gap-2">
+                            <i class="fa-solid fa-server"></i> 2. सूचना वितरण (Information Distribution)
+                        </h3>
+                        <ul class="space-y-3 text-sm text-slate-700 dark:text-slate-300">
+                            <li><strong>• वेब सर्वर और ब्राउज़र:</strong> ग्राहक के सर्च करने पर सर्वर HTTP/HTTPS प्रोटोकॉल द्वारा वेब पेज (HTML) वितरित करता है।</li>
+                            <li><strong>• डेटाबेस (DBMS):</strong> लाखों उत्पादों और कीमतों का डेटा MySQL/Oracle जैसे डेटाबेस से रीयल-टाइम में आता है।</li>
+                            <li><strong>• कंटेंट डिलीवरी नेटवर्क (CDN):</strong> वेबसाइट की हाई-क्वालिटी फोटो और वीडियो को यूज़र की लोकेशन के पास वाले सर्वर से तेज़ी से लोड करना।</li>
+                            <li><strong>• RSS फीड्स और न्यूज़लेटर्स:</strong> नए उत्पादों और डिस्काउंट की स्वचालित सूचनाएं भेजना।</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Key Protocols Pill Bar -->
+                <div class="p-4 rounded-2xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                    <h4 class="font-bold text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-3">सूचना वितरण के प्रमुख प्रोटोकॉल (Important Exam Points)</h4>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs sm:text-sm">
+                        <div class="bg-white dark:bg-slate-900 p-3 rounded-xl">
+                            <strong class="text-indigo-600 dark:text-indigo-400">HTTP / HTTPS:</strong> वेब पेजों के सुरक्षित वितरण के लिए।
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 p-3 rounded-xl">
+                            <strong class="text-indigo-600 dark:text-indigo-400">FTP:</strong> सर्वर पर बड़ी फाइलें अपलोड/डाउनलोड करने के लिए।
+                        </div>
+                        <div class="bg-white dark:bg-slate-900 p-3 rounded-xl">
+                            <strong class="text-indigo-600 dark:text-indigo-400">SMTP, POP3, IMAP:</strong> ईमेल भेजने और प्राप्त करने के लिए।
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- CHAPTER 6: EDI IN DETAIL -->
+            <article id="chapter-6" class="note-chapter bg-white dark:bg-slate-900 rounded-2xl sm:rounded-3xl p-6 sm:p-8 border border-slate-200/80 dark:border-slate-800 shadow-sm scroll-mt-20">
+                <div class="flex flex-wrap items-center justify-between gap-4 pb-5 mb-6 border-b border-slate-100 dark:border-slate-800">
+                    <div class="flex items-center gap-3">
+                        <span class="w-10 h-10 rounded-2xl bg-pink-600 text-white font-bold flex items-center justify-center shadow-md shadow-pink-500/20">06</span>
+                        <div>
+                            <span class="text-xs font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400">अध्याय 6 • विस्तृत तकनीकी नोट</span>
+                            <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white">EDI (Electronic Data Interchange) क्या है?</h2>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 no-print">
+                        <button onclick="copySection('chapter-6')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-indigo-50 hover:text-indigo-600 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-copy"></i> <span>Copy</span>
+                        </button>
+                        <button onclick="toggleRead(6, this)" class="px-3 py-1.5 rounded-xl text-xs font-semibold border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-emerald-500 transition-colors flex items-center gap-1.5">
+                            <i class="fa-regular fa-circle-check"></i> <span>पढ़ लिया</span>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-slate-700 dark:text-slate-300 text-sm sm:text-base mb-6">
+                    <strong>EDI (Electronic Data Interchange)</strong> दो व्यावसायिक संस्थाओं (कंपनियों) के बीच व्यावसायिक दस्तावेज़ों (जैसे- परचेज ऑर्डर, इनवॉइस, शिपिंग नोटिस) के <strong>कंप्यूटर-से-कंप्यूटर आदान-प्रदान</strong> की एक तकनीक है। यह कागजी कार्रवाई और मानवीय हस्तक्षेप (Human Intervention) को पूरी तरह खत्म कर देता है और डेटा को एक मानक इलेक्ट्रॉनिक प्रारूप (Standard Format जैसे ANSI X12 या EDIFACT) में सीधे एक सर्वर से दूसरे सर्वर में ट्रांसफर करता है।
+                </p>
+
+                <!-- Visual Flowchart Diagram of EDI -->
+                <div class="my-8 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white">
+                    <h3 class="text-center font-bold text-sm sm:text-base text-indigo-300 uppercase tracking-wider mb-6">
+                        <i class="fa-solid fa-diagram-project mr-1"></i> EDI की कार्यप्रणाली (4-Step Working Architecture)
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 relative">
+                        <!-- Step 1 -->
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/15 text-center">
+                            <div class="w-10 h-10 mx-auto mb-2 rounded-full bg-indigo-500 flex items-center justify-center font-bold">1</div>
+                            <div class="font-bold text-sm mb-1">डेटा की तैयारी</div>
+                            <div class="text-[11px] text-indigo-200 mb-2">(Data Preparation)</div>
+                            <p class="text-xs text-slate-300">कंपनी 'A' का ERP सॉफ्टवेयर परचेज ऑर्डर (PO) जेनरेट करता है।</p>
+                        </div>
+                        <!-- Step 2 -->
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/15 text-center">
+                            <div class="w-10 h-10 mx-auto mb-2 rounded-full bg-purple-500 flex items-center justify-center font-bold">2</div>
+                            <div class="font-bold text-sm mb-1">EDI अनुवाद</div>
+                            <div class="text-[11px] text-purple-200 mb-2">(Translation/Mapping)</div>
+                            <p class="text-xs text-slate-300">ट्रांसलेटर सॉफ्टवेयर इसे मानक प्रारूप (EDIFACT / ANSI X12) में बदलता है।</p>
+                        </div>
+                        <!-- Step 3 -->
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/15 text-center">
+                            <div class="w-10 h-10 mx-auto mb-2 rounded-full bg-pink-500 flex items-center justify-center font-bold">3</div>
+                            <div class="font-bold text-sm mb-1">सुरक्षित ट्रांसमिशन</div>
+                            <div class="text-[11px] text-pink-200 mb-2">(VAN / AS2 / HTTPS)</div>
+                            <p class="text-xs text-slate-300">सुरक्षित नेटवर्क (VAN या इंटरनेट) के माध्यम से कंपनी 'B' को भेजा जाता है।</p>
+                        </div>
+                        <!-- Step 4 -->
+                        <div class="bg-white/10 backdrop-blur-sm p-4 rounded-xl border border-white/15 text-center">
+                            <div class="w-10 h-10 mx-auto mb-2 rounded-full bg-emerald-500 flex items-center justify-center font-bold">4</div>
+                            <div class="font-bold text-sm mb-1">डिकोडिंग व प्रोसेसिंग</div>
+                            <div class="text-[11px] text-emerald-200 mb-2">(Decoding in ERP)</div>
+                            <p class="text-xs text-slate-300">कंपनी 'B' का सिस्टम फाइल को डिकोड करके बिना टाइपिंग के सीधे दर्ज कर लेता है।</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advantages of EDI -->
+                <h3 class="font-bold text-lg text-slate-900 dark:text-white mb-4">ई-कॉमर्स में EDI के 5 प्रमुख फायदे:</h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <strong class="text-pink-600 dark:text-pink-400 block mb-1">1. कागजी कार्रवाई से मुक्ति (Paperless):</strong>
+                        कागज़, प्रिंटिंग, कूरियर और दस्तावेज़ों को स्टोर करने की लागत बचती है।
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <strong class="text-pink-600 dark:text-pink-400 block mb-1">2. गलतियों में कमी (Zero Human Error):</strong>
+                        मैनुअल डेटा एंट्री (टाइपिंग) की जरूरत नहीं होती, जिससे मानवीय गलतियां शून्य हो जाती हैं।
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <strong class="text-pink-600 dark:text-pink-400 block mb-1">3. तीव्रता (Real-time Speed):</strong>
+                        जो ऑर्डर डाक से पहुँचने में दिनों लेते थे, वे सेकंड्स में प्रोसेस हो जाते हैं।
+                    </div>
+                    <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/60 dark:border-slate-800">
+                        <strong class="text-pink-600 dark:text-pink-400 block mb-1">4. बेहतर सप्लाई चेन और सुरक्षा:</strong>
+                        रीयल-टाइम स्टॉक अपडेट्स मिलते हैं और एन्क्रिप्शन के कारण डेटा पूरी तरह सुरक्षित रहता है।
+                    </div>
+                </div>
+            </article>
+
+            <!-- INTERACTIVE QUIZ SECTION -->
+            <section id="quiz-section" class="bg-gradient-to-br from-emerald-900 via-teal-900 to-slate-900 text-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 shadow-xl scroll-mt-20 no-print">
+                <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+                    <div>
+                        <span class="px-3 py-1 rounded-full bg-emerald-400/20 text-emerald-300 text-xs font-bold uppercase tracking-wider">Bitvedas Self-Test</span>
+                        <h2 class="text-xl sm:text-2xl font-extrabold mt-2">अभ्यास प्रश्नोत्तरी (Quick Revision Quiz)</h2>
+                        <p class="text-xs sm:text-sm text-emerald-100">ऊपर पढ़े गए नोट्स के आधार पर अपनी तैयारी जांचें:</p>
+                    </div>
+                    <div class="bg-white/10 px-4 py-2 rounded-xl text-sm font-bold">
+                        स्कोर: <span id="quiz-score" class="text-emerald-300">0</span> / 4
+                    </div>
+                </div>
+
+                <div class="space-y-5" id="quiz-questions">
+                    <!-- Q1 -->
+                    <div class="bg-white/10 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-white/15">
+                        <p class="font-bold text-sm sm:text-base mb-3">1. 1979-1980 में ऑनलाइन शॉपिंग (टेलीशॉपिंग) का आविष्कार किसने किया था?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm">
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">A) जेफ बेजोस (Jeff Bezos)</button>
+                            <button onclick="checkAnswer(this, true)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">B) माइकल एल्ड्रिच (Michael Aldrich)</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">C) टिम बर्नर्स-ली (Tim Berners-Lee)</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">D) जैक मा (Jack Ma)</button>
+                        </div>
+                    </div>
+
+                    <!-- Q2 -->
+                    <div class="bg-white/10 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-white/15">
+                        <p class="font-bold text-sm sm:text-base mb-3">2. OLX और Quikr पर एक ग्राहक द्वारा दूसरे ग्राहक को पुराना सामान बेचना किस मॉडल का उदाहरण है?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm">
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">A) B2B (Business-to-Business)</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">B) B2C (Business-to-Consumer)</button>
+                            <button onclick="checkAnswer(this, true)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">C) C2C (Consumer-to-Consumer)</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">D) B2G (Business-to-Government)</button>
+                        </div>
+                    </div>
+
+                    <!-- Q3 -->
+                    <div class="bg-white/10 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-white/15">
+                        <p class="font-bold text-sm sm:text-base mb-3">3. ई-कॉमर्स में 'Non-Repudiation' (गैर-अस्वीकरण) सिद्धांत का क्या अर्थ है?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm">
+                            <button onclick="checkAnswer(this, true)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">A) लेन-देन के बाद कोई भी पक्ष मुकर नहीं सकता</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">B) वेबसाइट की स्पीड तेज़ रखना</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">C) मुफ्त डिलीवरी देना</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">D) कैश ऑन डिलीवरी बंद करना</button>
+                        </div>
+                    </div>
+
+                    <!-- Q4 -->
+                    <div class="bg-white/10 backdrop-blur-sm p-4 sm:p-5 rounded-2xl border border-white/15">
+                        <p class="font-bold text-sm sm:text-base mb-3">4. EDI का पूरा नाम क्या है?</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs sm:text-sm">
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">A) Electronic Digital Internet</button>
+                            <button onclick="checkAnswer(this, true)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">B) Electronic Data Interchange</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">C) Easy Data Information</button>
+                            <button onclick="checkAnswer(this, false)" class="quiz-btn text-left p-3 rounded-xl bg-white/5 hover:bg-white/15 border border-white/10 transition-all">D) Electronic Delivery Interface</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Footer with Bitvedas & Creator Aakash Sen Details -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-12 py-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
+                    B
+                </div>
+                <div>
+                    <a href="https://bitsvedas.github.io/bitveda/" target="_blank" rel="noopener noreferrer" class="font-extrabold text-lg text-slate-900 dark:text-white hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
+                        Bitvedas Educational Portal
+                    </a>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">
+                        Designed & Created by <strong class="text-indigo-600 dark:text-indigo-400">Aakash Sen</strong>
+                    </p>
+                </div>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-4 text-xs sm:text-sm font-medium">
+                <a href="https://bitsvedas.github.io/bitveda/" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-indigo-600 text-white hover:bg-indigo-500 transition-colors shadow-sm">
+                    <i class="fa-solid fa-house mr-1.5"></i> गो टू होमपेज (Bitvedas)
+                </a>
+                <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition-colors">
+                    <i class="fa-solid fa-arrow-up mr-1"></i> ऊपर जाएं
+                </button>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification for Copy -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 px-4 py-3 rounded-xl bg-slate-900 text-white text-sm font-medium shadow-xl transform translate-y-20 opacity-0 transition-all duration-300 flex items-center gap-2 no-print">
+        <i class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toast-msg">नोट्स क्लिपबोर्ड पर कॉपी हो गए!</span>
+    </div>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        // 1. Dark Mode Toggle
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const themeIcon = document.getElementById('theme-icon');
+        
+        if (localStorage.getItem('bitvedas-theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+            themeIcon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('bitvedas-theme', isDark ? 'dark' : 'light');
+            themeIcon.classList.replace(isDark ? 'fa-moon' : 'fa-sun', isDark ? 'fa-sun' : 'fa-moon');
+        });
+
+        // 2. Scroll Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scroll-progress').style.width = scrolled + '%';
+        });
+
+        // 3. Mobile Drawer Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeDrawerBtn = document.getElementById('close-drawer-btn');
+        const mobileDrawer = document.getElementById('mobile-drawer');
+        const mobileLinks = document.querySelectorAll('.mobile-toc-link');
+
+        mobileMenuBtn.addEventListener('click', () => mobileDrawer.classList.remove('hidden'));
+        closeDrawerBtn.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => mobileDrawer.classList.add('hidden'));
+        });
+
+        // 4. Live Search / Filter across Chapters
+        function filterChapters(query) {
+            const normalized = query.trim().toLowerCase();
+            const chapters = document.querySelectorAll('.note-chapter');
+            chapters.forEach(chapter => {
+                const text = chapter.innerText.toLowerCase();
+                if (!normalized || text.includes(normalized)) {
+                    chapter.style.display = 'block';
+                } else {
+                    chapter.style.display = 'none';
+                }
+            });
+        }
+
+        document.getElementById('search-input').addEventListener('input', (e) => filterChapters(e.target.value));
+        document.getElementById('mobile-search-input').addEventListener('input', (e) => filterChapters(e.target.value));
+
+        // 5. Mark Chapter as Read Progress Tracker
+        const readChapters = new Set();
+        function toggleRead(chapterNum, btnElement) {
+            if (readChapters.has(chapterNum)) {
+                readChapters.delete(chapterNum);
+                btnElement.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-600');
+                btnElement.innerHTML = '<i class="fa-regular fa-circle-check"></i> <span>पढ़ लिया</span>';
+            } else {
+                readChapters.add(chapterNum);
+                btnElement.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
+                btnElement.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>पूर्ण ✓</span>';
+            }
+            const count = readChapters.size;
+            document.getElementById('read-counter').innerText = `${count} / 6 पूर्ण`;
+            document.getElementById('study-progress-bar').style.width = `${(count / 6) * 100}%`;
+        }
+
+        // 6. Copy Section Text to Clipboard (iframe-safe)
+        function copySection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = section.innerText + "\n\n— Source: Bitvedas (https://bitsvedas.github.io/bitveda/) | Creator: Aakash Sen";
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            showToast('अध्याय के नोट्स कॉपी हो गए!');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // 7. Interactive Quiz Handler
+        let currentScore = 0;
+        function checkAnswer(btn, isCorrect) {
+            const parent = btn.parentElement;
+            if (parent.dataset.answered === 'true') return;
+            parent.dataset.answered = 'true';
+
+            if (isCorrect) {
+                btn.classList.replace('bg-white/5', 'bg-emerald-500');
+                btn.classList.add('text-white', 'font-bold', 'border-emerald-300');
+                currentScore++;
+                document.getElementById('quiz-score').innerText = currentScore;
+            } else {
+                btn.classList.replace('bg-white/5', 'bg-rose-500/80');
+                btn.classList.add('text-white', 'border-rose-300');
+            }
+        }
+    </script>
+</body>
+</html>

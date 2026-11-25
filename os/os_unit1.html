@@ -1,0 +1,1502 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operating System Notes - By Aakash Sen 📓</title>
+
+    <!-- Google Fonts: Kalam (Handwritten Hindi/English) & Cascadia Code (Technical/Diagrams) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Cascadia+Code:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==================== GLOBAL RESET & BODY ==================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            font-family: 'Kalam', cursive;
+            color: #0000a0; /* Blue gel pen ink */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 24px 14px;
+            font-size: 1.22rem;
+            line-height: 1.65;
+        }
+
+        /* ==================== NOTEBOOK PAGE (PLAIN WHITE PAPER, COLORFUL TOP ACCENT) ==================== */
+        .notebook-page {
+            background-color: #ffffff;
+            width: 100%;
+            max-width: 920px;
+            margin-bottom: 36px;
+            padding: 46px 48px;
+            position: relative;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+            border-radius: 12px;
+            border-top: 7px solid #2563eb;
+            overflow-wrap: break-word;
+        }
+
+        /* Page-specific Accent Themes */
+        .notebook-page.theme-blue    { border-top-color: #2563eb; }
+        .notebook-page.theme-teal    { border-top-color: #0d9488; }
+        .notebook-page.theme-cyan    { border-top-color: #0284c7; }
+        .notebook-page.theme-amber   { border-top-color: #d97706; }
+        .notebook-page.theme-rose    { border-top-color: #e11d48; }
+        .notebook-page.theme-emerald { border-top-color: #059669; }
+        .notebook-page.theme-purple  { border-top-color: #7c3aed; }
+        .notebook-page.theme-indigo  { border-top-color: #4f46e5; }
+
+        /* Banner Header on Page 1 */
+        .title-banner {
+            background: linear-gradient(135deg, #1d4ed8 0%, #4f46e5 55%, #7c3aed 100%);
+            color: #ffffff;
+            padding: 22px 26px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 26px;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+
+        .title-banner h1 {
+            color: #ffffff;
+            margin: 0 0 6px 0;
+            font-size: 2.35rem;
+            line-height: 1.2;
+        }
+
+        .title-banner p {
+            color: #e0e7ff;
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        /* ==================== TYPOGRAPHY & ANNOTATIONS ==================== */
+        h1, h2, h3 {
+            color: #d32f2f; /* Red marker */
+            font-weight: 700;
+            margin-top: 26px;
+            margin-bottom: 12px;
+            line-height: 1.28;
+        }
+
+        h2 {
+            font-size: 1.82rem;
+            border-bottom: 2.5px dashed #d32f2f;
+            display: inline-block;
+            padding-bottom: 2px;
+        }
+
+        h3 {
+            font-size: 1.42rem;
+            color: #b91c1c;
+            margin-top: 20px;
+        }
+
+        p, ul, ol {
+            margin-bottom: 15px;
+        }
+
+        ul, ol {
+            padding-left: 28px;
+        }
+
+        li {
+            margin-bottom: 7px;
+        }
+
+        /* Realistic Yellow Highlighter */
+        .highlight {
+            background: linear-gradient(104deg, rgba(254, 240, 138, 0) 0.9%, rgba(254, 240, 138, 1) 2.5%, rgba(254, 240, 138, 0.7) 5.8%, rgba(254, 240, 138, 0.95) 93%, rgba(254, 240, 138, 0) 96%);
+            border-radius: 4px;
+            padding: 0 5px;
+            color: #111827;
+            font-weight: 700;
+        }
+
+        /* Hand-drawn Red Circle */
+        .rough-circle {
+            border: 2px solid #d32f2f;
+            border-radius: 50% 42% 52% 48% / 58% 48% 42% 52%;
+            padding: 1px 9px;
+            display: inline-block;
+            color: #b91c1c;
+            font-weight: 700;
+        }
+
+        /* Red Underline */
+        .underline-red {
+            text-decoration: underline;
+            text-decoration-color: #d32f2f;
+            text-decoration-thickness: 2.2px;
+            text-underline-offset: 4px;
+        }
+
+        /* Technical Keyword Pill */
+        .tech-pill {
+            display: inline-block;
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.88rem;
+            background: #eff6ff;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+            padding: 1px 7px;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+
+        /* ==================== SHORT & CORNERED STICKY MARGIN NOTES ==================== */
+        .margin-note {
+            float: right;
+            clear: right;
+            width: 195px;
+            padding: 12px 14px;
+            margin: 4px -14px 14px 20px;
+            background-color: #fef08a;
+            box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.16);
+            font-size: 0.94rem;
+            line-height: 1.38;
+            color: #1f2937;
+            transform: rotate(-2deg);
+            border-radius: 6px;
+            z-index: 10;
+            position: relative;
+            transition: transform 0.25s ease;
+        }
+
+        .margin-note:hover {
+            transform: rotate(0deg) scale(1.04);
+            z-index: 40;
+        }
+
+        .margin-note.pink  { background-color: #fbcfe8; transform: rotate(2deg); }
+        .margin-note.green { background-color: #bbf7d0; transform: rotate(-1.5deg); }
+        .margin-note.blue  { background-color: #bae6fd; transform: rotate(1.5deg); }
+
+        .note-title {
+            font-weight: 700;
+            color: #b91c1c;
+            margin-bottom: 5px;
+            border-bottom: 1.5px solid rgba(185, 28, 28, 0.45);
+            font-size: 0.98rem;
+        }
+
+        /* ==================== SVG DIAGRAM CONTAINERS ==================== */
+        .diagram-box {
+            margin: 22px 0;
+            padding: 18px 16px;
+            background: #f8fafc;
+            border: 2px dashed #93c5fd;
+            border-radius: 12px;
+            text-align: center;
+            overflow-x: auto;
+            clear: both;
+        }
+
+        .diagram-caption {
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1e3a8a;
+            margin-bottom: 12px;
+            background: #e0e7ff;
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 20px;
+        }
+
+        .diagram-box svg {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+        /* ==================== COLORFUL CARDS & GRIDS ==================== */
+        .func-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(235px, 1fr));
+            gap: 14px;
+            margin: 18px 0 22px 0;
+            clear: both;
+        }
+
+        .func-card {
+            background: #f8fafc;
+            border: 1.5px solid #cbd5e1;
+            border-left: 5px solid #2563eb;
+            border-radius: 8px;
+            padding: 13px 15px;
+            line-height: 1.45;
+            font-size: 1.06rem;
+        }
+
+        .func-card.c2 { border-left-color: #0d9488; }
+        .func-card.c3 { border-left-color: #d97706; }
+        .func-card.c4 { border-left-color: #7c3aed; }
+        .func-card.c5 { border-left-color: #e11d48; }
+        .func-card.c6 { border-left-color: #059669; }
+
+        .func-card strong {
+            color: #0f172a;
+            display: block;
+            margin-bottom: 4px;
+            font-size: 1.15rem;
+        }
+
+        /* ==================== TABLES ==================== */
+        .table-wrap {
+            width: 100%;
+            overflow-x: auto;
+            margin: 18px 0;
+            clear: both;
+        }
+
+        .notes-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+            border: 2px solid #1e40af;
+            font-size: 1.06rem;
+            line-height: 1.45;
+        }
+
+        .notes-table th {
+            background: linear-gradient(90deg, #1e3a8a, #2563eb);
+            color: #ffffff;
+            padding: 10px 12px;
+            text-align: left;
+            border: 1px solid #1e40af;
+            font-weight: 700;
+        }
+
+        .notes-table td {
+            border: 1px solid #93c5fd;
+            padding: 9px 12px;
+            vertical-align: top;
+            color: #0f172a;
+        }
+
+        .notes-table tr:nth-child(even) td {
+            background-color: #f8fafc;
+        }
+
+        /* ==================== FORMULA BOX ==================== */
+        .formula-box {
+            background: #fffbeb;
+            border: 2px dashed #f59e0b;
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin: 18px 0;
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.9rem;
+            color: #78350f;
+            line-height: 1.7;
+            clear: both;
+        }
+
+        /* ==================== CPU SCHEDULING ALGO CARDS & GANTT CHARTS ==================== */
+        .algo-card {
+            background: #ffffff;
+            border: 2px solid #bfdbfe;
+            border-left: 6px solid #2563eb;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin: 22px 0;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+            clear: both;
+        }
+
+        .algo-card.sjf      { border-color: #99f6e4; border-left-color: #0d9488; }
+        .algo-card.priority { border-color: #fde68a; border-left-color: #d97706; }
+        .algo-card.rr       { border-color: #ddd6fe; border-left-color: #7c3aed; }
+
+        .step-trace {
+            background: #f8fafc;
+            border-left: 4px solid #64748b;
+            padding: 10px 14px;
+            margin: 12px 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 1.03rem;
+            line-height: 1.55;
+            color: #1e293b;
+        }
+
+        .gantt-wrapper {
+            margin: 14px 0;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .gantt-label {
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: #334155;
+            margin-bottom: 6px;
+        }
+
+        .gantt-bar {
+            display: flex;
+            width: 100%;
+            min-width: 340px;
+            height: 40px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 2px solid #1e293b;
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .g-seg {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            border-right: 1.5px solid #1e293b;
+            white-space: nowrap;
+            padding: 0 4px;
+        }
+
+        .g-seg:last-child { border-right: none; }
+        .g-p1 { background: #2563eb; }
+        .g-p2 { background: #10b981; }
+        .g-p3 { background: #f59e0b; color: #111827; }
+        .g-p4 { background: #e11d48; }
+
+        .gantt-ticks {
+            display: flex;
+            width: 100%;
+            min-width: 340px;
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.82rem;
+            color: #1e293b;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+
+        .g-tick {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .mini-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.86rem;
+            background: #ffffff;
+            border: 1.5px solid #94a3b8;
+        }
+
+        .mini-table th {
+            background: #1e293b;
+            color: #ffffff;
+            padding: 7px 8px;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        .mini-table td {
+            padding: 6px 8px;
+            text-align: center;
+            border: 1px solid #cbd5e1;
+            color: #0f172a;
+        }
+
+        .mini-table tr:nth-child(even) td {
+            background: #f8fafc;
+        }
+
+        .calc-summary {
+            margin-top: 10px;
+            font-family: 'Cascadia Code', Consolas, monospace;
+            font-size: 0.88rem;
+            color: #0f172a;
+            background: #eff6ff;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border-left: 4px solid #2563eb;
+            line-height: 1.6;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 12px;
+            font-size: 1rem;
+            line-height: 1.45;
+        }
+
+        .pc-box {
+            padding: 10px 13px;
+            border-radius: 8px;
+        }
+
+        .pc-pro { background: #f0fdf4; border: 1.5px solid #86efac; color: #14532d; }
+        .pc-con { background: #fef2f2; border: 1.5px solid #fca5a5; color: #991b1b; }
+
+        /* ==================== PAGE FOOTER ==================== */
+        .page-footer {
+            text-align: right;
+            margin-top: 38px;
+            font-size: 1rem;
+            color: #475569;
+            font-style: italic;
+            border-top: 1.5px dashed #cbd5e1;
+            padding-top: 10px;
+            clear: both;
+        }
+
+        /* ==================== RESPONSIVE DESIGN ==================== */
+        @media (max-width: 850px) {
+            .notebook-page {
+                padding: 28px 20px;
+            }
+            .margin-note {
+                float: none;
+                width: 100%;
+                margin: 14px 0;
+                transform: rotate(0deg);
+            }
+            .title-banner h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.5rem; }
+            .pros-cons { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 520px) {
+            body { padding: 12px 8px; font-size: 1.08rem; }
+            .notebook-page { padding: 22px 14px; }
+            .notes-table { font-size: 0.94rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==================== PAGE 1: OS DEFINITION, FUNCTIONS & EVOLUTION ==================== -->
+    <div class="notebook-page theme-blue">
+        <div class="title-banner">
+            <h1>💻 Operating System (OS) — Complete Notes</h1>
+            <p>Introduction, Types, Layered Architecture, Process Management, Scheduling, Threads &amp; IPC</p>
+        </div>
+
+        <div class="margin-note pink">
+            <div class="note-title">🏛️ Best Analogy</div>
+            OS बिल्कुल एक <b>सरकार (Government)</b> की तरह है—खुद कोई सामान नहीं बनाती, बल्कि बाकी सब को काम करने का सही माहौल और संसाधन देती है!
+        </div>
+
+        <h2>1. Definition of Operating System</h2>
+        <p><span class="highlight">Operating System (OS)</span> एक System Software है जो कंप्यूटर के <b>User (उपयोगकर्ता)</b> और <b>Computer Hardware</b> के बीच एक <span class="rough-circle">Interface (मध्यस्थ / पुल)</span> का कार्य करता है।</p>
+        <p>बिना Operating System के कंप्यूटर केवल प्लास्टिक और धातु का एक डिब्बा (Dead Hardware) है। OS कंप्यूटर के सभी संसाधनों (CPU, RAM, Hard Disk, Keyboard, Printer) को प्रबंधित (Manage) करता है और यूज़र के प्रोग्राम्स (जैसे Chrome, MS Word, Games) को चलाने के लिए प्लेटफॉर्म देता है।<br>
+        <b>उदाहरण:</b> Windows, Linux, macOS, Android, iOS, UNIX।</p>
+
+        <!-- SVG Diagram 1.1: OS Architecture / Bridge -->
+        <div class="diagram-box">
+            <div class="diagram-caption">📐 Fig 1.1: Operating System as an Interface (Abstract View of Computer System)</div>
+            <svg viewBox="0 0 720 220" width="680" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code', sans-serif">
+                <!-- Users Layer -->
+                <rect x="40" y="10" width="640" height="42" rx="10" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                <text x="360" y="36" text-anchor="middle" fill="#1e3a8a" font-size="14" font-weight="bold">👥 USERS (User 1, User 2, Programmers, Operators)</text>
+
+                <!-- Arrows -->
+                <text x="360" y="66" text-anchor="middle" fill="#dc2626" font-size="16" font-weight="bold">↕</text>
+
+                <!-- Application Software Layer -->
+                <rect x="80" y="70" width="560" height="40" rx="10" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+                <text x="360" y="95" text-anchor="middle" fill="#5b21b6" font-size="13.5" font-weight="bold">📱 System &amp; Application Software (Compiler, Browser, Database, Games)</text>
+
+                <!-- Arrows -->
+                <text x="360" y="124" text-anchor="middle" fill="#dc2626" font-size="16" font-weight="bold">↕</text>
+
+                <!-- Operating System Layer -->
+                <rect x="120" y="128" width="480" height="42" rx="10" fill="#fef08a" stroke="#d97706" stroke-width="2.5"/>
+                <text x="360" y="154" text-anchor="middle" fill="#92400e" font-size="15" font-weight="bold">⚙️ OPERATING SYSTEM (Resource Manager &amp; Controller)</text>
+
+                <!-- Arrows -->
+                <text x="360" y="183" text-anchor="middle" fill="#dc2626" font-size="16" font-weight="bold">↕</text>
+
+                <!-- Hardware Layer -->
+                <rect x="160" y="186" width="400" height="30" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+                <text x="360" y="206" text-anchor="middle" fill="#f8fafc" font-size="13" font-weight="bold">🖥️ COMPUTER HARDWARE (CPU, RAM, I/O Devices)</text>
+            </svg>
+        </div>
+
+        <h2>2. Main Functions of Operating System</h2>
+        <div class="func-grid">
+            <div class="func-card">
+                <strong>1. Process Management</strong>
+                प्रोसेस बनाना (Create), रोकना, हटाना और CPU Scheduling द्वारा हर प्रोग्राम को CPU समय बांटना।
+            </div>
+            <div class="func-card c2">
+                <strong>2. Memory Management</strong>
+                RAM का कौन-सा हिस्सा खाली है और किस प्रोसेस को कितनी मेमोरी देनी है—इसका पूरा हिसाब रखना।
+            </div>
+            <div class="func-card c3">
+                <strong>3. File Management</strong>
+                डेटा को Files और Folders (Directories) के रूप में व्यवस्थित करना, सेव करना और एक्सेस कंट्रोल देना।
+            </div>
+            <div class="func-card c4">
+                <strong>4. Device (I/O) Management</strong>
+                Device Drivers की मदद से Keyboard, Mouse, Printer, Disk आदि हार्डवेयर को नियंत्रित करना।
+            </div>
+            <div class="func-card c5">
+                <strong>5. Security &amp; Protection</strong>
+                Password, Authentication और Permissions के ज़रिए अनधिकृत (Unauthorized) एक्सेस से डेटा बचाना।
+            </div>
+            <div class="func-card c6">
+                <strong>6. Error Detection &amp; Accounting</strong>
+                सिस्टम में आने वाली खराबी (Bugs/Errors) को पकड़ना और किस यूज़र ने कितने संसाधन उपयोग किए, ट्रैक करना।
+            </div>
+        </div>
+
+        <h2>3. Evolution of Operating Systems (OS का विकास)</h2>
+        <p>कंप्यूटर हार्डवेयर की पीढ़ियों के साथ ऑपरेटिंग सिस्टम भी <b>बिना OS वाले दौर</b> से आज के <b>AI व Cloud OS</b> तक विकसित हुए हैं:</p>
+
+        <!-- SVG Diagram 1.2: Evolution Timeline -->
+        <div class="diagram-box">
+            <div class="diagram-caption">📐 Fig 1.2: Evolution Timeline of Operating Systems (1945 to Present)</div>
+            <svg viewBox="0 0 740 160" width="710" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code', sans-serif">
+                <!-- Connecting Line -->
+                <line x1="40" y1="78" x2="700" y2="78" stroke="#2563eb" stroke-width="4" stroke-linecap="round"/>
+
+                <!-- Gen 1 -->
+                <circle cx="85" cy="78" r="10" fill="#dc2626"/>
+                <rect x="18" y="10" width="134" height="52" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5"/>
+                <text x="85" y="29" text-anchor="middle" fill="#991b1b" font-size="11.5" font-weight="bold">1st Gen (1945-55)</text>
+                <text x="85" y="45" text-anchor="middle" fill="#7f1d1d" font-size="10">Vacuum Tubes</text>
+                <text x="85" y="57" text-anchor="middle" fill="#7f1d1d" font-size="10">No OS (Serial)</text>
+
+                <!-- Gen 2 -->
+                <circle cx="245" cy="78" r="10" fill="#d97706"/>
+                <rect x="175" y="96" width="140" height="54" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+                <text x="245" y="114" text-anchor="middle" fill="#92400e" font-size="11.5" font-weight="bold">2nd Gen (1955-65)</text>
+                <text x="245" y="130" text-anchor="middle" fill="#78350f" font-size="10">Transistors</text>
+                <text x="245" y="143" text-anchor="middle" fill="#78350f" font-size="10">Simple Batch OS</text>
+
+                <!-- Gen 3 -->
+                <circle cx="420" cy="78" r="10" fill="#0d9488"/>
+                <rect x="342" y="10" width="156" height="52" rx="8" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.5"/>
+                <text x="420" y="29" text-anchor="middle" fill="#115e59" font-size="11.5" font-weight="bold">3rd Gen (1965-80)</text>
+                <text x="420" y="45" text-anchor="middle" fill="#134e4a" font-size="10">ICs • Multiprogramming</text>
+                <text x="420" y="57" text-anchor="middle" fill="#134e4a" font-size="10">Time-Sharing (UNIX)</text>
+
+                <!-- Gen 4 -->
+                <circle cx="615" cy="78" r="10" fill="#7c3aed"/>
+                <rect x="520" y="96" width="195" height="54" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+                <text x="617" y="114" text-anchor="middle" fill="#5b21b6" font-size="11.5" font-weight="bold">4th Gen (1980-Present)</text>
+                <text x="617" y="130" text-anchor="middle" fill="#4c1d95" font-size="10">Microprocessors, PCs, GUI</text>
+                <text x="617" y="143" text-anchor="middle" fill="#4c1d95" font-size="10">Mobile, Cloud &amp; Real-Time OS</text>
+            </svg>
+        </div>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 1)</div>
+    </div>
+
+    <!-- ==================== PAGE 2: TYPES OF OPERATING SYSTEMS ==================== -->
+    <div class="notebook-page theme-teal">
+        <h2>4. Types of Operating Systems (OS के प्रकार)</h2>
+
+        <div class="margin-note green">
+            <div class="note-title">📌 Exam Trick</div>
+            <b>B - M - T - D - R - E</b> याद रखो:<br>
+            Batch, Multiprogramming, Time-Sharing, Distributed, Real-Time, Embedded!
+        </div>
+
+        <p>कार्य करने के तरीके और यूज़र की ज़रूरतों के आधार पर Operating Systems को 6 मुख्य श्रेणियों में बांटा जाता है:</p>
+
+        <h3>1. Batch Operating System</h3>
+        <p>इसमें यूज़र सीधे कंप्यूटर से बात (interact) नहीं करता। एक जैसे कामों (Jobs) का एक <span class="highlight">Batch (समूह)</span> बनाकर Operator को दे दिया जाता है, जो उन्हें एक-एक करके कंप्यूटर में चलाता है।<br>
+        <b>कमी:</b> CPU बहुत देर खाली (Idle) रहता है जब I/O चल रहा हो। <b>उदाहरण:</b> Payroll System, Bank Statements (IBM OS/360)।</p>
+
+        <h3>2. Multiprogramming Operating System</h3>
+        <p>इसका मुख्य उद्देश्य <span class="underline-red">CPU Utilization को अधिकतम करना</span> है। इसमें Main Memory (RAM) में एक साथ कई प्रोग्राम लोड रहते हैं। जैसे ही Program 1 किसी I/O (जैसे प्रिंटर या डिस्क) का इंतज़ार करता है, CPU तुरंत खाली बैठने के बजाय Program 2 को चलाने लगता है।</p>
+
+        <h3>3. Time-Sharing (Multitasking) Operating System</h3>
+        <p>यह Multiprogramming का ही उन्नत रूप है। इसमें हर प्रोसेस/यूज़र को एक बहुत छोटा निश्चित समय (<span class="rough-circle">Time Quantum</span>, जैसे 10ms) दिया जाता है। CPU इतनी तेज़ी से सबके बीच स्विच करता है कि हर यूज़र को लगता है कि पूरा कंप्यूटर सिर्फ उसी के लिए चल रहा है।<br>
+        <b>उदाहरण:</b> UNIX, Linux, Windows, macOS।</p>
+
+        <!-- SVG Diagram 2.1: Multiprogramming vs Time-Sharing -->
+        <div class="diagram-box">
+            <div class="diagram-caption">📐 Fig 2.1: Memory Layout (Multiprogramming) vs CPU Time Slicing (Time-Sharing)</div>
+            <svg viewBox="0 0 720 185" width="680" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code', sans-serif">
+                <!-- Left: Multiprogramming RAM -->
+                <text x="150" y="20" text-anchor="middle" fill="#0f766e" font-size="13" font-weight="bold">Multiprogramming (RAM)</text>
+                <rect x="65" y="30" width="170" height="32" fill="#1e293b" stroke="#0f172a"/>
+                <text x="150" y="50" text-anchor="middle" fill="#fef08a" font-size="12" font-weight="bold">Operating System</text>
+                <rect x="65" y="62" width="170" height="32" fill="#dbeafe" stroke="#2563eb"/>
+                <text x="150" y="82" text-anchor="middle" fill="#1e3a8a" font-size="12">Job 1 (Active / I/O)</text>
+                <rect x="65" y="94" width="170" height="32" fill="#dcfce7" stroke="#16a34a"/>
+                <text x="150" y="114" text-anchor="middle" fill="#14532d" font-size="12">Job 2 (Ready in RAM)</text>
+                <rect x="65" y="126" width="170" height="32" fill="#fef3c7" stroke="#d97706"/>
+                <text x="150" y="146" text-anchor="middle" fill="#92400e" font-size="12">Job 3 (Ready in RAM)</text>
+                <text x="150" y="176" text-anchor="middle" fill="#475569" font-size="10.5">Switch only on I/O wait</text>
+
+                <!-- Divider -->
+                <line x1="310" y1="15" x2="310" y2="175" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="5,5"/>
+
+                <!-- Right: Time-Sharing CPU -->
+                <text x="515" y="20" text-anchor="middle" fill="#7c3aed" font-size="13" font-weight="bold">Time-Sharing (Rapid Switching)</text>
+                <circle cx="515" cy="96" r="34" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.5"/>
+                <text x="515" y="93" text-anchor="middle" fill="#5b21b6" font-size="13" font-weight="bold">CPU</text>
+                <text x="515" y="109" text-anchor="middle" fill="#6d28d9" font-size="10">q = 10ms</text>
+
+                <!-- Users around CPU -->
+                <rect x="345" y="42" width="90" height="30" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+                <text x="390" y="61" text-anchor="middle" fill="#1e3a8a" font-size="11.5">User 1</text>
+                <line x1="435" y1="62" x2="484" y2="83" stroke="#2563eb" stroke-width="2"/>
+
+                <rect x="595" y="42" width="90" height="30" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+                <text x="640" y="61" text-anchor="middle" fill="#14532d" font-size="11.5">User 2</text>
+                <line x1="595" y1="62" x2="546" y2="83" stroke="#16a34a" stroke-width="2"/>
+
+                <rect x="345" y="122" width="90" height="30" rx="6" fill="#fef3c7" stroke="#d97706"/>
+                <text x="390" y="141" text-anchor="middle" fill="#92400e" font-size="11.5">User 3</text>
+                <line x1="435" y1="132" x2="484" y2="112" stroke="#d97706" stroke-width="2"/>
+
+                <rect x="595" y="122" width="90" height="30" rx="6" fill="#ffe4e6" stroke="#e11d48"/>
+                <text x="640" y="141" text-anchor="middle" fill="#9f1239" font-size="11.5">User 4</text>
+                <line x1="595" y1="132" x2="546" y2="112" stroke="#e11d48" stroke-width="2"/>
+                <text x="515" y="176" text-anchor="middle" fill="#475569" font-size="10.5">Fast Response Time for All Users</text>
+            </svg>
+        </div>
+
+        <h3>4. Distributed Operating System</h3>
+        <p>इसमें नेटवर्क के ज़रिए जुड़े हुए कई अलग-अलग कंप्यूटर (Nodes) मिलकर काम करते हैं, जिनके पास अपना-अपना CPU और Memory होती है—परंतु यूज़र को यह पूरा सिस्टम <span class="highlight">एक ही सिंगल कंप्यूटर</span> जैसा दिखता है। यदि एक नोड खराब हो जाए, तो बाकी नोड्स काम जारी रखते हैं (Fault Tolerant)। <b>उदाहरण:</b> LOCUS, Amoeba।</p>
+
+        <h3>5. Real-Time Operating System (RTOS)</h3>
+        <p>जहाँ समय सीमा (<span class="rough-circle">Strict Deadline</span>) सबसे महत्वपूर्ण हो—अर्थात् डेटा का उत्तर तय सेकंड/मिलीसेकंड के भीतर आना ही चाहिए। इसके 2 प्रकार होते हैं:</p>
+        <ul>
+            <li><b>Hard Real-Time OS:</b> थोड़ी सी भी देरी होने पर भयानक दुर्घटना या नुकसान हो सकता है। (उदा: Missile Control, Air Traffic Control, Pacemaker)।</li>
+            <li><b>Soft Real-Time OS:</b> कभी-कभार हल्की देरी बर्दाश्त की जा सकती है। (उदा: Live Video Streaming, Online Gaming)।</li>
+        </ul>
+
+        <h3>6. Embedded Operating System</h3>
+        <p>यह विशेष रूप से किसी <b>एक ही विशिष्ट हार्डवेयर डिवाइस</b> के लिए बनाया गया छोटा, हल्का और तेज़ OS होता है, जो अक्सर ROM/Flash Memory में स्टोर रहता है। <b>उदाहरण:</b> Smart TV, Washing Machine, Microwave, ATM, Car Infotainment (VxWorks, FreeRTOS, Embedded Linux)।</p>
+
+        <div class="table-wrap">
+            <table class="notes-table">
+                <tr>
+                    <th>OS Type</th>
+                    <th>Primary Goal (मुख्य लक्ष्य)</th>
+                    <th>User Interaction</th>
+                    <th>Real-World Example</th>
+                </tr>
+                <tr>
+                    <td><b>Batch</b></td>
+                    <td>समान जॉब्स को एक साथ प्रोसेस करना</td>
+                    <td>नहीं (None)</td>
+                    <td>Payroll, Electricity Billing</td>
+                </tr>
+                <tr>
+                    <td><b>Multiprogramming</b></td>
+                    <td>अधिकतम CPU Utilization</td>
+                    <td>कम (Low)</td>
+                    <td>IBM OS/360, Early UNIX</td>
+                </tr>
+                <tr>
+                    <td><b>Time-Sharing</b></td>
+                    <td>तेज़ Response Time (Interactive)</td>
+                    <td>बहुत अधिक (High)</td>
+                    <td>Windows, Linux, macOS</td>
+                </tr>
+                <tr>
+                    <td><b>Distributed</b></td>
+                    <td>Resource Sharing &amp; High Reliability</td>
+                    <td>High (Networked)</td>
+                    <td>LOCUS, Solaris, Cloud Clusters</td>
+                </tr>
+                <tr>
+                    <td><b>Real-Time (RTOS)</b></td>
+                    <td>तय समय-सीमा (Deadline) में आउटपुट</td>
+                    <td>Automated / Sensors</td>
+                    <td>VxWorks, QNX, Robotics</td>
+                </tr>
+                <tr>
+                    <td><b>Embedded</b></td>
+                    <td>एक निश्चित डिवाइस का सटीक नियंत्रण</td>
+                    <td>Limited / Dedicated</td>
+                    <td>Smartwatch, ATM, Car ECU</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 2)</div>
+    </div>
+
+    <!-- ==================== PAGE 3: LAYERED STRUCTURE OF OPERATING SYSTEM ==================== -->
+    <div class="notebook-page theme-cyan">
+        <h2>5. Layered Structure (Approach) of Operating System</h2>
+
+        <div class="margin-note blue">
+            <div class="note-title">🧅 Onion Analogy</div>
+            Layered OS बिल्कुल एक <b>प्याज (Onion)</b> के छिलकों जैसा होता है—सबसे अंदर <b>Hardware (Layer 0)</b> और सबसे बाहर <b>User Interface (Layer N)</b>!
+        </div>
+
+        <p><span class="highlight">Layered Architecture</span> ऑपरेटिंग सिस्टम को डिज़ाइन करने का एक मॉड्यूलर (Modular) तरीका है। इसमें पूरे OS को एक बड़े प्रोग्राम की तरह लिखने के बजाय कई अलग-अलग <b>Layers (परतों)</b> में बांट दिया जाता है, जहाँ हर परत एक के ऊपर एक रखी होती है।</p>
+
+        <p><b>मुख्य नियम (Golden Rule of Layered OS):</b><br>
+        हर परत (<span class="tech-pill">Layer i</span>) केवल अपने <b>ठीक नीचे वाली परत (<span class="tech-pill">Layer i - 1</span>)</b> के फंक्शन्स और सेवाओं का उपयोग कर सकती है, और अपने <b>ठीक ऊपर वाली परत (<span class="tech-pill">Layer i + 1</span>)</b> को सेवाएं प्रदान करती है। कोई भी परत सीधे किसी निचली परत को कूदकर (Skip करके) एक्सेस नहीं कर सकती।</p>
+
+        <!-- SVG Diagram 3.1: Concentric Layered Structure of OS -->
+        <div class="diagram-box">
+            <div class="diagram-caption">📐 Fig 3.1: Layered Architecture of Operating System (Layer 0 to Layer 5)</div>
+            <svg viewBox="0 0 740 315" width="700" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code', sans-serif">
+                <!-- Layer 5: Outermost (User Interface) -->
+                <rect x="20" y="10" width="700" height="295" rx="22" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+                <text x="370" y="34" text-anchor="middle" fill="#1e3a8a" font-size="13.5" font-weight="bold">Layer 5: User Interface / Application Layer (Shell, GUI, CLI, User Programs)</text>
+
+                <!-- Layer 4: File System & I/O Buffering -->
+                <rect x="55" y="48" width="630" height="242" rx="18" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2.5"/>
+                <text x="370" y="72" text-anchor="middle" fill="#5b21b6" font-size="13" font-weight="bold">Layer 4: File System &amp; I/O Buffering (Files, Folders, Access Permissions)</text>
+
+                <!-- Layer 3: Device Drivers / I/O Management -->
+                <rect x="90" y="86" width="560" height="190" rx="16" fill="#f0fdf4" stroke="#16a34a" stroke-width="2.5"/>
+                <text x="370" y="110" text-anchor="middle" fill="#14532d" font-size="13" font-weight="bold">Layer 3: Device Drivers &amp; I/O Management (Keyboard, Printer, Disk Drivers)</text>
+
+                <!-- Layer 2: Memory Management -->
+                <rect x="125" y="124" width="490" height="138" rx="14" fill="#fffbeb" stroke="#d97706" stroke-width="2.5"/>
+                <text x="370" y="148" text-anchor="middle" fill="#92400e" font-size="13" font-weight="bold">Layer 2: Memory Management (RAM Allocation, Paging, Virtual Memory)</text>
+
+                <!-- Layer 1: CPU Scheduling & Process Management -->
+                <rect x="160" y="162" width="420" height="86" rx="12" fill="#fff1f2" stroke="#e11d48" stroke-width="2.5"/>
+                <text x="370" y="185" text-anchor="middle" fill="#9f1239" font-size="13" font-weight="bold">Layer 1: CPU Scheduling &amp; Process Management</text>
+
+                <!-- Layer 0: Core Hardware -->
+                <rect x="205" y="198" width="330" height="38" rx="10" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+                <text x="370" y="222" text-anchor="middle" fill="#fef08a" font-size="13.5" font-weight="bold">Layer 0: 🖥️ HARDWARE (CPU, RAM, Disk)</text>
+            </svg>
+        </div>
+
+        <h3>प्रत्येक लेयर का विस्तृत विवरण (Layer-by-Layer Explanation)</h3>
+        <div class="table-wrap">
+            <table class="notes-table">
+                <tr>
+                    <th width="16%">Layer</th>
+                    <th width="28%">Name (नाम)</th>
+                    <th width="56%">मुख्य कार्य (Responsibilities)</th>
+                </tr>
+                <tr>
+                    <td><b>Layer 0</b></td>
+                    <td><b>Hardware</b></td>
+                    <td>सबसे भीतरी और बुनियादी स्तर। इसमें भौतिक उपकरण (CPU, RAM, Registers, Hard Disk, I/O Devices) होते हैं।</td>
+                </tr>
+                <tr>
+                    <td><b>Layer 1</b></td>
+                    <td><b>CPU Scheduling</b></td>
+                    <td>मल्टीप्रोग्रामिंग और प्रोसेस स्विचिंग को संभालता है। तय करता है कि किस प्रोसेस को कब CPU मिलेगा।</td>
+                </tr>
+                <tr>
+                    <td><b>Layer 2</b></td>
+                    <td><b>Memory Management</b></td>
+                    <td>प्रोसेस के लिए Main Memory (RAM) आवंटित करना, Paging और Virtual Memory को नियंत्रित करना।</td>
+                </tr>
+                <tr>
+                    <td><b>Layer 3</b></td>
+                    <td><b>I/O &amp; Device Drivers</b></td>
+                    <td>हार्डवेयर डिवाइस (माउस, कीबोर्ड, प्रिंटर) के साथ कम्युनिकेशन और Buffering संभालना।</td>
+                </tr>
+                <tr>
+                    <td><b>Layer 4</b></td>
+                    <td><b>File System</b></td>
+                    <td>डेटा को फाइल्स और डायरेक्टरीज़ (Folders) में सेव करना, पढ़ना और सिक्योरिटी लागू करना।</td>
+                </tr>
+                <tr>
+                    <td><b>Layer 5</b></td>
+                    <td><b>User Interface (UI)</b></td>
+                    <td>सबसे बाहरी परत (Layer N) जहाँ यूज़र सीधे काम करता है (जैसे Windows GUI, Linux Terminal/Shell)।</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="pros-cons">
+            <div class="pc-box pc-pro">
+                <b>✅ Advantages (फायदे):</b><br>
+                1. <b>Modularity:</b> पूरा OS छोटे-छोटे हिस्सों में बंटा होता है, जिससे इसे बनाना और समझना आसान है।<br>
+                2. <b>Easy Debugging:</b> लेयर-बाय-लेयर टेस्टिंग होती है। यदि Layer 2 में एरर आए, तो पता होता है कि गड़बड़ी सिर्फ Layer 2 में ही है।<br>
+                3. <b>Information Hiding:</b> ऊपर की लेयर को यह जानने की ज़रूरत नहीं कि नीचे की लेयर अंदर से कैसे काम करती है।
+            </div>
+            <div class="pc-box pc-con">
+                <b>❌ Disadvantages (कमियाँ):</b><br>
+                1. <b>Careful Layer Design:</b> लेयर्स का सही क्रम तय करना कठिन है (जैसे: Memory Manager को Disk चाहिए, और Disk Driver को Memory!)।<br>
+                2. <b>Less Efficient (Overhead):</b> यूज़र की एक रिक्वेस्ट को कई लेयर्स से गुज़रना पड़ता है, जिससे सिस्टम थोड़ा धीमा हो सकता है।
+            </div>
+        </div>
+
+        <p style="margin-top: 14px;"><b>प्रमुख उदाहरण:</b> <b>THE Operating System</b> (Edsger Dijkstra द्वारा 1968 में बनाया गया पहला प्रसिद्ध Layered OS), <b>MULTICS</b>, तथा <b>UNIX / Windows NT</b> (जो आंशिक रूप से Layered डिज़ाइन का उपयोग करते हैं)।</p>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 3)</div>
+    </div>
+
+    <!-- ==================== PAGE 4: KERNEL IN OPERATING SYSTEM ==================== -->
+    <div class="notebook-page theme-indigo">
+        <h2>6. Kernel in Operating System (कर्नेल — OS का हृदय)</h2>
+
+        <div class="margin-note pink">
+            <div class="note-title">🚗 Best Analogy</div>
+            अगर पूरा OS एक <b>कार (Car)</b> है, तो <b>Kernel उसका Engine</b> है! बिना कर्नेल के OS कुछ भी नहीं कर सकता।
+        </div>
+
+        <p><span class="highlight">Kernel (कर्नेल)</span> ऑपरेटिंग सिस्टम का सबसे महत्वपूर्ण और केंद्रीय भाग (<span class="rough-circle">Core Component</span>) है। जब कंप्यूटर ऑन (Boot) होता है, तो यह सबसे पहले RAM में लोड होता है और सिस्टम बंद होने तक लगातार मेमोरी में मौजूद रहता है।</p>
+        <p>कर्नेल <b>Applications (Software)</b> और <b>Hardware (CPU, RAM, Disk)</b> के बीच सीधा संपर्क बनाता है। जब कोई ऐप (जैसे Chrome या Music Player) किसी हार्डवेयर का उपयोग करना चाहता है, तो वह सीधे हार्डवेयर को नहीं छू सकता—वह <b>System Call</b> के ज़रिए कर्नेल से अनुरोध करता है।</p>
+
+        <h3>Kernel के मुख्य कार्य (Main Functions of Kernel)</h3>
+        <div class="func-grid">
+            <div class="func-card">
+                <strong>1. Process &amp; CPU Management</strong>
+                प्रोसेस को CPU आवंटित करना, Context Switching करना और मल्टीटास्किंग चलाना।
+            </div>
+            <div class="func-card c2">
+                <strong>2. Memory Management</strong>
+                किस प्रोग्राम को RAM में कितनी जगह मिलेगी और डेटा सुरक्षित कैसे रहेगा, यह तय करना।
+            </div>
+            <div class="func-card c3">
+                <strong>3. Device Management</strong>
+                Device Drivers के माध्यम से कीबोर्ड, माउस, प्रिंटर और हार्ड डिस्क को नियंत्रित करना।
+            </div>
+            <div class="func-card c4">
+                <strong>4. System Calls &amp; Security</strong>
+                User Mode से आने वाली रिक्वेस्ट को सुरक्षित तरीके से Kernel Mode में पूरा करना।
+            </div>
+        </div>
+
+        <h3>User Mode vs Kernel Mode (Dual-Mode Operation)</h3>
+        <p>सिस्टम को क्रैश या हैकिंग से बचाने के लिए CPU दो मोड में काम करता है:</p>
+        <ul>
+            <li><b>User Mode (सामान्य मोड):</b> इसमें यूज़र के सामान्य ऐप्स (Browser, MS Word, Games) चलते हैं। इन्हें हार्डवेयर का सीधा एक्सेस नहीं होता।</li>
+            <li><b>Kernel Mode (सुपरवाइज़र मोड):</b> इसमें OS Kernel चलता है। इसे कंप्यूटर के पूरे हार्डवेयर और मेमोरी का <b>पूर्ण अधिकार (Full Privilege)</b> होता है। जब यूज़र ऐप को हार्डवेयर चाहिए होता है, तो वह <span class="underline-red">System Call</span> भेजकर Kernel Mode में स्विच करता है।</li>
+        </ul>
+
+        <!-- SVG Diagram 4.1: Kernel Role & Monolithic vs Microkernel -->
+        <div class="diagram-box">
+            <div class="diagram-caption">📐 Fig 4.1: Role of Kernel &amp; Types (Monolithic vs Microkernel Architecture)</div>
+            <svg viewBox="0 0 740 240" width="705" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code', sans-serif">
+                <!-- Left: Monolithic Kernel -->
+                <rect x="18" y="12" width="335" height="216" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+                <text x="185" y="34" text-anchor="middle" fill="#1e3a8a" font-size="13" font-weight="bold">1. Monolithic Kernel (Fast)</text>
+
+                <rect x="42" y="46" width="286" height="34" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+                <text x="185" y="67" text-anchor="middle" fill="#1e3a8a" font-size="11.5" font-weight="bold">User Mode: User Applications</text>
+
+                <line x1="35" y1="90" x2="336" y2="90" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5,4"/>
+                <text x="185" y="103" text-anchor="middle" fill="#dc2626" font-size="9.5" font-weight="bold">System Call Interface</text>
+
+                <rect x="42" y="110" width="286" height="68" rx="8" fill="#fef08a" stroke="#d97706" stroke-width="2"/>
+                <text x="185" y="129" text-anchor="middle" fill="#92400e" font-size="11.5" font-weight="bold">Kernel Mode (All Services Inside)</text>
+                <text x="185" y="148" text-anchor="middle" fill="#78350f" font-size="10.2">IPC • File System • Memory Mgmt</text>
+                <text x="185" y="165" text-anchor="middle" fill="#78350f" font-size="10.2">CPU Scheduling • Device Drivers</text>
+
+                <rect x="42" y="188" width="286" height="28" rx="6" fill="#1e293b"/>
+                <text x="185" y="206" text-anchor="middle" fill="#f8fafc" font-size="11.5" font-weight="bold">🖥️ Hardware (CPU, RAM, I/O)</text>
+
+                <!-- Right: Microkernel -->
+                <rect x="387" y="12" width="335" height="216" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+                <text x="554" y="34" text-anchor="middle" fill="#5b21b6" font-size="13" font-weight="bold">2. Microkernel (Stable &amp; Secure)</text>
+
+                <rect x="411" y="46" width="286" height="62" rx="6" fill="#ede9fe" stroke="#7c3aed"/>
+                <text x="554" y="64" text-anchor="middle" fill="#5b21b6" font-size="11.2" font-weight="bold">User Mode: Apps + Services</text>
+                <text x="554" y="82" text-anchor="middle" fill="#6d28d9" font-size="10">[File Server] [Device Drivers]</text>
+                <text x="554" y="98" text-anchor="middle" fill="#6d28d9" font-size="10">[Network / UI Services]</text>
+
+                <line x1="404" y1="118" x2="705" y2="118" stroke="#dc2626" stroke-width="1.8" stroke-dasharray="5,4"/>
+                <text x="554" y="131" text-anchor="middle" fill="#dc2626" font-size="9.5" font-weight="bold">Message Passing (IPC)</text>
+
+                <rect x="411" y="138" width="286" height="40" rx="8" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+                <text x="554" y="155" text-anchor="middle" fill="#14532d" font-size="11.2" font-weight="bold">Kernel Mode (Minimal Core)</text>
+                <text x="554" y="170" text-anchor="middle" fill="#166534" font-size="10">Basic IPC • Basic Scheduling • RAM</text>
+
+                <rect x="411" y="188" width="286" height="28" rx="6" fill="#1e293b"/>
+                <text x="554" y="206" text-anchor="middle" fill="#f8fafc" font-size="11.5" font-weight="bold">🖥️ Hardware (CPU, RAM, I/O)</text>
+            </svg>
+        </div>
+
+        <h3>Types of Kernel (कर्नेल के मुख्य प्रकार)</h3>
+        <div class="table-wrap">
+            <table class="notes-table">
+                <tr>
+                    <th width="20%">Kernel Type</th>
+                    <th width="38%">संरचना और कार्यप्रणाली (Architecture)</th>
+                    <th width="24%">फायदा / कमी</th>
+                    <th width="18%">Examples</th>
+                </tr>
+                <tr>
+                    <td><b>1. Monolithic Kernel</b></td>
+                    <td>OS की सभी सेवाएं (File System, Drivers, Scheduling, Memory) एक ही बड़ी Kernel Space में चलती हैं।</td>
+                    <td><b>फायदा:</b> बहुत तेज़ गति।<br><b>कमी:</b> एक ड्राइवर क्रैश हो तो पूरा OS क्रैश हो जाता है।</td>
+                    <td>Linux, UNIX, MS-DOS</td>
+                </tr>
+                <tr>
+                    <td><b>2. Microkernel</b></td>
+                    <td>कर्नेल में केवल सबसे ज़रूरी सेवाएं (IPC, Basic Scheduling) होती हैं; बाकी सब User Space में चलता है।</td>
+                    <td><b>फायदा:</b> अधिक सुरक्षित व स्थिर।<br><b>कमी:</b> बार-बार IPC के कारण थोड़ा धीमा।</td>
+                    <td>Minix, QNX, Mach</td>
+                </tr>
+                <tr>
+                    <td><b>3. Hybrid Kernel</b></td>
+                    <td>यह Monolithic की <b>तेज़ गति</b> और Microkernel की <b>सुरक्षा/मॉड्यूलैरिटी</b>—दोनों का मिश्रण है।</td>
+                    <td><b>फायदा:</b> बेहतरीन परफॉर्मेंस और स्थिरता का संतुलन।</td>
+                    <td>Windows NT/10/11, macOS</td>
+                </tr>
+            </table>
+        </div>
+
+        <p><i>अन्य विशेष प्रकार:</i> <b>Nanokernel</b> (अत्यंत सूक्ष्म कर्नेल, जो सिर्फ हार्डवेयर एब्स्ट्रैक्शन देता है) तथा <b>Exokernel</b> (जो ऐप्स को सीधे हार्डवेयर मैनेज करने की छूट देता है)।</p>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 4)</div>
+    </div>
+
+    <!-- ==================== PAGE 5: PROCESS CONCEPT, MEMORY, PCB & STATES ==================== -->
+    <div class="notebook-page theme-amber">
+        <h2>7. Process Management: Process Concept</h2>
+
+        <div class="margin-note blue">
+            <div class="note-title">📖 Program vs Process</div>
+            <b>Program</b> = Recipe Book (Passive, डिस्क पर सेव)<br>
+            <b>Process</b> = खाना बनाना शुरू करना (Active, RAM में चल रहा!)
+        </div>
+
+        <p>जब कोई प्रोग्राम हार्ड डिस्क में पड़ा होता है, तो वह एक <b>Passive Entity</b> है। लेकिन जैसे ही आप उस पर डबल-क्लिक करते हैं और वह RAM में लोड होकर चलने लगता है, उसे <span class="highlight">Process (A Program in Execution)</span> कहते हैं।</p>
+
+        <p><b>मेमोरी में Process के 4 भाग:</b>
+        (1) <b>Text Section:</b> प्रोग्राम का कोड,
+        (2) <b>Data Section:</b> Global Variables,
+        (3) <b>Heap:</b> Dynamic Memory (रन-टाइम पर बढ़ती है),
+        (4) <b>Stack:</b> Local Variables व Function Calls।</p>
+
+        <p><b>Process Control Block (PCB):</b> OS हर प्रोसेस का एक <b>"Identity Card"</b> बनाता है जिसे <span class="rough-circle">PCB</span> कहते हैं। इसमें Process ID (PID), Current State, Program Counter (अगला निर्देश), CPU Registers और Memory Limits सेव रहते हैं।</p>
+
+        <!-- SVG Diagram 5.1: Process Memory Layout + PCB Side-by-Side -->
+        <div class="diagram-box">
+            <div class="diagram-caption">📐 Fig 5.1: Process Memory Layout &amp; Process Control Block (PCB)</div>
+            <svg viewBox="0 0 720 235" width="680" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code', sans-serif">
+                <!-- Left: Process in Memory -->
+                <text x="165" y="20" text-anchor="middle" fill="#b45309" font-size="13.5" font-weight="bold">Process in RAM (Memory Layout)</text>
+                <rect x="75" y="30" width="180" height="40" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+                <text x="165" y="54" text-anchor="middle" fill="#991b1b" font-size="12.5" font-weight="bold">Stack (Local Vars) ↓</text>
+
+                <rect x="75" y="70" width="180" height="36" fill="#f8fafc" stroke="#94a3b8" stroke-dasharray="4,3"/>
+                <text x="165" y="92" text-anchor="middle" fill="#64748b" font-size="11">Free Space</text>
+
+                <rect x="75" y="106" width="180" height="40" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+                <text x="165" y="130" text-anchor="middle" fill="#14532d" font-size="12.5" font-weight="bold">Heap (Dynamic Mem) ↑</text>
+
+                <rect x="75" y="146" width="180" height="36" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+                <text x="165" y="168" text-anchor="middle" fill="#92400e" font-size="12" font-weight="bold">Data (Global Vars)</text>
+
+                <rect x="75" y="182" width="180" height="38" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                <text x="165" y="205" text-anchor="middle" fill="#1e3a8a" font-size="12.5" font-weight="bold">Text (Program Code)</text>
+
+                <!-- Right: PCB -->
+                <text x="520" y="20" text-anchor="middle" fill="#1e3a8a" font-size="13.5" font-weight="bold">Process Control Block (PCB)</text>
+                <rect x="395" y="30" width="250" height="32" fill="#1e3a8a" stroke="#1e3a8a"/>
+                <text x="520" y="51" text-anchor="middle" fill="#ffffff" font-size="12.5" font-weight="bold">Process ID (PID) &amp; State</text>
+
+                <rect x="395" y="62" width="250" height="32" fill="#eff6ff" stroke="#2563eb"/>
+                <text x="520" y="83" text-anchor="middle" fill="#1e40af" font-size="12">Program Counter (Next Instr)</text>
+
+                <rect x="395" y="94" width="250" height="32" fill="#ffffff" stroke="#2563eb"/>
+                <text x="520" y="115" text-anchor="middle" fill="#1e40af" font-size="12">CPU Registers &amp; Priority</text>
+
+                <rect x="395" y="126" width="250" height="32" fill="#eff6ff" stroke="#2563eb"/>
+                <text x="520" y="147" text-anchor="middle" fill="#1e40af" font-size="12">CPU Scheduling Info</text>
+
+                <rect x="395" y="158" width="250" height="32" fill="#ffffff" stroke="#2563eb"/>
+                <text x="520" y="179" text-anchor="middle" fill="#1e40af" font-size="12">Memory Management Info</text>
+
+                <rect x="395" y="190" width="250" height="30" fill="#eff6ff" stroke="#2563eb"/>
+                <text x="520" y="210" text-anchor="middle" fill="#1e40af" font-size="12">Open Files &amp; I/O Status</text>
+            </svg>
+        </div>
+
+        <h3>Process States (प्रोसेस की 5 अवस्थाएं)</h3>
+        <p>अपने जीवनकाल (Lifecycle) में एक प्रोसेस 5 मुख्य अवस्थाओं से गुज़रता है:</p>
+
+        <!-- SVG Diagram 5.2: 5-State Process Transition -->
+        <div class="diagram-box">
+            <div class="diagram-caption">📐 Fig 5.2: 5-State Process State Transition Diagram</div>
+            <svg viewBox="0 0 740 250" width="710" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code', sans-serif">
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155"/>
+                    </marker>
+                </defs>
+
+                <!-- NEW -->
+                <rect x="20" y="75" width="95" height="46" rx="23" fill="#e0f2fe" stroke="#0284c7" stroke-width="2.2"/>
+                <text x="67" y="103" text-anchor="middle" fill="#0369a1" font-size="13.5" font-weight="bold">NEW</text>
+
+                <!-- READY -->
+                <rect x="195" y="75" width="105" height="46" rx="23" fill="#fef08a" stroke="#ca8a04" stroke-width="2.2"/>
+                <text x="247" y="103" text-anchor="middle" fill="#854d0e" font-size="13.5" font-weight="bold">READY</text>
+
+                <!-- RUNNING -->
+                <rect x="425" y="75" width="115" height="46" rx="23" fill="#bbf7d0" stroke="#16a34a" stroke-width="2.5"/>
+                <text x="482" y="103" text-anchor="middle" fill="#14532d" font-size="13.5" font-weight="bold">RUNNING</text>
+
+                <!-- TERMINATED -->
+                <rect x="615" y="75" width="110" height="46" rx="23" fill="#fecdd3" stroke="#e11d48" stroke-width="2.2"/>
+                <text x="670" y="103" text-anchor="middle" fill="#9f1239" font-size="12.5" font-weight="bold">TERMINATED</text>
+
+                <!-- WAITING / BLOCKED -->
+                <rect x="305" y="185" width="135" height="46" rx="23" fill="#ede9fe" stroke="#7c3aed" stroke-width="2.2"/>
+                <text x="372" y="213" text-anchor="middle" fill="#5b21b6" font-size="12.5" font-weight="bold">WAITING / BLOCK</text>
+
+                <!-- Arrows -->
+                <!-- New -> Ready -->
+                <line x1="115" y1="98" x2="191" y2="98" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+                <text x="153" y="88" text-anchor="middle" fill="#0f172a" font-size="11">Admitted</text>
+
+                <!-- Ready -> Running -->
+                <line x1="300" y1="90" x2="421" y2="90" stroke="#16a34a" stroke-width="2.2" marker-end="url(#arrow)"/>
+                <text x="360" y="80" text-anchor="middle" fill="#15803d" font-size="11" font-weight="bold">Dispatch (CPU)</text>
+
+                <!-- Running -> Ready (Interrupt / Time Quantum) -->
+                <path d="M 455 75 Q 360 18 265 73" fill="none" stroke="#d97706" stroke-width="2" marker-end="url(#arrow)"/>
+                <text x="360" y="34" text-anchor="middle" fill="#b45309" font-size="11" font-weight="bold">Interrupt / Time Quantum</text>
+
+                <!-- Running -> Terminated -->
+                <line x1="540" y1="98" x2="611" y2="98" stroke="#e11d48" stroke-width="2" marker-end="url(#arrow)"/>
+                <text x="575" y="88" text-anchor="middle" fill="#be123c" font-size="11">Exit</text>
+
+                <!-- Running -> Waiting -->
+                <path d="M 480 121 Q 480 195 444 205" fill="none" stroke="#7c3aed" stroke-width="2" marker-end="url(#arrow)"/>
+                <text x="545" y="175" text-anchor="middle" fill="#6d28d9" font-size="11">I/O or Event Wait</text>
+
+                <!-- Waiting -> Ready -->
+                <path d="M 305 205 Q 247 195 247 125" fill="none" stroke="#2563eb" stroke-width="2" marker-end="url(#arrow)"/>
+                <text x="200" y="175" text-anchor="middle" fill="#1d4ed8" font-size="11">I/O Completed</text>
+            </svg>
+        </div>
+
+        <ol>
+            <li><b>New:</b> प्रोसेस अभी नया-नया बनाया (Create) जा रहा है।</li>
+            <li><b>Ready:</b> प्रोसेस RAM में आ चुका है और CPU मिलने का इंतज़ार कर रहा है।</li>
+            <li><b>Running:</b> प्रोसेस के निर्देश (Instructions) वर्तमान में CPU पर चल रहे हैं।</li>
+            <li><b>Waiting (Blocked):</b> प्रोसेस किसी I/O काम (जैसे प्रिंटिंग या यूज़र इनपुट) के पूरा होने का इंतज़ार कर रहा है।</li>
+            <li><b>Terminated:</b> प्रोसेस का काम पूरा हो गया है और OS उसे मेमोरी से हटा रहा है।</li>
+        </ol>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 5)</div>
+    </div>
+
+    <!-- ==================== PAGE 6: CPU SCHEDULING (PART 1 — INTRO, FCFS, SJF) ==================== -->
+    <div class="notebook-page theme-rose">
+        <h2>8. Process Scheduling (CPU Scheduling) — Detailed</h2>
+        <p>जब Ready Queue में कई प्रोसेस तैयार खड़े हों, तो <b>किस प्रोसेस को पहले CPU दिया जाए</b>—यह निर्णय लेने की प्रक्रिया <span class="highlight">CPU Scheduling</span> कहलाती है। यह काम <b>Short-Term Scheduler</b> करता है।</p>
+
+        <div class="margin-note pink">
+            <div class="note-title">⭐ Exam Rule</div>
+            अगर प्रश्न में <b>Arrival Time (AT)</b> अलग-अलग हो, तो हमेशा पहले देखो कि <b>उस समय (t) तक कौन-कौन से प्रोसेस आ चुके हैं!</b> जो आया ही नहीं, उसे CPU नहीं मिल सकता।
+        </div>
+
+        <ul>
+            <li><b>Non-Preemptive Scheduling:</b> एक बार प्रोसेस को CPU मिल गया, तो वह पूरा खत्म होने या I/O पर जाने से पहले CPU नहीं छोड़ता।</li>
+            <li><b>Preemptive Scheduling:</b> OS बीच में ही किसी चलते हुए प्रोसेस से CPU छीनकर ज़्यादा ज़रूरी प्रोसेस को दे सकता है (जैसे Round Robin, SRTF)।</li>
+        </ul>
+
+        <div class="formula-box">
+            <b>📌 Important Scheduling Terms &amp; Formulas (रट लो!):</b><br>
+            • <b>AT (Arrival Time):</b> प्रोसेस Ready Queue में किस समय आया।<br>
+            • <b>BT (Burst Time):</b> प्रोसेस को CPU पर पूरा चलने के लिए कुल कितना समय चाहिए।<br>
+            • <b>CT (Completion Time):</b> प्रोसेस Gantt Chart के अनुसार किस समय समाप्त हुआ।<br>
+            • <b>TAT (Turnaround Time) = CT - AT</b> &nbsp;&nbsp;(सिस्टम में आने से खत्म होने तक का कुल समय)<br>
+            • <b>WT (Waiting Time) &nbsp;&nbsp;&nbsp;&nbsp;= TAT - BT</b> (Ready Queue में इंतज़ार का कुल समय)
+        </div>
+
+        <!-- 1. FCFS IN DETAIL -->
+        <div class="algo-card">
+            <h3 style="margin-top:0; color:#1d4ed8;">1. FCFS (First Come, First Serve) — Detailed</h3>
+            <p><b>सिद्धांत (Working):</b> यह सबसे सरल <b>Non-Preemptive</b> एल्गोरिदम है जो <b>FIFO (First-In, First-Out)</b> कतार की तरह काम करता है। जिसका <b>Arrival Time (AT) सबसे कम</b> होता है (जो पहले आता है), उसे पहले CPU मिलता है।</p>
+
+            <p><b>Numerical Question:</b> मान लीजिए 4 प्रोसेस नीचे दिए गए Arrival Time और Burst Time के साथ आते हैं (जहाँ <span class="tech-pill">P1 का BT = 5</span> है):</p>
+
+            <div class="gantt-wrapper">
+                <div class="gantt-label">📊 Gantt Chart (FCFS):</div>
+                <div class="gantt-bar">
+                    <div class="g-seg g-p1" style="flex:5;">P1 (5)</div>
+                    <div class="g-seg g-p2" style="flex:3;">P2 (3)</div>
+                    <div class="g-seg g-p3" style="flex:2;">P3 (2)</div>
+                    <div class="g-seg g-p4" style="flex:4;">P4 (4)</div>
+                </div>
+                <div class="gantt-ticks">
+                    <div class="g-tick" style="flex:5;"><span>0</span><span></span></div>
+                    <div class="g-tick" style="flex:3;"><span>5</span><span></span></div>
+                    <div class="g-tick" style="flex:2;"><span>8</span><span></span></div>
+                    <div class="g-tick" style="flex:4;"><span>10</span><span>14</span></div>
+                </div>
+            </div>
+
+            <div class="table-wrap" style="margin: 10px 0;">
+                <table class="mini-table">
+                    <tr>
+                        <th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT (CT - AT)</th><th>WT (TAT - BT)</th>
+                    </tr>
+                    <tr><td><b>P1</b></td><td>0</td><td>5</td><td>5</td><td>5 - 0 = <b>5</b></td><td>5 - 5 = <b>0</b></td></tr>
+                    <tr><td><b>P2</b></td><td>1</td><td>3</td><td>8</td><td>8 - 1 = <b>7</b></td><td>7 - 3 = <b>4</b></td></tr>
+                    <tr><td><b>P3</b></td><td>2</td><td>2</td><td>10</td><td>10 - 2 = <b>8</b></td><td>8 - 2 = <b>6</b></td></tr>
+                    <tr><td><b>P4</b></td><td>4</td><td>4</td><td>14</td><td>14 - 4 = <b>10</b></td><td>10 - 4 = <b>6</b></td></tr>
+                </table>
+            </div>
+
+            <div class="calc-summary">
+                <b>Avg TAT</b> = (5 + 7 + 8 + 10) / 4 = 30 / 4 = <b>7.50 ms</b><br>
+                <b>Avg WT</b> &nbsp;= (0 + 4 + 6 + 6) / 4 &nbsp;= 16 / 4 = <b>4.00 ms</b>
+            </div>
+
+            <div class="pros-cons">
+                <div class="pc-box pc-pro"><b>✅ फायदा:</b> समझने और लागू करने में सबसे आसान; कोई Starvation नहीं।</div>
+                <div class="pc-box pc-con"><b>❌ कमी (Convoy Effect):</b> बड़ा प्रोसेस पहले आ जाए तो छोटे प्रोसेस को बहुत इंतज़ार करना पड़ता है।</div>
+            </div>
+        </div>
+
+        <!-- 2. SJF IN DETAIL -->
+        <div class="algo-card sjf">
+            <h3 style="margin-top:0; color:#0f766e;">2. SJF (Shortest Job First — Non-Preemptive) — Detailed</h3>
+            <p><b>सिद्धांत (Working):</b> जो प्रोसेस Ready Queue में आ चुके हैं, उनमें से जिसका <b>Burst Time (BT) सबसे कम</b> है, उसे पहले CPU दिया जाता है। यह सबसे कम Average Waiting Time देता है। (इसका Preemptive रूप <b>SRTF</b> कहलाता है)।</p>
+
+            <p><b>Numerical Question (Same Data):</b> <span class="tech-pill">P1 (AT=0, BT=5)</span>, <span class="tech-pill">P2 (AT=1, BT=3)</span>, <span class="tech-pill">P3 (AT=2, BT=2)</span>, <span class="tech-pill">P4 (AT=4, BT=4)</span></p>
+
+            <div class="gantt-wrapper">
+                <div class="gantt-label">📊 Gantt Chart (SJF Non-Preemptive):</div>
+                <div class="gantt-bar">
+                    <div class="g-seg g-p1" style="flex:5;">P1 (5)</div>
+                    <div class="g-seg g-p3" style="flex:2;">P3 (2)</div>
+                    <div class="g-seg g-p2" style="flex:3;">P2 (3)</div>
+                    <div class="g-seg g-p4" style="flex:4;">P4 (4)</div>
+                </div>
+                <div class="gantt-ticks">
+                    <div class="g-tick" style="flex:5;"><span>0</span><span></span></div>
+                    <div class="g-tick" style="flex:2;"><span>5</span><span></span></div>
+                    <div class="g-tick" style="flex:3;"><span>7</span><span></span></div>
+                    <div class="g-tick" style="flex:4;"><span>10</span><span>14</span></div>
+                </div>
+            </div>
+
+            <div class="table-wrap" style="margin: 10px 0;">
+                <table class="mini-table">
+                    <tr>
+                        <th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT (CT - AT)</th><th>WT (TAT - BT)</th>
+                    </tr>
+                    <tr><td><b>P1</b></td><td>0</td><td>5</td><td>5</td><td>5 - 0 = <b>5</b></td><td>5 - 5 = <b>0</b></td></tr>
+                    <tr><td><b>P2</b></td><td>1</td><td>3</td><td>10</td><td>10 - 1 = <b>9</b></td><td>9 - 3 = <b>6</b></td></tr>
+                    <tr><td><b>P3</b></td><td>2</td><td>2</td><td>7</td><td>7 - 2 = <b>5</b></td><td>5 - 2 = <b>3</b></td></tr>
+                    <tr><td><b>P4</b></td><td>4</td><td>4</td><td>14</td><td>14 - 4 = <b>10</b></td><td>10 - 4 = <b>6</b></td></tr>
+                </table>
+            </div>
+
+            <div class="calc-summary">
+                <b>Avg TAT</b> = (5 + 9 + 5 + 10) / 4 = 29 / 4 = <b>7.25 ms</b><br>
+                <b>Avg WT</b> &nbsp;= (0 + 6 + 3 + 6) / 4 &nbsp;= 15 / 4 = <b>3.75 ms</b> (FCFS के 4.00 ms से बेहतर!)
+            </div>
+
+            <div class="pros-cons">
+                <div class="pc-box pc-pro"><b>✅ फायदा:</b> सबसे कम Average Waiting Time (Optimal Algorithm)।</div>
+                <div class="pc-box pc-con"><b>❌ कमी:</b> बड़े प्रोसेस को <b>Starvation</b> हो सकता है और पहले से सही Burst Time जानना मुश्किल है।</div>
+            </div>
+        </div>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 6)</div>
+    </div>
+
+    <!-- ==================== PAGE 7: CPU SCHEDULING (PART 2 — PRIORITY, ROUND ROBIN & COMPARISON) ==================== -->
+    <div class="notebook-page theme-emerald">
+        <h2>8. Process Scheduling (Continued — Priority &amp; Round Robin)</h2>
+
+        <!-- 3. PRIORITY SCHEDULING IN DETAIL -->
+        <div class="algo-card priority">
+            <h3 style="margin-top:0; color:#b45309;">3. Priority Scheduling (Non-Preemptive) — Detailed</h3>
+            <p><b>सिद्धांत (Working):</b> हर प्रोसेस के साथ एक <b>Priority Number</b> जुड़ा होता है। Ready Queue में मौजूद प्रोसेस में से जिसकी <b>Priority सबसे अधिक</b> हो (यहाँ <b>छोटा नंबर = High Priority</b>, अर्थात् 1 सबसे ऊँचा), उसे पहले CPU मिलता है।</p>
+            <p><b>समाधान (<span class="rough-circle">Aging</span>):</b> लो-प्रायोरिटी प्रोसेस को Starvation से बचाने के लिए, लंबे इंतज़ार के बाद OS धीरे-धीरे उसकी Priority बढ़ाता जाता है।</p>
+
+            <p><b>Numerical Question:</b> <span class="tech-pill">P1 (AT=0, BT=5, Pri=3)</span>, <span class="tech-pill">P2 (AT=1, BT=3, Pri=1★)</span>, <span class="tech-pill">P3 (AT=2, BT=2, Pri=4)</span>, <span class="tech-pill">P4 (AT=3, BT=4, Pri=2)</span></p>
+
+            <div class="gantt-wrapper">
+                <div class="gantt-label">📊 Gantt Chart (Priority Scheduling):</div>
+                <div class="gantt-bar">
+                    <div class="g-seg g-p1" style="flex:5;">P1 [Pri 3]</div>
+                    <div class="g-seg g-p2" style="flex:3;">P2 [Pri 1]</div>
+                    <div class="g-seg g-p4" style="flex:4;">P4 [Pri 2]</div>
+                    <div class="g-seg g-p3" style="flex:2;">P3 [Pri 4]</div>
+                </div>
+                <div class="gantt-ticks">
+                    <div class="g-tick" style="flex:5;"><span>0</span><span></span></div>
+                    <div class="g-tick" style="flex:3;"><span>5</span><span></span></div>
+                    <div class="g-tick" style="flex:4;"><span>8</span><span></span></div>
+                    <div class="g-tick" style="flex:2;"><span>12</span><span>14</span></div>
+                </div>
+            </div>
+
+            <div class="table-wrap" style="margin: 10px 0;">
+                <table class="mini-table">
+                    <tr>
+                        <th>Process</th><th>AT</th><th>BT</th><th>Priority</th><th>CT</th><th>TAT (CT-AT)</th><th>WT (TAT-BT)</th>
+                    </tr>
+                    <tr><td><b>P1</b></td><td>0</td><td>5</td><td>3</td><td>5</td><td>5 - 0 = <b>5</b></td><td>5 - 5 = <b>0</b></td></tr>
+                    <tr><td><b>P2</b></td><td>1</td><td>3</td><td>1 ★</td><td>8</td><td>8 - 1 = <b>7</b></td><td>7 - 3 = <b>4</b></td></tr>
+                    <tr><td><b>P3</b></td><td>2</td><td>2</td><td>4</td><td>14</td><td>14 - 2 = <b>12</b></td><td>12 - 2 = <b>10</b></td></tr>
+                    <tr><td><b>P4</b></td><td>3</td><td>4</td><td>2</td><td>12</td><td>12 - 3 = <b>9</b></td><td>9 - 4 = <b>5</b></td></tr>
+                </table>
+            </div>
+
+            <div class="calc-summary">
+                <b>Avg TAT</b> = (5 + 7 + 12 + 9) / 4 = 33 / 4 = <b>8.25 ms</b><br>
+                <b>Avg WT</b> &nbsp;= (0 + 4 + 10 + 5) / 4 = 19 / 4 = <b>4.75 ms</b>
+            </div>
+        </div>
+
+        <!-- 4. ROUND ROBIN IN DETAIL -->
+        <div class="algo-card rr">
+            <h3 style="margin-top:0; color:#6d28d9;">4. Round Robin (RR — Preemptive) — Detailed</h3>
+            <p><b>सिद्धांत (Working):</b> यह Time-Sharing OS का सबसे लोकप्रिय एल्गोरिदम है। हर प्रोसेस को एक तय समय <span class="highlight">Time Quantum (q)</span> के लिए CPU मिलता है। यदि प्रोसेस उस समय में पूरा न हो, तो उसे रोककर (Preempt करके) वापस <b>Ready Queue के अंत</b> में भेज दिया जाता है।</p>
+
+            <p><b>Numerical Question (Time Quantum q = 2 ms):</b> <span class="tech-pill">P1 (AT=0, BT=5)</span>, <span class="tech-pill">P2 (AT=1, BT=3)</span>, <span class="tech-pill">P3 (AT=2, BT=2)</span>, <span class="tech-pill">P4 (AT=4, BT=4)</span></p>
+
+            <div class="gantt-wrapper">
+                <div class="gantt-label">📊 Gantt Chart (Round Robin, q = 2 ms):</div>
+                <div class="gantt-bar">
+                    <div class="g-seg g-p1" style="flex:2;">P1</div>
+                    <div class="g-seg g-p2" style="flex:2;">P2</div>
+                    <div class="g-seg g-p3" style="flex:2;">P3</div>
+                    <div class="g-seg g-p1" style="flex:2;">P1</div>
+                    <div class="g-seg g-p4" style="flex:2;">P4</div>
+                    <div class="g-seg g-p2" style="flex:1;">P2</div>
+                    <div class="g-seg g-p1" style="flex:1;">P1</div>
+                    <div class="g-seg g-p4" style="flex:2;">P4</div>
+                </div>
+                <div class="gantt-ticks">
+                    <div class="g-tick" style="flex:2;"><span>0</span><span></span></div>
+                    <div class="g-tick" style="flex:2;"><span>2</span><span></span></div>
+                    <div class="g-tick" style="flex:2;"><span>4</span><span></span></div>
+                    <div class="g-tick" style="flex:2;"><span>6</span><span></span></div>
+                    <div class="g-tick" style="flex:2;"><span>8</span><span></span></div>
+                    <div class="g-tick" style="flex:1;"><span>10</span><span></span></div>
+                    <div class="g-tick" style="flex:1;"><span>11</span><span></span></div>
+                    <div class="g-tick" style="flex:2;"><span>12</span><span>14</span></div>
+                </div>
+            </div>
+
+            <div class="table-wrap" style="margin: 10px 0;">
+                <table class="mini-table">
+                    <tr>
+                        <th>Process</th><th>AT</th><th>BT</th><th>CT</th><th>TAT (CT - AT)</th><th>WT (TAT - BT)</th>
+                    </tr>
+                    <tr><td><b>P1</b></td><td>0</td><td>5</td><td>12</td><td>12 - 0 = <b>12</b></td><td>12 - 5 = <b>7</b></td></tr>
+                    <tr><td><b>P2</b></td><td>1</td><td>3</td><td>11</td><td>11 - 1 = <b>10</b></td><td>10 - 3 = <b>7</b></td></tr>
+                    <tr><td><b>P3</b></td><td>2</td><td>2</td><td>6</td><td>6 - 2 = <b>4</b></td><td>4 - 2 = <b>2</b></td></tr>
+                    <tr><td><b>P4</b></td><td>4</td><td>4</td><td>14</td><td>14 - 4 = <b>10</b></td><td>10 - 4 = <b>6</b></td></tr>
+                </table>
+            </div>
+
+            <div class="calc-summary">
+                <b>Avg TAT</b> = (12 + 10 + 4 + 10) / 4 = 36 / 4 = <b>9.00 ms</b><br>
+                <b>Avg WT</b> &nbsp;= (7 + 7 + 2 + 6) / 4 &nbsp;= 22 / 4 = <b>5.50 ms</b>
+            </div>
+
+            <div class="pros-cons">
+                <div class="pc-box pc-pro"><b>✅ फायदा:</b> हर प्रोसेस को बराबर मौका; बेहतरीन Response Time; <b>कोई Starvation नहीं</b>।</div>
+                <div class="pc-box pc-con"><b>❌ कमी:</b> यदि Time Quantum बहुत छोटा हो, तो बार-बार Context Switching से CPU समय बर्बाद होता है।</div>
+            </div>
+        </div>
+
+        <!-- Quick Comparison Table of All 4 Algorithms -->
+        <h3>Quick Revision: Scheduling Algorithms Comparison</h3>
+        <div class="table-wrap">
+            <table class="notes-table">
+                <tr>
+                    <th>Algorithm</th>
+                    <th>Criteria (आधार)</th>
+                    <th>Mode</th>
+                    <th>Starvation?</th>
+                    <th>Best Use Case</th>
+                </tr>
+                <tr>
+                    <td><b>FCFS</b></td>
+                    <td>Arrival Time</td>
+                    <td>Non-Preemptive</td>
+                    <td>नहीं (No)</td>
+                    <td>Simple Batch Systems</td>
+                </tr>
+                <tr>
+                    <td><b>SJF</b></td>
+                    <td>Burst Time</td>
+                    <td>Non-Preemptive / Preemptive (SRTF)</td>
+                    <td>हाँ (Yes)</td>
+                    <td>Minimum Avg Waiting Time</td>
+                </tr>
+                <tr>
+                    <td><b>Priority</b></td>
+                    <td>Priority Number</td>
+                    <td>Both (Preemptive / Non-Preemptive)</td>
+                    <td>हाँ (Fix: Aging)</td>
+                    <td>Critical / Real-Time Tasks</td>
+                </tr>
+                <tr>
+                    <td><b>Round Robin</b></td>
+                    <td>Arrival Time + Quantum (q)</td>
+                    <td>Preemptive</td>
+                    <td>नहीं (No)</td>
+                    <td>Time-Sharing / Interactive OS</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 7)</div>
+    </div>
+
+    <!-- ==================== PAGE 8: THREADS & IPC ==================== -->
+    <div class="notebook-page theme-purple">
+        <h2>9. Threads (थ्रेड्स — Lightweight Process)</h2>
+
+        <div class="margin-note">
+            <div class="note-title">📝 MS Word Example</div>
+            MS Word एक <b>Process</b> है, और उसमें एक साथ चलने वाले <b>Typing</b>, <b>Spell-Check</b> और <b>Auto-Save</b> अलग-अलग <b>Threads</b> हैं!
+        </div>
+
+        <p><span class="highlight">Thread</span> किसी प्रोसेस के अंदर CPU Execution की सबसे छोटी इकाई है। इसे <span class="rough-circle">Lightweight Process</span> भी कहते हैं क्योंकि एक ही प्रोसेस के सभी थ्रेड्स उसका <b>Code, Data और Open Files</b> आपस में शेयर करते हैं।</p>
+        <p>हालाँकि, हर थ्रेड के पास अपना अलग <b>Thread ID, Program Counter, Registers और Stack</b> होता है।</p>
+
+        <!-- SVG Diagram 8.1: Single vs Multithreaded Process -->
+        <div class="diagram-box">
+            <div class="diagram-caption">📐 Fig 8.1: Single-Threaded vs Multi-Threaded Process Architecture</div>
+            <svg viewBox="0 0 720 215" width="680" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code', sans-serif">
+                <!-- Single-threaded Process -->
+                <rect x="20" y="15" width="245" height="185" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+                <text x="142" y="38" text-anchor="middle" fill="#1e3a8a" font-size="13" font-weight="bold">Single-Threaded Process</text>
+
+                <rect x="42" y="50" width="200" height="34" rx="6" fill="#dbeafe" stroke="#2563eb"/>
+                <text x="142" y="72" text-anchor="middle" fill="#1e3a8a" font-size="12" font-weight="bold">Code | Data | Files</text>
+
+                <rect x="77" y="96" width="130" height="32" rx="6" fill="#fef3c7" stroke="#d97706"/>
+                <text x="142" y="117" text-anchor="middle" fill="#92400e" font-size="11.5">Registers | Stack</text>
+
+                <path d="M 142 135 Q 152 148 142 160 Q 132 172 142 185" fill="none" stroke="#dc2626" stroke-width="3"/>
+                <text x="188" y="168" text-anchor="middle" fill="#b91c1c" font-size="11" font-weight="bold">1 Thread</text>
+
+                <!-- Multi-threaded Process -->
+                <rect x="305" y="15" width="395" height="185" rx="12" fill="#f5f3ff" stroke="#7c3aed" stroke-width="2"/>
+                <text x="502" y="38" text-anchor="middle" fill="#5b21b6" font-size="13" font-weight="bold">Multi-Threaded Process (Shared Resources)</text>
+
+                <rect x="330" y="50" width="345" height="34" rx="6" fill="#ede9fe" stroke="#7c3aed"/>
+                <text x="502" y="72" text-anchor="middle" fill="#5b21b6" font-size="12" font-weight="bold">Shared: Code | Data | Open Files</text>
+
+                <!-- Thread 1 -->
+                <rect x="330" y="96" width="102" height="32" rx="6" fill="#dcfce7" stroke="#16a34a"/>
+                <text x="381" y="116" text-anchor="middle" fill="#14532d" font-size="10.5">Reg | Stack 1</text>
+                <path d="M 381 134 Q 390 147 381 159 Q 372 171 381 184" fill="none" stroke="#16a34a" stroke-width="3"/>
+                <text x="381" y="195" text-anchor="middle" fill="#15803d" font-size="10" font-weight="bold">T1</text>
+
+                <!-- Thread 2 -->
+                <rect x="451" y="96" width="102" height="32" rx="6" fill="#fef3c7" stroke="#d97706"/>
+                <text x="502" y="116" text-anchor="middle" fill="#92400e" font-size="10.5">Reg | Stack 2</text>
+                <path d="M 502 134 Q 511 147 502 159 Q 493 171 502 184" fill="none" stroke="#d97706" stroke-width="3"/>
+                <text x="502" y="195" text-anchor="middle" fill="#b45309" font-size="10" font-weight="bold">T2</text>
+
+                <!-- Thread 3 -->
+                <rect x="573" y="96" width="102" height="32" rx="6" fill="#ffe4e6" stroke="#e11d48"/>
+                <text x="624" y="116" text-anchor="middle" fill="#9f1239" font-size="10.5">Reg | Stack 3</text>
+                <path d="M 624 134 Q 633 147 624 159 Q 615 171 624 184" fill="none" stroke="#e11d48" stroke-width="3"/>
+                <text x="624" y="195" text-anchor="middle" fill="#be123c" font-size="10" font-weight="bold">T3</text>
+            </svg>
+        </div>
+
+        <ul>
+            <li><b>User-Level Threads (ULT):</b> इन्हें यूज़र की Thread Library मैनेज करती है (Kernel को इनकी खबर नहीं होती)। ये बहुत तेज़ बनते हैं, पर यदि एक थ्रेड ब्लॉक हो तो पूरा प्रोसेस रुक जाता है।</li>
+            <li><b>Kernel-Level Threads (KLT):</b> इन्हें सीधे OS Kernel मैनेज करता है। ये थोड़े धीमे बनते हैं, लेकिन एक थ्रेड के ब्लॉक होने पर बाकी थ्रेड्स Multi-core CPU पर चलते रहते हैं।</li>
+        </ul>
+
+        <p><b>Multithreading के फायदे:</b> (1) <b>Responsiveness</b> (ऐप हैंग नहीं होता), (2) <b>Resource Sharing</b> (मेमोरी बचती है), (3) <b>Economy</b> (नया प्रोसेस बनाने से सस्ता), (4) <b>Scalability</b> (Multi-core CPU का पूरा लाभ)।</p>
+
+        <h2>10. Inter-Process Communication (IPC)</h2>
+        <p>सिस्टम में चलने वाले प्रोसेस दो तरह के होते हैं—<b>Independent</b> (जो दूसरों को प्रभावित नहीं करते) और <b>Cooperating</b> (जो एक-दूसरे से डेटा शेयर करते हैं)। Cooperating प्रोसेस को आपस में डेटा आदान-प्रदान और सिंक्रोनाइज़ करने के लिए जिस तकनीक की ज़रूरत होती है, उसे <span class="highlight">Inter-Process Communication (IPC)</span> कहते हैं।</p>
+
+        <p>IPC के दो मुख्य मॉडल (Models) होते हैं: <span class="underline-red">1. Shared Memory</span> और <span class="underline-red">2. Message Passing</span>।</p>
+
+        <!-- SVG Diagram 8.2: IPC Models -->
+        <div class="diagram-box">
+            <div class="diagram-caption">📐 Fig 8.2: Two Fundamental IPC Models — Shared Memory vs Message Passing</div>
+            <svg viewBox="0 0 720 215" width="680" xmlns="http://www.w3.org/2000/svg" font-family="'Cascadia Code', sans-serif">
+                <defs>
+                    <marker id="ipc-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1 L 10 5 L 0 9 z" fill="#1e3a8a"/>
+                    </marker>
+                </defs>
+
+                <!-- Left Model: Shared Memory -->
+                <rect x="20" y="15" width="320" height="185" rx="12" fill="#f0fdf4" stroke="#16a34a" stroke-width="2"/>
+                <text x="180" y="38" text-anchor="middle" fill="#14532d" font-size="13.5" font-weight="bold">(A) Shared Memory Model</text>
+
+                <rect x="115" y="48" width="130" height="32" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+                <text x="180" y="69" text-anchor="middle" fill="#1e3a8a" font-size="12" font-weight="bold">Process A</text>
+
+                <rect x="90" y="92" width="180" height="36" rx="6" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                <text x="180" y="114" text-anchor="middle" fill="#854d0e" font-size="12" font-weight="bold">📦 Shared Memory</text>
+
+                <rect x="115" y="140" width="130" height="32" rx="6" fill="#ffe4e6" stroke="#e11d48" stroke-width="1.8"/>
+                <text x="180" y="161" text-anchor="middle" fill="#9f1239" font-size="12" font-weight="bold">Process B</text>
+
+                <line x1="180" y1="80" x2="180" y2="90" stroke="#1e3a8a" stroke-width="2" marker-end="url(#ipc-arrow)"/>
+                <line x1="180" y1="138" x2="180" y2="130" stroke="#1e3a8a" stroke-width="2" marker-end="url(#ipc-arrow)"/>
+                <text x="180" y="190" text-anchor="middle" fill="#166534" font-size="10.5">Fastest • Direct Read/Write</text>
+
+                <!-- Right Model: Message Passing -->
+                <rect x="380" y="15" width="320" height="185" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+                <text x="540" y="38" text-anchor="middle" fill="#1e3a8a" font-size="13.5" font-weight="bold">(B) Message Passing Model</text>
+
+                <rect x="410" y="54" width="105" height="34" rx="6" fill="#dbeafe" stroke="#2563eb" stroke-width="1.8"/>
+                <text x="462" y="76" text-anchor="middle" fill="#1e3a8a" font-size="12" font-weight="bold">Process A</text>
+
+                <rect x="565" y="54" width="105" height="34" rx="6" fill="#ffe4e6" stroke="#e11d48" stroke-width="1.8"/>
+                <text x="617" y="76" text-anchor="middle" fill="#9f1239" font-size="12" font-weight="bold">Process B</text>
+
+                <rect x="415" y="128" width="250" height="44" rx="8" fill="#1e293b" stroke="#0f172a" stroke-width="2"/>
+                <text x="540" y="148" text-anchor="middle" fill="#fef08a" font-size="12" font-weight="bold">OS KERNEL (Message Queue)</text>
+                <text x="540" y="164" text-anchor="middle" fill="#cbd5e1" font-size="10.5">[ M1 ]  [ M2 ]  [ M3 ]</text>
+
+                <line x1="462" y1="88" x2="462" y2="124" stroke="#1e3a8a" stroke-width="2" marker-end="url(#ipc-arrow)"/>
+                <text x="434" y="112" text-anchor="middle" fill="#1e40af" font-size="10">send()</text>
+
+                <line x1="617" y1="126" x2="617" y2="92" stroke="#1e3a8a" stroke-width="2" marker-end="url(#ipc-arrow)"/>
+                <text x="652" y="112" text-anchor="middle" fill="#be123c" font-size="10">recv()</text>
+                <text x="540" y="190" text-anchor="middle" fill="#1e40af" font-size="10.5">Safe • Ideal for Distributed Systems</text>
+            </svg>
+        </div>
+
+        <div class="table-wrap">
+            <table class="notes-table">
+                <tr>
+                    <th width="22%">Basis (आधार)</th>
+                    <th width="39%">Shared Memory</th>
+                    <th width="39%">Message Passing</th>
+                </tr>
+                <tr>
+                    <td><b>कार्यप्रणाली</b></td>
+                    <td>दोनों प्रोसेस एक ही कॉमन RAM हिस्से (Buffer) में डेटा लिखते और पढ़ते हैं।</td>
+                    <td>प्रोसेस <code>send()</code> और <code>receive()</code> सिस्टम कॉल द्वारा Kernel के माध्यम से मैसेज भेजते हैं।</td>
+                </tr>
+                <tr>
+                    <td><b>गति (Speed)</b></td>
+                    <td><b>बहुत तेज़ (Fast)</b> — सेटअप के बाद बार-बार Kernel की ज़रूरत नहीं।</td>
+                    <td><b>अपेक्षाकृत धीमा</b> — हर मैसेज पर System Call (Kernel हस्तक्षेप) होता है।</td>
+                </tr>
+                <tr>
+                    <td><b>उपयोग (Best For)</b></td>
+                    <td>एक ही कंप्यूटर में बड़े डेटा का तेज़ आदान-प्रदान।</td>
+                    <td>छोटा डेटा और अलग-अलग कंप्यूटर (Distributed Network) के बीच कम्युनिकेशन।</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="page-footer">निर्माता: Aakash Sen ✨ (पेज 8 - अंतिम)</div>
+    </div>
+
+</body>
+</html>
